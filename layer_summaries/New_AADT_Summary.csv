@@ -1,0 +1,72 @@
+Field_Name,Unique_Value,Count,Percentage
+FROM_MEASURE,<NULL>,677597,100.00%
+TO_MEASURE,<NULL>,677597,100.00%
+TMPD_RECOMMENDATIONS,"Based on the counter location and road segmentation, AADT for this segment should be calculated by adding AADTs from LINKID 783044 and LINKID 783045.",5,0.00%
+TMPD_RECOMMENDATIONS,"Based on the counter location and road segmentation, AADT from LinkID 130015 in TMS is more reasonable than LinkID 030269.",9,0.00%
+TMPD_RECOMMENDATIONS,"Based on the counter location and road segmentation, AADT from LinkID 706981 in TMS is more reasonable than LinkID 120064.",1,0.00%
+TMPD_RECOMMENDATIONS,"Based on the counter location and road segmentation, AADT from LinkID 783044 in TMS is uncertain.",3,0.00%
+TMPD_RECOMMENDATIONS,None,672713,99.28%
+TMPD_RECOMMENDATIONS,TMPD advises that users should pay additional attention to directionality due to inconsistencies observed over the years.,4866,0.72%
+AADT_YR,1997,156,0.02%
+AADT_YR,1999,40,0.01%
+AADT_YR,2000,59,0.01%
+AADT_YR,2001,3415,0.50%
+AADT_YR,2002,7974,1.18%
+AADT_YR,2003,4036,0.60%
+AADT_YR,2004,455,0.07%
+AADT_YR,2005,2728,0.40%
+AADT_YR,2006,517,0.08%
+AADT_YR,2007,34,0.01%
+AADT_YR,2008,4003,0.59%
+AADT_YR,2009,7236,1.07%
+AADT_YR,2010,7531,1.11%
+AADT_YR,2011,2974,0.44%
+AADT_YR,2012,2915,0.43%
+AADT_YR,2013,7499,1.11%
+AADT_YR,2014,30258,4.47%
+AADT_YR,2015,23374,3.45%
+AADT_YR,2016,8674,1.28%
+AADT_YR,2017,11978,1.77%
+AADT_YR,2018,18206,2.69%
+AADT_YR,2019,30405,4.49%
+AADT_YR,2022,30766,4.54%
+AADT_YR,2023,38278,5.65%
+AADT_YR,2024,400773,59.15%
+AADT_YR,<NULL>,33313,4.92%
+AADT_QUALITY,A,7036,1.04%
+AADT_QUALITY,B,172,0.03%
+AADT_QUALITY,F,111333,16.43%
+AADT_QUALITY,G,189686,27.99%
+AADT_QUALITY,M,111,0.02%
+AADT_QUALITY,O,1192,0.18%
+AADT_QUALITY,R,276693,40.83%
+AADT_QUALITY,T,57921,8.55%
+AADT_QUALITY,V,29,0.00%
+AADT_QUALITY,X,105,0.02%
+AADT_QUALITY,<NULL>,33319,4.92%
+AAWDT_QUALITY,A,7036,1.04%
+AAWDT_QUALITY,B,172,0.03%
+AAWDT_QUALITY,F,4915,0.73%
+AAWDT_QUALITY,G,178394,26.33%
+AAWDT_QUALITY,M,43,0.01%
+AAWDT_QUALITY,X,453689,66.96%
+AAWDT_QUALITY,<NULL>,33348,4.92%
+DIRECTIONALITY,Combined,296647,43.78%
+DIRECTIONALITY,Single,12523,1.85%
+DIRECTIONALITY,<NULL>,368427,54.37%
+MPO_DSC,Bristol Metropolitan Planning Organization,4429,0.65%
+MPO_DSC,Central Virginia Metropolitan Planning Organization,12227,1.80%
+MPO_DSC,Charlottesville-Albemarle Metropolitan Planning Organization,8917,1.32%
+MPO_DSC,Danville Metropolitan Planning Organization,5041,0.74%
+MPO_DSC,Fredericksburg Area Metropolitan Planning Organization,23718,3.50%
+MPO_DSC,Hampton Roads Transportation Planning Organization,67274,9.93%
+MPO_DSC,Harrisonburg-Rockingham Metropolitan Planning Organization,4061,0.60%
+MPO_DSC,Kingsport Transportation Planning Organization,1981,0.29%
+MPO_DSC,New River Valley Metropolitan Planning Organization,6153,0.91%
+MPO_DSC,Northern Virginia Portion of The Metropolitan Washington Council of Governments,125370,18.50%
+MPO_DSC,Richmond Transportation Planning Organization,79459,11.73%
+MPO_DSC,Roanoke Valley Transportation Planning Organization,18515,2.73%
+MPO_DSC,Staunton-Augusta-Waynesboro Metropolitan Planning Organization,6273,0.93%
+MPO_DSC,Tri-Cities Area Metropolitan Planning Organization,12742,1.88%
+MPO_DSC,Winchester-Frederick Metropolitan Planning Organization,5851,0.86%
+MPO_DSC,<NULL>,295586,43.62%

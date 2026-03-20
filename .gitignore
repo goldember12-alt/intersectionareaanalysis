@@ -1,0 +1,112 @@
+# ---------------------------
+# Git / local repo internals
+# ---------------------------
+.git/
+
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.pyd
+*.so
+*.dylib
+*.dll
+
+# Packaging / build
+build/
+dist/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+
+# Test / coverage / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ---------------------------
+# Virtual environments
+# ---------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# ---------------------------
+# IDE / editor files
+# ---------------------------
+.idea/
+.vscode/
+*.iml
+
+# ---------------------------
+# OS cruft
+# ---------------------------
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------------------------
+# Logs
+# ---------------------------
+*.log
+
+# ---------------------------
+# ArcGIS / geodatabase temp + locks
+# ---------------------------
+*.lock
+*.sr.lock
+*.ex.lock
+*.tmp
+*.temp
+
+# ArcGIS scratch / temp folders if created later
+scratch/
+temp/
+tmp/
+
+# ---------------------------
+# Local outputs / generated figures
+# Keep these ignored only if they are reproducible outputs.
+# Remove these lines if you want these folders versioned.
+# ---------------------------
+secondstepfigures/
+outputs/
+exports/
+
+# ---------------------------
+# Secrets / machine-specific config
+# ---------------------------
+.env
+.env.*
+*.local
+
+# ---------------------------
+# Optional: large data artifacts
+# Uncomment if these show up later and should stay out of GitHub
+# ---------------------------
+# *.gdb/
+# *.zip
+# *.7z
+# *.csv
+# *.xlsx
+# *.aprx
+# *.lyrx
+# *.tif
+# *.shp
+# *.dbf
+# *.shx
+# *.cpg
+# *.prj

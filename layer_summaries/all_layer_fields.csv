@@ -1,0 +1,374 @@
+layer,field_name,alias,type,length,precision,scale
+CrashData_Basic,OBJECTID,OBJECTID,OID,4,0,0
+CrashData_Basic,SHAPE,SHAPE,Geometry,0,0,0
+CrashData_Basic,DOCUMENT_NBR,Document Nbr,Integer,4,0,0
+CrashData_Basic,CRASH_YEAR,Crash Year,String,4,0,0
+CrashData_Basic,CRASH_DT,Crash Date,Date,8,0,0
+CrashData_Basic,CRASH_MILITARY_TM,Crash Military Time,String,4,0,0
+CrashData_Basic,CRASH_SEVERITY,Crash Severity,String,1,0,0
+CrashData_Basic,K_PEOPLE,K_People,SmallInteger,2,0,0
+CrashData_Basic,A_PEOPLE,A_People,SmallInteger,2,0,0
+CrashData_Basic,B_PEOPLE,B_People,SmallInteger,2,0,0
+CrashData_Basic,C_PEOPLE,C_People,SmallInteger,2,0,0
+CrashData_Basic,PERSONS_INJURED,Persons Injured,SmallInteger,2,0,0
+CrashData_Basic,PEDESTRIANS_KILLED,Pedestrians Killed,SmallInteger,2,0,0
+CrashData_Basic,PEDESTRIANS_INJURED,Pedestrians Injured,SmallInteger,2,0,0
+CrashData_Basic,VEH_COUNT,Vehicle Count,SmallInteger,2,0,0
+CrashData_Basic,COLLISION_TYPE,Collision Type,String,255,0,0
+CrashData_Basic,WEATHER_CONDITION,Weather Condition,String,255,0,0
+CrashData_Basic,LIGHT_CONDITION,Light Condition,String,255,0,0
+CrashData_Basic,ROADWAY_SURFACE_COND,Roadway Surface Condition,String,255,0,0
+CrashData_Basic,RELATION_TO_ROADWAY,Relation To Roadway,String,255,0,0
+CrashData_Basic,ROADWAY_ALIGNMENT,Roadway Alignment,String,255,0,0
+CrashData_Basic,ROADWAY_SURFACE_TYPE,Roadway Surface Type,String,255,0,0
+CrashData_Basic,ROADWAY_DEFECT,Roadway Defect,String,255,0,0
+CrashData_Basic,ROADWAY_DESCRIPTION,Roadway Description,String,255,0,0
+CrashData_Basic,INTERSECTION_TYPE,Intersection Type,String,255,0,0
+CrashData_Basic,TRAFFIC_CONTROL_TYPE,Traffic Control Type,String,255,0,0
+CrashData_Basic,TRFC_CTRL_STATUS_TYPE,Traffic Control Status,String,255,0,0
+CrashData_Basic,WORK_ZONE_RELATED,Work Zone Related,String,255,0,0
+CrashData_Basic,WORK_ZONE_LOCATION,Work Zone Location,String,255,0,0
+CrashData_Basic,WORK_ZONE_TYPE,Work Zone Type,String,255,0,0
+CrashData_Basic,SCHOOL_ZONE,School Zone,String,255,0,0
+CrashData_Basic,FIRST_HARMFUL_EVENT,First Harmful Event,String,255,0,0
+CrashData_Basic,FIRST_HARMFUL_EVENT_LOC,First Harmful Event Loc,String,255,0,0
+CrashData_Basic,ALCOHOL_NOTALCOHOL,Alcohol?,String,3,0,0
+CrashData_Basic,ANIMAL,Animal Related?,String,3,0,0
+CrashData_Basic,BELTED_UNBELTED,Unrestrained?,String,10,0,0
+CrashData_Basic,BIKE_NONBIKE,Bike?,String,3,0,0
+CrashData_Basic,DISTRACTED_NOTDISTRACTED,Distracted?,String,3,0,0
+CrashData_Basic,DROWSY_NOTDROWSY,Drowsy?,String,3,0,0
+CrashData_Basic,DRUG_NODRUG,Drug Related?,String,3,0,0
+CrashData_Basic,GR_NOGR,Guardrail Related?,String,3,0,0
+CrashData_Basic,HITRUN_NOT_HITRUN,Hitrun?,String,3,0,0
+CrashData_Basic,LGTRUCK_NONLGTRUCK,Lgtruck?,String,3,0,0
+CrashData_Basic,MOTOR_NONMOTOR,Motorcycle?,String,3,0,0
+CrashData_Basic,PED_NONPED,Pedestrian?,String,3,0,0
+CrashData_Basic,SPEED_NOTSPEED,Speed?,String,3,0,0
+CrashData_Basic,SPEED_DIFF_MAX,Max Speed Diff,SmallInteger,2,0,0
+CrashData_Basic,RD_TYPE,RoadDeparture Type,String,255,0,0
+CrashData_Basic,INTERSECTION_ANALYSIS,Intersection Analysis,String,255,0,0
+CrashData_Basic,SENIOR_NOTSENIOR,Senior?,String,3,0,0
+CrashData_Basic,YOUNG_NOTYOUNG,Young?,String,3,0,0
+CrashData_Basic,MAINLINE_YN,Mainline?,String,3,0,0
+CrashData_Basic,NIGHT,Night?,String,3,0,0
+CrashData_Basic,VDOT_DISTRICT,VDOT District,String,255,0,0
+CrashData_Basic,JURIS_CODE,Juris Code,String,3,0,0
+CrashData_Basic,PHYSICAL_JURIS,Physical Juris Name,String,255,0,0
+CrashData_Basic,FUN,Functional Class,String,255,0,0
+CrashData_Basic,FAC,Facility Type,String,255,0,0
+CrashData_Basic,AREA_TYPE,Area Type,String,10,0,0
+CrashData_Basic,SYSTEM,SYSTEM,String,255,0,0
+CrashData_Basic,VSP,VSP,String,1,0,0
+CrashData_Basic,OWNERSHIP,Ownership,String,255,0,0
+CrashData_Basic,PLAN_DISTRICT,Planning District,String,255,0,0
+CrashData_Basic,MPO_NAME,MPO Name,String,255,0,0
+CrashData_Basic,RTE_NM,RTE Name,String,255,0,0
+CrashData_Basic,RNS_MP,RNS MP,Double,8,0,0
+CrashData_Basic,NODE,Node,String,8,0,0
+CrashData_Basic,OFFSET,Node Offset (ft),Double,8,0,0
+Hampton_Signals,OBJECTID,OBJECTID,OID,4,0,0
+Hampton_Signals,Shape,Shape,Geometry,0,0,0
+Hampton_Signals,OBJECTID_1,OBJECTID_1,Double,8,0,0
+Hampton_Signals,INID,INID,Double,8,0,0
+Hampton_Signals,INTNO,INTNO,String,2000000000,0,0
+Hampton_Signals,INTNUM,INTNUM,String,2000000000,0,0
+Hampton_Signals,SIGNAL_NO,SIGNAL_NO,Double,8,0,0
+Hampton_Signals,IntType,IntType,String,2000000000,0,0
+HMMS_TrafficSignals_Flat,OBJECTID,OBJECTID,OID,4,0,0
+HMMS_TrafficSignals_Flat,SHAPE,SHAPE,Geometry,0,0,0
+HMMS_TrafficSignals_Flat,ASSET_ID,Asset ID,Integer,4,0,0
+HMMS_TrafficSignals_Flat,REG_SIGNAL_ID,Region Signal ID,String,50,0,0
+HMMS_TrafficSignals_Flat,ASSET_NUM,Asset Number,String,50,0,0
+HMMS_TrafficSignals_Flat,ASSET_SUBTYPE,Asset SubType,String,50,0,0
+HMMS_TrafficSignals_Flat,ASSET_GROUP,Asset Group,String,50,0,0
+HMMS_TrafficSignals_Flat,STATUS,Asset Status,String,50,0,0
+HMMS_TrafficSignals_Flat,DISTRICT,District,String,50,0,0
+HMMS_TrafficSignals_Flat,MAINT_JURISDICTION,Maintenance Jurisdiction,String,50,0,0
+HMMS_TrafficSignals_Flat,MAJ_NAME,Major Route Name,String,150,0,0
+HMMS_TrafficSignals_Flat,MAJ_NUM,Major Route Number,String,50,0,0
+HMMS_TrafficSignals_Flat,ROUTE_TYPE,Route Type,String,50,0,0
+HMMS_TrafficSignals_Flat,MINOR_NAME,Minor Route Name,String,150,0,0
+HMMS_TrafficSignals_Flat,MINOR_NUM,Minor Route Number,String,50,0,0
+HMMS_TrafficSignals_Flat,INSTALL_DATE,Latest Install/Modification Date,Date,8,0,0
+HMMS_TrafficSignals_Flat,MAINT_RESP,Maintenance Responsibility,String,50,0,0
+HMMS_TrafficSignals_Flat,COORDINATION,Isolated versus Coordinated,String,50,0,0
+HMMS_TrafficSignals_Flat,SIGNAL_MODE,Advanced Signal Mode Present,String,50,0,0
+HMMS_TrafficSignals_Flat,UPS,UPS Present?,String,50,0,0
+HMMS_TrafficSignals_Flat,PREEMPTION,Pre-emption Present?,String,50,0,0
+HMMS_TrafficSignals_Flat,PEDSIGNAL,Pedestrian Signals?,String,50,0,0
+HMMS_TrafficSignals_Flat,DETECTION,Detection?,String,50,0,0
+HMMS_TrafficSignals_Flat,COMMENTS,Comments,String,250,0,0
+HMMS_TrafficSignals_Flat,CREATED_USER,CREATED_USER,String,255,0,0
+HMMS_TrafficSignals_Flat,CREATED_DATE,CREATED_DATE,Date,8,0,0
+HMMS_TrafficSignals_Flat,LAST_EDITED_USER,LAST_EDITED_USER,String,255,0,0
+HMMS_TrafficSignals_Flat,LAST_EDITED_DATE,LAST_EDITED_DATE,Date,8,0,0
+HMMS_TrafficSignals_Flat,FYA,Flashing Yellow Arrow (FYA)?,String,70,0,0
+HMMS_TrafficSignals_Flat,HVSB,High Visibility Signal Backplate(HVSB)?,String,70,0,0
+HMMS_TrafficSignals_Flat,APS,Access Pedestrian Signal (APS)?,String,70,0,0
+HMMS_TrafficSignals_Flat,PROJECTUPC,Project UPC,String,10,0,0
+HMMS_TrafficSignals_Flat,ATSPM,Automated Traffic Signal Performance Metrics?,String,5,0,0
+layer_lrspoint,OBJECTID,OBJECTID,OID,4,0,0
+layer_lrspoint,SHAPE,SHAPE,Geometry,0,0,0
+layer_lrspoint,id,id,String,65536,0,0
+layer_lrspoint,UNKNOWN,UNKNOWN,String,65536,0,0
+layer_lrspoint,_editId,_editId,String,65536,0,0
+layer_lrspoint,_layerId,_layerId,String,65536,0,0
+layer_lrspoint,INDUSTRIAL,INDUSTRIAL,String,65536,0,0
+layer_lrspoint,_createdBy,_createdBy,String,65536,0,0
+layer_lrspoint,_createdOn,_createdOn,Date,8,0,0
+layer_lrspoint,_featureId,_featureId,String,65536,0,0
+layer_lrspoint,RESIDENTIAL,RESIDENTIAL,String,65536,0,0
+layer_lrspoint,_modifiedBy,_modifiedBy,String,65536,0,0
+layer_lrspoint,_modifiedOn,_modifiedOn,String,65536,0,0
+layer_lrspoint,CROSS_STREET,CROSS_STREET,String,65536,0,0
+layer_lrspoint,_geometryType,_geometryType,String,65536,0,0
+layer_lrspoint,ACCESS_CONTROL,ACCESS_CONTROL,String,65536,0,0
+layer_lrspoint,ACCESS_DIRECTION,ACCESS_DIRECTION,String,65536,0,0
+layer_lrspoint,COMMERCIAL_RETAIL,COMMERCIAL_RETAIL,String,65536,0,0
+layer_lrspoint,NUMBER_OF_APPROACHES,NUMBER_OF_APPROACHES,String,65536,0,0
+layer_lrspoint,GOV_SCHOOL_INSTITUTIONAL,GOV_SCHOOL_INSTITUTIONAL,String,65536,0,0
+layer_lrspoint,TURN_LANES_PRIMARY_ROUTE,TURN_LANES_PRIMARY_ROUTE,String,65536,0,0
+layer_lrspoint,_rte_nm,_rte_nm,String,65536,0,0
+layer_lrspoint,_m,_m,Double,8,0,0
+layer_lrspoint,_x,_x,Double,8,0,0
+layer_lrspoint,_y,_y,Double,8,0,0
+layer_lrspoint,geometryType,geometryType,String,65536,0,0
+New_AADT,OBJECTID,OBJECTID,OID,4,0,0
+New_AADT,SHAPE,SHAPE,Geometry,0,0,0
+New_AADT,RTE_NM,RTE_NM,String,65536,0,0
+New_AADT,FROM_MEASURE,FROM_MEASURE,String,65536,0,0
+New_AADT,TO_MEASURE,TO_MEASURE,String,65536,0,0
+New_AADT,TMPD_RECOMMENDATIONS,TMPD_RECOMMENDATIONS,String,65536,0,0
+New_AADT,LINKID,LINKID,String,65536,0,0
+New_AADT,AADT_YR,AADT_YR,Integer,4,0,0
+New_AADT,AADT,AADT,Double,8,0,0
+New_AADT,AADT_QUALITY,AADT_QUALITY,String,65536,0,0
+New_AADT,AAWDT,AAWDT,Double,8,0,0
+New_AADT,AAWDT_QUALITY,AAWDT_QUALITY,String,65536,0,0
+New_AADT,DIRECTION_FACTOR,DIRECTION_FACTOR,Double,8,0,0
+New_AADT,DIRECTIONALITY,DIRECTIONALITY,String,65536,0,0
+New_AADT,FROM_PHY_JURISDICTION_NM,FROM_PHY_JURISDICTION_NM,String,65536,0,0
+New_AADT,MPO_DSC,MPO_DSC,String,65536,0,0
+New_AADT,MASTER_RTE_NM,MASTER_RTE_NM,String,65536,0,0
+New_AADT,TRANSPORT_EDGE_FROM_MSR,TRANSPORT_EDGE_FROM_MSR,Double,8,0,0
+New_AADT,TRANSPORT_EDGE_TO_MSR,TRANSPORT_EDGE_TO_MSR,Double,8,0,0
+New_AADT,EDGE_RTE_KEY,EDGE_RTE_KEY,String,65536,0,0
+New_AADT,SHAPE_Length,SHAPE_Length,Double,8,0,0
+Norfolk_Signals,OBJECTID,OBJECTID,OID,4,0,0
+Norfolk_Signals,SHAPE,SHAPE,Geometry,0,0,0
+Norfolk_Signals,AREACD,AREA,String,10,0,0
+Norfolk_Signals,ASBLT,AS BUILT,String,10,0,0
+Norfolk_Signals,COMPKEY,COMPKEY,Integer,4,0,0
+Norfolk_Signals,DISTRICT,DISTRICT,String,4,0,0
+Norfolk_Signals,INSTDATE,DATE INSTALLED,Date,8,0,0
+Norfolk_Signals,INTKEY,INTERSECTION KEY,Integer,4,0,0
+Norfolk_Signals,LOC,LOC,String,4,0,0
+Norfolk_Signals,LOCATOR,LOCATION,String,254,0,0
+Norfolk_Signals,MAPNO,MAP NO.,String,14,0,0
+Norfolk_Signals,OWN,OWNERSHIP,String,4,0,0
+Norfolk_Signals,PEDBUTTONS,PED BUTTONS,String,1,0,0
+Norfolk_Signals,SEGKEY,STREET SEGMENT,Integer,4,0,0
+Norfolk_Signals,SERVSTAT,SERVICE STATUS,String,4,0,0
+Norfolk_Signals,STKEY,STREET ID,Integer,4,0,0
+Norfolk_Signals,SUBAREA,SUB-AREA,String,4,0,0
+Norfolk_Signals,UNITDESC,DESCRIPTION,String,30,0,0
+Norfolk_Signals,UNITID,SIGNAL ID,String,16,0,0
+Norfolk_Signals,UNITTYPE,SIGNAL TYPE,String,6,0,0
+Norfolk_Signals,ADDRKEY,ADDRESS KEY,Integer,4,0,0
+Norfolk_Signals,BGTNO,BUDGET NO.,String,24,0,0
+Norfolk_Signals,EXPBY,EXPIRED BY,String,12,0,0
+Norfolk_Signals,EXPDATE,EXPIRED DATE,Date,8,0,0
+Norfolk_Signals,PRCLKEY,PARCEL KEY,Integer,4,0,0
+Norfolk_Signals,USGAREAKEY,CABINET KEY,Integer,4,0,0
+Norfolk_Signals,XCOORD,X COORD,Double,8,0,0
+Norfolk_Signals,YCOORD,Y COORD,Double,8,0,0
+Norfolk_Signals,CREATEDBY,CREATOR,String,255,0,0
+Norfolk_Signals,DATECREATED,DATE CREATED,Date,8,0,0
+Norfolk_Signals,MODIFIEDBY,LAST EDITOR,String,255,0,0
+Norfolk_Signals,DATEEDITED,LAST EDIT DATE,Date,8,0,0
+Norfolk_Signals,REDLIGHTCAM,RED LIGHT CAMERA,String,1,0,0
+Norfolk_Signals,LUCITYID,LUCITYID,String,20,0,0
+Norfolk_Signals,LucityAutoID,Link to Lucity,Integer,4,0,0
+Norfolk_Signals,InLucity,In Lucity?,SmallInteger,2,0,0
+Norfolk_Signals,LastSynDate,Last Synchronized Date,Date,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,OBJECTID,OBJECTID,OID,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,SHAPE,SHAPE,Geometry,0,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,EVENT_SOURCE_ID,EVENT_SOURCE_ID,Integer,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,CAR_SPEED_LIMIT,CAR_SPEED_LIMIT,SmallInteger,2,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,TRUCK_SPEED_LIMIT,TRUCK_SPEED_LIMIT,SmallInteger,2,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,SPEEDZONE_TYPE_DSC,SPEEDZONE_TYPE_DSC,String,2000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,AUTHORITY_DSC,AUTHORITY_DSC,String,2000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,LENGTH,LENGTH,Single,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,ROUTE_COMMON_NAME,ROUTE_COMMON_NAME,String,60,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,LOC_COMP_DIRECTIONALITY_NAME,LOC_COMP_DIRECTIONALITY_NAME,String,60,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,ROUTE_FROM_MEASURE,ROUTE_FROM_MEASURE,Double,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,FROM_JURISDICTION,FROM_JURISDICTION,String,100,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,START_LABEL,START_LABEL,String,2000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,ROUTE_TO_MEASURE,ROUTE_TO_MEASURE,Double,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,TO_JURISDICTION,TO_JURISDICTION,String,100,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,END_LABEL,END_LABEL,String,2000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,COMMENT_TEXT,COMMENT_TEXT,String,2000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,SUB_DIVISION_NAME,SUB_DIVISION_NAME,String,1000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,RADAR_STUDY_RECEIVED_DATE,RADAR_STUDY_RECEIVED_DATE,Date,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,STUDY_DATE,STUDY_DATE,Date,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,RESOLUTION_SIGNED_DATE,RESOLUTION_SIGNED_DATE,Date,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,SIGN_INSTALLED_DATE,SIGN_INSTALLED_DATE,Date,8,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,RESOLUTION_ID,RESOLUTION_ID,Integer,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,EVENT_LOCATION_ID,EVENT_LOCATION_ID,Integer,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,EVENT_COMPONENT_ID,EVENT_COMPONENT_ID,Integer,4,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,RTE_TYPE_CD,RTE_TYPE_CD,String,3,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,RTE_TYPE_NM,RTE_TYPE_NM,String,60,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,FROM_DISTRICT,FROM_DISTRICT,String,4000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,TO_DISTRICT,TO_DISTRICT,String,4000,0,0
+SDE_VDOT_SPEED_LIMIT_MSTR_RTE,SHAPE_Length,SHAPE_Length,Double,8,0,0
+Travelway,OBJECTID,OBJECTID,OID,4,0,0
+Travelway,SHAPE,SHAPE,Geometry,0,0,0
+Travelway,RTE_NM,RTE_NM,String,65536,0,0
+Travelway,FROM_MEASURE,FROM_MEASURE,Double,8,0,0
+Travelway,TO_MEASURE,TO_MEASURE,Double,8,0,0
+Travelway,EVENT_SOUR,EVENT_SOUR,Integer,4,0,0
+Travelway,RTE_COMMON,RTE_COMMON,String,65536,0,0
+Travelway,RTE_FROM_M,RTE_FROM_M,Double,8,0,0
+Travelway,RTE_TO_MSR,RTE_TO_MSR,Double,8,0,0
+Travelway,RIM_FACILI,RIM_FACILI,String,65536,0,0
+Travelway,LANE_THRU_,LANE_THRU_,Double,8,0,0
+Travelway,LANE_THRU1,LANE_THRU1,Double,8,0,0
+Travelway,LANE_THR_1,LANE_THR_1,Double,8,0,0
+Travelway,LANE_REVER,LANE_REVER,Integer,4,0,0
+Travelway,RIM_ACCESS,RIM_ACCESS,String,65536,0,0
+Travelway,RIM_COUPLE,RIM_COUPLE,String,65536,0,0
+Travelway,CURRENCY_D,CURRENCY_D,Date,8,0,0
+Travelway,LANE_THR_2,LANE_THR_2,Double,8,0,0
+Travelway,LANE_THR_3,LANE_THR_3,Double,8,0,0
+Travelway,LANE_THR_4,LANE_THR_4,Double,8,0,0
+Travelway,PAVEMENT_W,PAVEMENT_W,Double,8,0,0
+Travelway,PAVEMENT_1,PAVEMENT_1,Double,8,0,0
+Travelway,THRU_TRVL_,THRU_TRVL_,Double,8,0,0
+Travelway,THRU_TRVL1,THRU_TRVL1,Double,8,0,0
+Travelway,RIM_SHOULD,RIM_SHOULD,String,65536,0,0
+Travelway,RIM_SHOU_1,RIM_SHOU_1,String,65536,0,0
+Travelway,PAVED_SHLD,PAVED_SHLD,Double,8,0,0
+Travelway,PAVED_SH_1,PAVED_SH_1,Double,8,0,0
+Travelway,UNPAVED_SH,UNPAVED_SH,Double,8,0,0
+Travelway,UNPAVED__1,UNPAVED__1,Double,8,0,0
+Travelway,RIM_MEDIAN,RIM_MEDIAN,String,65536,0,0
+Travelway,MEDIAN_WID,MEDIAN_WID,Double,8,0,0
+Travelway,MEDIAN_W_1,MEDIAN_W_1,Double,8,0,0
+Travelway,MEDIAN_COV,MEDIAN_COV,Double,8,0,0
+Travelway,RIM_CURB_T,RIM_CURB_T,String,65536,0,0
+Travelway,RIM_CURB_1,RIM_CURB_1,String,65536,0,0
+Travelway,RIM_MEDI_1,RIM_MEDI_1,String,65536,0,0
+Travelway,RIM_MEDI_2,RIM_MEDI_2,String,65536,0,0
+Travelway,RIM_MEDI_3,RIM_MEDI_3,String,65536,0,0
+Travelway,RIM_MEDI_4,RIM_MEDI_4,String,65536,0,0
+Travelway,PAVED_MDN_,PAVED_MDN_,Double,8,0,0
+Travelway,PAVED_MDN1,PAVED_MDN1,Double,8,0,0
+Travelway,UNPVD_MDN_,UNPVD_MDN_,Double,8,0,0
+Travelway,UNPVD_MDN1,UNPVD_MDN1,Double,8,0,0
+Travelway,MEDIAN_IND,MEDIAN_IND,String,65536,0,0
+Travelway,MEDIAN_OPP,MEDIAN_OPP,String,65536,0,0
+Travelway,RIM_REVIEW,RIM_REVIEW,String,65536,0,0
+Travelway,RIM_TRAVEL,RIM_TRAVEL,String,65536,0,0
+Travelway,EVENT_SO_1,EVENT_SO_1,String,65536,0,0
+Travelway,EVENT_SO_2,EVENT_SO_2,String,65536,0,0
+Travelway,EVENT_LOCA,EVENT_LOCA,Integer,4,0,0
+Travelway,EVENT_COMP,EVENT_COMP,Integer,4,0,0
+Travelway,RTE_MEASUR,RTE_MEASUR,String,65536,0,0
+Travelway,LOCATION_V,LOCATION_V,String,65536,0,0
+Travelway,LOCATION_C,LOCATION_C,String,65536,0,0
+Travelway,LOCATION_1,LOCATION_1,String,65536,0,0
+Travelway,RTE_CATEGO,RTE_CATEGO,String,65536,0,0
+Travelway,RTE_TYPE_N,RTE_TYPE_N,String,65536,0,0
+Travelway,RTE_RAMP_C,RTE_RAMP_C,String,65536,0,0
+Travelway,LOC_COMP_D,LOC_COMP_D,String,65536,0,0
+Travelway,LOC_COMP_1,LOC_COMP_1,String,65536,0,0
+Travelway,RTE_ID,RTE_ID,Integer,4,0,0
+Travelway,RIM_FACI_1,RIM_FACI_1,String,65536,0,0
+Travelway,RIM_ACCE_1,RIM_ACCE_1,String,65536,0,0
+Travelway,RIM_SHOU_2,RIM_SHOU_2,String,65536,0,0
+Travelway,RIM_SHOU_3,RIM_SHOU_3,String,65536,0,0
+Travelway,RIM_MEDI_5,RIM_MEDI_5,String,65536,0,0
+Travelway,RIM_MEDI_6,RIM_MEDI_6,String,65536,0,0
+Travelway,RIM_MEDI_7,RIM_MEDI_7,String,65536,0,0
+Travelway,RIM_MEDI_8,RIM_MEDI_8,String,65536,0,0
+Travelway,RIM_MEDI_9,RIM_MEDI_9,String,65536,0,0
+Travelway,RIM_CURB_2,RIM_CURB_2,String,65536,0,0
+Travelway,RIM_CURB_3,RIM_CURB_3,String,65536,0,0
+Travelway,LRM_CURREN,LRM_CURREN,Date,8,0,0
+Travelway,CHANGE_STA,CHANGE_STA,String,65536,0,0
+Travelway,CHANGE_S_1,CHANGE_S_1,Date,8,0,0
+Travelway,SHAPE_Length,SHAPE_Length,Double,8,0,0
+Master_Signal_Layer,OBJECTID,OBJECTID,OID,4,0,0
+Master_Signal_Layer,Shape,Shape,Geometry,0,0,0
+Master_Signal_Layer,ASSET_ID,Asset ID,Integer,4,0,0
+Master_Signal_Layer,REG_SIGNAL_ID,Region Signal ID,String,50,0,0
+Master_Signal_Layer,ASSET_NUM,Asset Number,String,50,0,0
+Master_Signal_Layer,ASSET_SUBTYPE,Asset SubType,String,50,0,0
+Master_Signal_Layer,ASSET_GROUP,Asset Group,String,50,0,0
+Master_Signal_Layer,STATUS,Asset Status,String,50,0,0
+Master_Signal_Layer,DISTRICT,District,String,50,0,0
+Master_Signal_Layer,MAINT_JURISDICTION,Maintenance Jurisdiction,String,50,0,0
+Master_Signal_Layer,MAJ_NAME,Major Route Name,String,150,0,0
+Master_Signal_Layer,MAJ_NUM,Major Route Number,String,50,0,0
+Master_Signal_Layer,ROUTE_TYPE,Route Type,String,50,0,0
+Master_Signal_Layer,MINOR_NAME,Minor Route Name,String,150,0,0
+Master_Signal_Layer,MINOR_NUM,Minor Route Number,String,50,0,0
+Master_Signal_Layer,INSTALL_DATE,Latest Install/Modification Date,Date,8,0,0
+Master_Signal_Layer,MAINT_RESP,Maintenance Responsibility,String,50,0,0
+Master_Signal_Layer,COORDINATION,Isolated versus Coordinated,String,50,0,0
+Master_Signal_Layer,SIGNAL_MODE,Advanced Signal Mode Present,String,50,0,0
+Master_Signal_Layer,UPS,UPS Present?,String,50,0,0
+Master_Signal_Layer,PREEMPTION,Pre-emption Present?,String,50,0,0
+Master_Signal_Layer,PEDSIGNAL,Pedestrian Signals?,String,50,0,0
+Master_Signal_Layer,DETECTION,Detection?,String,50,0,0
+Master_Signal_Layer,COMMENTS,Comments,String,250,0,0
+Master_Signal_Layer,CREATED_USER,CREATED_USER,String,255,0,0
+Master_Signal_Layer,CREATED_DATE,CREATED_DATE,Date,8,0,0
+Master_Signal_Layer,LAST_EDITED_USER,LAST_EDITED_USER,String,255,0,0
+Master_Signal_Layer,LAST_EDITED_DATE,LAST_EDITED_DATE,Date,8,0,0
+Master_Signal_Layer,FYA,Flashing Yellow Arrow (FYA)?,String,70,0,0
+Master_Signal_Layer,HVSB,High Visibility Signal Backplate(HVSB)?,String,70,0,0
+Master_Signal_Layer,APS,Access Pedestrian Signal (APS)?,String,70,0,0
+Master_Signal_Layer,PROJECTUPC,Project UPC,String,10,0,0
+Master_Signal_Layer,ATSPM,Automated Traffic Signal Performance Metrics?,String,5,0,0
+Master_Signal_Layer,AREACD,AREA,String,10,0,0
+Master_Signal_Layer,ASBLT,AS BUILT,String,10,0,0
+Master_Signal_Layer,COMPKEY,COMPKEY,Integer,4,0,0
+Master_Signal_Layer,INSTDATE,DATE INSTALLED,Date,8,0,0
+Master_Signal_Layer,INTKEY,INTERSECTION KEY,Integer,4,0,0
+Master_Signal_Layer,LOC,LOC,String,4,0,0
+Master_Signal_Layer,LOCATOR,LOCATION,String,254,0,0
+Master_Signal_Layer,MAPNO,MAP NO.,String,14,0,0
+Master_Signal_Layer,OWN,OWNERSHIP,String,4,0,0
+Master_Signal_Layer,PEDBUTTONS,PED BUTTONS,String,1,0,0
+Master_Signal_Layer,SEGKEY,STREET SEGMENT,Integer,4,0,0
+Master_Signal_Layer,SERVSTAT,SERVICE STATUS,String,4,0,0
+Master_Signal_Layer,STKEY,STREET ID,Integer,4,0,0
+Master_Signal_Layer,SUBAREA,SUB-AREA,String,4,0,0
+Master_Signal_Layer,UNITDESC,DESCRIPTION,String,30,0,0
+Master_Signal_Layer,UNITID,SIGNAL ID,String,16,0,0
+Master_Signal_Layer,UNITTYPE,SIGNAL TYPE,String,6,0,0
+Master_Signal_Layer,ADDRKEY,ADDRESS KEY,Integer,4,0,0
+Master_Signal_Layer,BGTNO,BUDGET NO.,String,24,0,0
+Master_Signal_Layer,EXPBY,EXPIRED BY,String,12,0,0
+Master_Signal_Layer,EXPDATE,EXPIRED DATE,Date,8,0,0
+Master_Signal_Layer,PRCLKEY,PARCEL KEY,Integer,4,0,0
+Master_Signal_Layer,USGAREAKEY,CABINET KEY,Integer,4,0,0
+Master_Signal_Layer,XCOORD,X COORD,Double,8,0,0
+Master_Signal_Layer,YCOORD,Y COORD,Double,8,0,0
+Master_Signal_Layer,CREATEDBY,CREATOR,String,255,0,0
+Master_Signal_Layer,DATECREATED,DATE CREATED,Date,8,0,0
+Master_Signal_Layer,MODIFIEDBY,LAST EDITOR,String,255,0,0
+Master_Signal_Layer,DATEEDITED,LAST EDIT DATE,Date,8,0,0
+Master_Signal_Layer,REDLIGHTCAM,RED LIGHT CAMERA,String,1,0,0
+Master_Signal_Layer,LUCITYID,LUCITYID,String,20,0,0
+Master_Signal_Layer,LucityAutoID,Link to Lucity,Integer,4,0,0
+Master_Signal_Layer,InLucity,In Lucity?,SmallInteger,2,0,0
+Master_Signal_Layer,LastSynDate,Last Synchronized Date,Date,8,0,0
+Master_Signal_Layer,OBJECTID_1,OBJECTID_1,Double,8,0,0
+Master_Signal_Layer,INID,INID,Double,8,0,0
+Master_Signal_Layer,INTNO,INTNO,String,2000000000,0,0
+Master_Signal_Layer,INTNUM,INTNUM,String,2000000000,0,0
+Master_Signal_Layer,SIGNAL_NO,SIGNAL_NO,Double,8,0,0
+Master_Signal_Layer,IntType,IntType,String,2000000000,0,0
