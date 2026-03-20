@@ -287,7 +287,7 @@ def export_sample_intersection_images(segments_fc, crashes_fc, out_dir):
         msg("Sample export: ArcGIS Pro session not detected; skipping intersection image export.")
         return
 
-    if not view or view.type.upper() != "MAP":
+    if not view or not getattr(view, "map", None):
         msg("Sample export: active view is not a map; skipping intersection image export.")
         return
 
