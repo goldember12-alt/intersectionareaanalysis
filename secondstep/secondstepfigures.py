@@ -45,6 +45,18 @@ ROBUST_REGRESSION = True         # seaborn regplot robust fit if available
 
 TOP_N = 10
 
+# Sample intersection export (optional)
+EXPORT_SAMPLE_INTERSECTION = True
+SAMPLE_INTERSECTION_MIN_SEGMENTS = 4
+SAMPLE_INTERSECTION_MAX_SEGMENTS = 40
+SAMPLE_INTERSECTION_PADDING_RATIO = 0.25
+SAMPLE_INTERSECTION_MIN_PAD_FT = 150.0
+SAMPLE_INTERSECTION_IMAGE_SIZE = (1800, 1200)
+SAMPLE_INTERSECTION_DPI = 200
+SAMPLE_INTERSECTION_ZONES_IMG = "Fig5_SampleIntersection_Zones.png"
+SAMPLE_INTERSECTION_CRASH_IMG = "Fig5_SampleIntersection_Zones_WithCrashes.png"
+SAMPLE_INTERSECTION_CRASH_LAYER = "CrashData_Basic"
+
 # ==============================================================================
 # HELPERS
 # ==============================================================================
@@ -138,6 +150,227 @@ def to_int(x, default=0):
         return int(x)
     except Exception:
         return default
+
+def find_signal_id_field(fields):
+    upper = {f.upper(): f for f in fields}
+    candidates = [
+        "SIGNALOID", "SIGNAL_ID", "SIGNALID", "REG_SIGNAL_ID", "SIGNAL_NO", "SIGNALNO",
+        "INTNO", "INTNUM", "INTERSECTION_ID", "INTERSECTIONID", "INT_ID"
+    ]
+    for c in candidates:
+        if c.upper() in upper:
+            return upper[c.upper()]
+    for f in fields:
+        up = f.upper()
+        if "SIGNAL" in up and ("ID" in up or "NO" in up):
+            return f
+        if up.startswith("INT") and ("ID" in up or "NO" in up or "NUM" in up):
+            return f
+    return None
+
+def _extent_from_bounds(bounds):
+    return arcpy.Extent(bounds[0], bounds[1], bounds[2], bounds[3])
+
+def _pad_extent(ext, pad_ratio=SAMPLE_INTERSECTION_PADDING_RATIO, min_pad=SAMPLE_INTERSECTION_MIN_PAD_FT):
+    if ext is None:
+        return None
+    width = max(ext.XMax - ext.XMin, 0.0)
+    height = max(ext.YMax - ext.YMin, 0.0)
+    pad_x = max(width * pad_ratio, min_pad)
+    pad_y = max(height * pad_ratio, min_pad)
+    return arcpy.Extent(ext.XMin - pad_x, ext.YMin - pad_y, ext.XMax + pad_x, ext.YMax + pad_y)
+
+def _build_signal_where(fc, field_name, field_type, value):
+    if value is None:
+        return None
+    field = arcpy.AddFieldDelimiters(fc, field_name)
+    if field_type in ("String", "Guid"):
+        safe = str(value).replace("'", "''")
+        return f"{field} = '{safe}'"
+    return f"{field} = {value}"
+
+def _choose_sample_intersection(fc):
+    fields = [f.name for f in arcpy.ListFields(fc)]
+    signal_field = find_signal_id_field(fields)
+    if not signal_field:
+        msg("Sample export: no signal ID field detected; skipping intersection image export.")
+        return None
+
+    field_type = {f.name: f.type for f in arcpy.ListFields(fc)}.get(signal_field, "String")
+    stats = {}
+    with arcpy.da.SearchCursor(fc, [signal_field, "Zone_Type", "Cnt_TotalCrash", "SHAPE@"]) as cur:
+        for sig_val, zone_val, crash_val, geom in cur:
+            if sig_val in (None, "", " "):
+                continue
+            rec = stats.setdefault(sig_val, {
+                "seg_count": 0,
+                "zones": set(),
+                "crash_sum": 0,
+                "bounds": None,
+            })
+            rec["seg_count"] += 1
+            if zone_val not in (None, "", " "):
+                rec["zones"].add(str(zone_val))
+            rec["crash_sum"] += int(crash_val or 0)
+            if geom:
+                ext = geom.extent
+                if rec["bounds"] is None:
+                    rec["bounds"] = [ext.XMin, ext.YMin, ext.XMax, ext.YMax]
+                else:
+                    rec["bounds"][0] = min(rec["bounds"][0], ext.XMin)
+                    rec["bounds"][1] = min(rec["bounds"][1], ext.YMin)
+                    rec["bounds"][2] = max(rec["bounds"][2], ext.XMax)
+                    rec["bounds"][3] = max(rec["bounds"][3], ext.YMax)
+
+    candidates = []
+    for sig_val, rec in stats.items():
+        if rec["bounds"] is None:
+            continue
+        seg_count = rec["seg_count"]
+        if seg_count < SAMPLE_INTERSECTION_MIN_SEGMENTS or seg_count > SAMPLE_INTERSECTION_MAX_SEGMENTS:
+            continue
+        zones_upper = [z.upper() for z in rec["zones"]]
+        has_zone1 = any("ZONE 1" in z or "CRITICAL" in z for z in zones_upper)
+        has_zone2 = any("ZONE 2" in z or "FUNCTIONAL" in z for z in zones_upper)
+        if not (has_zone1 and has_zone2):
+            continue
+        candidates.append({
+            "signal_value": sig_val,
+            "seg_count": seg_count,
+            "crash_sum": rec["crash_sum"],
+            "extent": _extent_from_bounds(rec["bounds"]),
+        })
+
+    if not candidates:
+        msg("Sample export: no suitable intersection candidate found.")
+        return None
+
+    with_crashes = [c for c in candidates if c["crash_sum"] > 0]
+    chosen = min(with_crashes, key=lambda c: c["seg_count"]) if with_crashes else min(candidates, key=lambda c: c["seg_count"])
+    return {
+        "signal_field": signal_field,
+        "signal_type": field_type,
+        "signal_value": chosen["signal_value"],
+        "extent": chosen["extent"],
+    }
+
+def _find_layer_by_source(map_obj, catalog_path):
+    if not map_obj or not catalog_path:
+        return None
+    norm_target = os.path.normcase(os.path.abspath(catalog_path))
+    for lyr in map_obj.listLayers():
+        try:
+            src = getattr(lyr, "dataSource", None)
+            if src and os.path.normcase(os.path.abspath(src)) == norm_target:
+                return lyr
+        except Exception:
+            continue
+    return None
+
+def _apply_zone_symbology(layer, zone_field="Zone_Type"):
+    try:
+        sym = layer.symbology
+        sym.updateRenderer("UniqueValueRenderer")
+        sym.renderer.fields = [zone_field]
+        layer.symbology = sym
+    except Exception:
+        return
+
+def export_sample_intersection_images(segments_fc, crashes_fc, out_dir):
+    if not EXPORT_SAMPLE_INTERSECTION:
+        return
+
+    try:
+        aprx = arcpy.mp.ArcGISProject("CURRENT")
+        view = aprx.activeView
+    except Exception:
+        msg("Sample export: ArcGIS Pro session not detected; skipping intersection image export.")
+        return
+
+    if not view or view.type.upper() != "MAP":
+        msg("Sample export: active view is not a map; skipping intersection image export.")
+        return
+
+    candidate = _choose_sample_intersection(segments_fc)
+    if not candidate:
+        return
+
+    seg_path = arcpy.Describe(segments_fc).catalogPath
+    crash_path = arcpy.Describe(crashes_fc).catalogPath if crashes_fc and arcpy.Exists(crashes_fc) else None
+
+    m = view.map
+    seg_layer = _find_layer_by_source(m, seg_path)
+    added_seg = False
+    if not seg_layer:
+        seg_layer = m.addDataFromPath(seg_path)
+        added_seg = True
+
+    crash_layer = None
+    added_crash = False
+    if crash_path:
+        crash_layer = _find_layer_by_source(m, crash_path)
+        if not crash_layer:
+            crash_layer = m.addDataFromPath(crash_path)
+            added_crash = True
+
+    seg_query = getattr(seg_layer, "definitionQuery", "")
+    seg_visible = getattr(seg_layer, "visible", True)
+    crash_visible = getattr(crash_layer, "visible", True) if crash_layer else None
+    seg_sym = getattr(seg_layer, "symbology", None)
+
+    try:
+        where = _build_signal_where(segments_fc, candidate["signal_field"], candidate["signal_type"], candidate["signal_value"])
+        if where:
+            seg_layer.definitionQuery = where
+        seg_layer.visible = True
+        _apply_zone_symbology(seg_layer)
+
+        if crash_layer:
+            crash_layer.visible = False
+
+        ext = _pad_extent(candidate["extent"])
+        if ext:
+            view.camera.setExtent(ext)
+
+        width, height = SAMPLE_INTERSECTION_IMAGE_SIZE
+        out_zones = os.path.join(out_dir, SAMPLE_INTERSECTION_ZONES_IMG)
+        view.exportToPNG(out_zones, width=width, height=height, resolution=SAMPLE_INTERSECTION_DPI)
+        msg(f"Sample export: wrote {out_zones}")
+
+        if crash_layer:
+            crash_layer.visible = True
+            out_crash = os.path.join(out_dir, SAMPLE_INTERSECTION_CRASH_IMG)
+            view.exportToPNG(out_crash, width=width, height=height, resolution=SAMPLE_INTERSECTION_DPI)
+            msg(f"Sample export: wrote {out_crash}")
+    finally:
+        try:
+            seg_layer.definitionQuery = seg_query
+        except Exception:
+            pass
+        try:
+            seg_layer.visible = seg_visible
+        except Exception:
+            pass
+        try:
+            if seg_sym is not None:
+                seg_layer.symbology = seg_sym
+        except Exception:
+            pass
+        if crash_layer and crash_visible is not None:
+            try:
+                crash_layer.visible = crash_visible
+            except Exception:
+                pass
+        if added_seg:
+            try:
+                m.removeLayer(seg_layer)
+            except Exception:
+                pass
+        if added_crash and crash_layer:
+            try:
+                m.removeLayer(crash_layer)
+            except Exception:
+                pass
 
 # ==============================================================================
 # RESOLVE PROJECT FOLDER / FIGURES FOLDER
@@ -611,6 +844,10 @@ plt.title(f"Crash Density vs Access Density (Clipped at {CLIP_PCT_SCATTER}th pct
 plt.xlabel("Access Points per 1,000 ft (clipped)")
 plt.ylabel("Crashes per 1,000 ft (clipped)")
 safe_savefig(os.path.join(figures_folder, "Fig10_CrashDensity_vs_AccessDensity_Scatter.png"))
+
+if EXPORT_SAMPLE_INTERSECTION:
+    crash_fc = SAMPLE_INTERSECTION_CRASH_LAYER if arcpy.Exists(SAMPLE_INTERSECTION_CRASH_LAYER) else None
+    export_sample_intersection_images(INPUT_LAYER, crash_fc, figures_folder)
 
 plt.close("all")
 msg(f"Done. Figures saved to: {figures_folder}")
