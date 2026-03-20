@@ -85,6 +85,7 @@ tmp/
 secondstepfigures/
 outputs/
 exports/
+docs/
 
 # ---------------------------
 # Secrets / machine-specific config

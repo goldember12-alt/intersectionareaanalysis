@@ -189,11 +189,11 @@ ROADS_STUDY_AADT_CACHE = STAGED["roads_study_aadt_cache"]
 
 
 # Oracle broad lookup inputs exported by cotedopget.py.
-# Oracle is now treated as a first-class directional dependency rather than a
-# purely optional enhancement layered onto a GIS-only path.
-ORACLE_INTEGRATION_REQUIRED = _env_bool("THIRDSTEP_ORACLE_INTEGRATION_REQUIRED", True)
-ORACLE_GIS_KEYS_REQUIRED = _env_bool("THIRDSTEP_ORACLE_GIS_KEYS_REQUIRED", True)
-ALLOW_GIS_ONLY_DIRECTION_FALLBACK = _env_bool("THIRDSTEP_ALLOW_GIS_ONLY_DIRECTION_FALLBACK", False)
+# Oracle integration is optional by default and should only be required when
+# explicitly enabled for a second-pass directional refinement.
+ORACLE_INTEGRATION_REQUIRED = _env_bool("THIRDSTEP_ORACLE_INTEGRATION_REQUIRED", False)
+ORACLE_GIS_KEYS_REQUIRED = _env_bool("THIRDSTEP_ORACLE_GIS_KEYS_REQUIRED", False)
+ALLOW_GIS_ONLY_DIRECTION_FALLBACK = _env_bool("THIRDSTEP_ALLOW_GIS_ONLY_DIRECTION_FALLBACK", True)
 ORACLE_BROAD_LOOKUP_SOURCE = os.environ.get("THIRDSTEP_ORACLE_BROAD_LOOKUP_SOURCE") or None
 ORACLE_GIS_KEYS_SOURCE = os.environ.get("THIRDSTEP_ORACLE_GIS_KEYS_SOURCE") or None
 ORACLE_REQUIRED_COLUMNS = [

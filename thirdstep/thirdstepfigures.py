@@ -365,7 +365,7 @@ qc_far_field = find_field(all_fields, ["QC_CRASHFARSNAP"])
 count_fields = [f for f in all_fields if f.startswith("Cnt_")]
 dir_type_fields = [
     f for f in count_fields
-    if f not in {access_count_field, crash_total_field, crash_up_field, crash_down_field, crash_at_field}
+    if re.match(r"^Cnt_(Upstream|Downstream|AtSignal|Unknown)_", f, flags=re.IGNORECASE)
 ]
 
 msg("Detected fields:")

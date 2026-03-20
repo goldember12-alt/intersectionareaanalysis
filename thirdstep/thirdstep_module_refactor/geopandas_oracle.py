@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-GeoPandas/Oracle export, directional labeling, and Oracle-first match logic.
+GeoPandas/Oracle export, directional labeling, and Oracle-aware match logic.
 
-The directional stage now treats Oracle reference CSVs as part of the core
-runtime contract for production runs. GIS-side FromNode_Norm / ToNode_Norm may
-be present for compatibility, but they are not assumed to be authoritative.
+Oracle reference CSVs are optional by default and are only required when a
+second-pass Oracle refinement is explicitly enabled. GIS-side FromNode_Norm /
+ToNode_Norm may be present for compatibility, but they are not assumed to be
+authoritative.
 """
 
 import math
@@ -250,7 +251,7 @@ def _build_oracle_gis_key_indexes(gis_keys_df):
 
 
 def _oracle_mode_required():
-    return bool(USE_ORACLE_MATCH_RESOLUTION and ORACLE_INTEGRATION_REQUIRED and not ALLOW_GIS_ONLY_DIRECTION_FALLBACK)
+    return bool(USE_ORACLE_MATCH_RESOLUTION and ORACLE_INTEGRATION_REQUIRED)
 
 
 def validate_oracle_runtime_contract(segment_linkids=None):

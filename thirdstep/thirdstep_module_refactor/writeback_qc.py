@@ -369,6 +369,16 @@ def write_directional_summary_back(segments_fc, seg_summary_table):
     add_final_schema_defaults(segments_fc)
 
     seg_fields = set(field_names(seg_summary_table, cached=False))
+    cnt_fields = [
+        f for f in seg_fields
+        if f.upper().startswith("CNT_") and f.upper() not in {"CNT_ACCESS"}
+    ]
+    for fname in cnt_fields:
+        ensure_field(segments_fc, fname, "LONG")
+    for fname in cnt_fields:
+        if fname not in target_fields:
+            target_fields.append(fname)
+
     keep_fields = [f for f in target_fields if f in seg_fields]
     lookup_fields = [
         f for f in [

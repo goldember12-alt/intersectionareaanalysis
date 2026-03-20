@@ -273,8 +273,8 @@ def phase_iv_segment_roads():
     log_counts("Segments", STAGED["seg_clean"])
 
 
-def phase_vii_initial_assignments():
-    msg("[5/10] PHASE V/VII/VIII - INITIAL ARC ASSIGNMENTS")
+def phase_v_initial_assignments():
+    msg("[5/10] PHASE V - INITIAL ARC ASSIGNMENTS")
     t0 = time.time()
 
     _refresh_direct_source_handles()
@@ -326,7 +326,33 @@ def phase_vi_geo_directional():
     return result
 
 
-def phase_ix_write_final(summary_paths, access_assigned_fc):
+def _join_crash_counts_from_assigned(segments_fc, crash_assigned_fc):
+    if not crash_assigned_fc or not arcpy.Exists(crash_assigned_fc):
+        msg("    -> Crash summary join skipped; crash assignment output not found")
+        return
+
+    seg_oid_target = pick_field(segments_fc, ["SegOID"], required=False)
+    if not seg_oid_target:
+        msg("    ! Crash summary join skipped; SegOID not found on segments")
+        return
+
+    names_upper = field_map_upper(crash_assigned_fc)
+    seg_oid_assigned = pick_field(crash_assigned_fc, ["SegOID"], required=False, names_upper=names_upper)
+    if not seg_oid_assigned:
+        msg("    ! Crash summary join skipped; SegOID not found on crash-assigned output")
+        return
+
+    crash_freq = os.path.join(arcpy.env.scratchGDB, make_unique_name("crash_freq_total"))
+    delete_if_exists(crash_freq)
+    arcpy.analysis.Frequency(crash_assigned_fc, crash_freq, [seg_oid_assigned])
+    freq_count = pick_field(crash_freq, ["FREQUENCY"], required=False, names_upper=field_map_upper(crash_freq))
+    if freq_count and freq_count != "Cnt_Crash_Total":
+        arcpy.management.AlterField(crash_freq, freq_count, "Cnt_Crash_Total", "Cnt_Crash_Total")
+    join_fields_back(segments_fc, seg_oid_target, crash_freq, seg_oid_assigned, ["Cnt_Crash_Total"])
+    delete_if_exists(crash_freq)
+
+
+def phase_ix_write_final(summary_paths, access_assigned_fc, crash_assigned_fc):
     msg("[8/10] PHASE VIII - WRITE FINAL RESULTS BACK IN ARCPY")
 
     delete_if_exists(OUTPUT_SEGMENTS_FINAL)
@@ -345,6 +371,11 @@ def phase_ix_write_final(summary_paths, access_assigned_fc):
             delete_if_exists(access_freq)
     except Exception:
         msg("    ! Access summary join failed")
+
+    try:
+        _join_crash_counts_from_assigned(OUTPUT_SEGMENTS_FINAL, crash_assigned_fc)
+    except Exception:
+        msg("    ! Crash summary join failed")
 
     if summary_paths:
         seg_tbl = None
@@ -394,6 +425,19 @@ def phase_ix_write_final(summary_paths, access_assigned_fc):
     consolidate_final_qc_flags(OUTPUT_SEGMENTS_FINAL)
     calculate_final_density_metrics(OUTPUT_SEGMENTS_FINAL)
     log_final_oracle_validation(OUTPUT_SEGMENTS_FINAL)
+
+    try:
+        if crash_assigned_fc and arcpy.Exists(crash_assigned_fc):
+            crash_total = int(arcpy.management.GetCount(crash_assigned_fc)[0])
+            if crash_total > 0 and "Cnt_Crash_Total" in field_names(OUTPUT_SEGMENTS_FINAL):
+                seg_sum = 0
+                with arcpy.da.SearchCursor(OUTPUT_SEGMENTS_FINAL, ["Cnt_Crash_Total"]) as cur:
+                    for (val,) in cur:
+                        seg_sum += int(val or 0)
+                if seg_sum == 0:
+                    msg("    ! Crash counts are zero on final segments despite non-empty crash assignments")
+    except Exception:
+        msg("    ! Crash count validation skipped")
 
     if WRITE_OPTIONAL_OUTPUT_COPIES:
         delete_if_exists(OUTPUT_SIGNALS_FINAL)
@@ -473,7 +517,7 @@ def main():
     if _phase_enabled(4):
         phase_iv_segment_roads()
     if _phase_enabled(5):
-        crash_assigned_fc, access_assigned_fc = phase_vii_initial_assignments()
+        crash_assigned_fc, access_assigned_fc = phase_v_initial_assignments()
     if _phase_enabled(6):
         if not crash_assigned_fc:
             crash_assigned_fc = STAGED.get("crash_assigned")
@@ -485,7 +529,7 @@ def main():
             summary_paths = {}
         if not access_assigned_fc:
             access_assigned_fc = STAGED.get("access_assigned")
-        phase_ix_write_final(summary_paths, access_assigned_fc)
+        phase_ix_write_final(summary_paths, access_assigned_fc, crash_assigned_fc)
     if _phase_enabled(9):
         if not crash_assigned_fc:
             crash_assigned_fc = STAGED.get("crash_assigned")
