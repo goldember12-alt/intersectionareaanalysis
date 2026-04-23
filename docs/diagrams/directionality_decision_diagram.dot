@@ -1,0 +1,393 @@
+// Render example:
+//   dot -Tsvg docs/diagrams/directionality_decision_diagram.dot -o docs/diagrams/directionality_decision_diagram.svg
+//   dot -Tpng docs/diagrams/directionality_decision_diagram.dot -o docs/diagrams/directionality_decision_diagram.png
+
+digraph directionality_decision_diagram {
+  graph [
+    rankdir=TB,
+    splines=ortho,
+    newrank=true,
+    nodesep=0.10,
+    ranksep=0.30,
+    pad=0.12,
+    bgcolor="white",
+    fontname="Arial",
+    labelloc=t,
+    labeljust=c,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="20"><B>Empirical Flow Orientation on Divided-Road Study Rows</B></FONT></TD></TR>
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="13">For one segmented one-side roadway row at a time, is there enough conservative crash evidence to assign local travel direction, or should the row stay unresolved?</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  node [
+    fontname="Arial",
+    fontsize=12,
+    margin="0.18,0.11",
+    shape=box,
+    style="rounded,filled",
+    color="#3B6F8E",
+    fillcolor="#EAF3F9",
+    fontcolor="#1F2A33",
+    penwidth=1.2
+  ];
+
+  edge [
+    fontname="Arial",
+    fontsize=11,
+    color="#4E5B66",
+    arrowsize=0.82,
+    penwidth=1.05
+  ];
+
+  subgraph cluster_starts {
+    label="Inputs / Starts Here";
+    color="#E9D3AF";
+    penwidth=1.0;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=11,
+      margin="0.14,0.09"
+    ];
+
+    input_scope [
+      label="Starting point\nrow segmentation and crash-to-row\nattachment are already done",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+
+    input_fields [
+      label="Evidence already available\nattached crashes + crash direction of travel\n+ vehicle count + maneuver fields",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+  }
+
+  subgraph cluster_spine {
+    label="Main Assignment Spine";
+    color="#D7E2EA";
+    penwidth=1.1;
+    style="rounded";
+    bgcolor="#FFFFFF";
+
+    node [
+      width=2.38,
+      margin="0.16,0.10"
+    ];
+
+    start [
+      label="Review one study row\none segmented one-side roadway unit\nused for local flow assignment",
+      group="spine"
+    ];
+
+    gather [
+      label="Use only crashes already\nattached to that row",
+      group="spine"
+    ];
+
+    filter [
+      label="Keep only qualifying directional crashes\nsingle-vehicle + straight-ahead\nwith one clear travel direction",
+      group="spine"
+    ];
+
+    enough [
+      shape=diamond,
+      label="At least 2 qualifying crashes?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.75,
+      group="spine"
+    ];
+
+    agree [
+      shape=diamond,
+      label="Do all qualifying crashes\npoint the same way?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.95,
+      group="spine"
+    ];
+
+    dominant [
+      shape=diamond,
+      label="If not, is there still a strong majority\nin one direction\nat least 90%?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=3.0,
+      group="spine"
+    ];
+
+    strict_outcome [
+      label="StrictUnanimous\nall qualifying crashes agree,\nso local flow is assigned conservatively",
+      fillcolor="#CFECCF",
+      color="#4D8B4D",
+      group="spine"
+    ];
+
+    empirical90_outcome [
+      label="Empirical90Pct\none direction holds a strong majority,\nso local flow is assigned with a bounded relaxation",
+      fillcolor="#DDF2D8",
+      color="#5E9B58",
+      group="spine"
+    ];
+
+    unresolved [
+      label="Unresolved\nfewer than 2 qualifying crashes,\nor remaining direction conflict",
+      fillcolor="#E5E7EB",
+      color="#7A828A",
+      group="spine"
+    ];
+
+    start -> gather;
+    gather -> filter;
+    filter -> enough;
+    enough -> agree [xlabel="Yes"];
+    enough -> unresolved [xlabel="No"];
+    agree -> strict_outcome [xlabel="Yes"];
+    agree -> dominant [xlabel="No"];
+    dominant -> empirical90_outcome [xlabel="Yes"];
+    dominant -> unresolved [xlabel="No"];
+  }
+
+  subgraph cluster_rules {
+    label="Definitions / Prototype Mechanics";
+    color="#E9D3AF";
+    penwidth=1.0;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=10,
+      margin="0.10,0.07"
+    ];
+
+    rule_terms [
+      label="Study row in plain English\none segmented one-side roadway unit;\nthis is the row that receives the local flow label",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_qualifying [
+      label="Qualifying crash in plain English\nuse single-vehicle, straight-ahead crashes\nwith one usable travel direction;\nexclude ambiguous, compound, or multi-vehicle reads",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_thresholds [
+      label="Conservative evidence posture\nrequire at least 2 qualifying crashes;\nprefer unanimity, but allow a strong majority\nonly at the 90% threshold",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_support [
+      label="Secondary review readouts\nclear-direction crash read\nand SingleVehicleSupport\nhelp review borderline rows",
+      fillcolor="#E8F7F8",
+      color="#4C94A0",
+      group="right"
+    ];
+
+    rule_fallback [
+      label="RouteNameFallback\nroad-name context for review only;\nused only after unresolved,\nand never as an override",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="right"
+    ];
+  }
+
+  subgraph cluster_outputs {
+    label="Outputs / Review";
+    color="#E9D3AF";
+    penwidth=1.1;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    out_main [
+      label="Row-level flow result\nStrictUnanimous = unanimous qualifying crash evidence\nEmpirical90Pct = strong-majority qualifying crash evidence\nUnresolved = evidence too thin or still conflicting",
+      fillcolor="#EAF3F9",
+      color="#3B6F8E",
+      group="spine"
+    ];
+
+    out_handoff [
+      label="Meaning for later work\nthis becomes row-level directed flow support\nfor the signal-centered crash workflow",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="bottom"
+    ];
+
+    out_review [
+      label="Review posture\nunresolved stays unresolved;\nsecondary context helps review,\nbut does not replace crash evidence",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      fontsize=10,
+      margin="0.12,0.08",
+      group="bottom"
+    ];
+
+    out_main -> out_handoff;
+    out_handoff -> out_review [
+      style=invis,
+      weight=40,
+      minlen=2
+    ];
+  }
+
+  output_anchor [
+    shape=point,
+    label="",
+    width=0,
+    height=0,
+    style=invis,
+    group="spine"
+  ];
+
+  strict_outcome -> output_anchor [
+    style=invis,
+    weight=50
+  ];
+  empirical90_outcome -> output_anchor [
+    style=invis,
+    weight=32
+  ];
+  unresolved -> output_anchor [
+    style=invis,
+    weight=32
+  ];
+  output_anchor -> out_main [
+    style=invis,
+    weight=60
+  ];
+
+  strict_outcome -> out_main [weight=20];
+  empirical90_outcome -> out_main [weight=20];
+  unresolved -> out_main [weight=20];
+  strict_outcome -> empirical90_outcome [
+    style=invis,
+    weight=20
+  ];
+  empirical90_outcome -> unresolved [
+    style=invis,
+    weight=20
+  ];
+
+  input_scope -> start [
+    style=invis,
+    weight=26
+  ];
+
+  start -> rule_terms [
+    style=invis,
+    weight=24
+  ];
+
+  input_fields -> gather [
+    style=invis,
+    weight=24
+  ];
+
+  gather -> rule_qualifying [
+    style=invis,
+    weight=18
+  ];
+
+  enough -> rule_thresholds [
+    style=invis,
+    weight=16
+  ];
+
+  filter -> rule_support [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="secondary",
+    constraint=false
+  ];
+
+  unresolved -> rule_fallback [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="review only",
+    constraint=false
+  ];
+
+  rule_support -> rule_fallback [
+    color="#4C94A0",
+    style=dashed,
+    arrowhead=none,
+    constraint=false
+  ];
+
+  rule_fallback -> out_review [
+    color="#4C94A0",
+    style=dashed,
+    arrowhead=none,
+    constraint=false
+  ];
+
+  {
+    rank=same;
+    input_scope;
+    start;
+    rule_terms;
+  }
+
+  {
+    rank=same;
+    input_fields;
+    gather;
+    rule_qualifying;
+  }
+
+  {
+    rank=same;
+    filter;
+  }
+
+  {
+    rank=same;
+    enough;
+    rule_thresholds;
+    rule_support;
+  }
+
+  {
+    rank=same;
+    dominant;
+  }
+
+  {
+    rank=same;
+    strict_outcome;
+    empirical90_outcome;
+    unresolved;
+    rule_fallback;
+  }
+
+  {
+    rank=same;
+    out_main;
+  }
+
+  {
+    rank=same;
+    out_handoff;
+  }
+
+  {
+    rank=same;
+    out_review;
+  }
+}

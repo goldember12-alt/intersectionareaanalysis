@@ -7,6 +7,7 @@
 # Python
 # ---------------------------
 __pycache__/
+*.pyc
 *.py[cod]
 *$py.class
 
@@ -76,6 +77,8 @@ Desktop.ini
 scratch/
 temp/
 tmp/
+pip_cache/
+.npm-cache/
 
 # ---------------------------
 # Local outputs / generated figures
@@ -85,7 +88,20 @@ tmp/
 secondstepfigures/
 outputs/
 exports/
-docs/
+work/
+
+# ---------------------------
+# Legacy generated outputs
+# Keep curated legacy source/reference archives versioned.
+# ---------------------------
+legacy/outputs/
+
+# ---------------------------
+# Runtime spill under tracked artifact roots
+# ---------------------------
+artifacts/Users/
+artifacts/pycompile/
+artifacts/pycompile_verify/
 
 # ---------------------------
 # Secrets / machine-specific config
