@@ -43,4 +43,9 @@
 
 ## Recommended next execution step
 
-Implement `src/active/context_enrichment.py` as a direct-entry module that reads the fixed default paths, writes the grouped `work/output/context_enrichment/` contract, and starts with `approach_row_context_base.csv` plus `aadt_match_candidates.csv` before adding access and rural/urban aggregation in the same bounded module.
+Use the completed diagnostics to make one bounded policy decision before further production edits:
+
+- either keep AADT disabled under the current exact-overlap rule
+- or explicitly authorize a bounded fallback based on exact route support, positive measure overlap, and a very small local geometry-distance gate
+
+In parallel, the upstream prototype summary should be corrected to emit one additive-collapsed row per `StudyAreaID` so downstream context enrichment no longer has to repair paired summary rows.
