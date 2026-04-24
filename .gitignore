@@ -1,0 +1,152 @@
+# ---------------------------
+# Git / local repo internals
+# ---------------------------
+.git/
+/.git_writable_test/
+/.git-local/
+/.git_working/
+
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.pyd
+*.so
+*.dylib
+*.dll
+
+# Packaging / build
+build/
+dist/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+
+# Test / coverage / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ---------------------------
+# Virtual environments
+# ---------------------------
+/.venv/
+.venv/
+venv/
+env/
+ENV/
+
+# ---------------------------
+# IDE / editor files
+# ---------------------------
+.idea/
+.vscode/
+*.iml
+
+# ---------------------------
+# OS cruft
+# ---------------------------
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------------------------
+# Logs
+# ---------------------------
+*.log
+
+# ---------------------------
+# ArcGIS / geodatabase temp + locks
+# ---------------------------
+*.lock
+*.sr.lock
+*.ex.lock
+*.tmp
+*.temp
+
+# ArcGIS scratch / temp folders if created later
+scratch/
+temp/
+tmp/
+pip_cache/
+.npm-cache/
+
+# ---------------------------
+# Local outputs / generated figures
+# Keep these ignored only if they are reproducible outputs.
+# Remove these lines if you want these folders versioned.
+# ---------------------------
+secondstepfigures/
+outputs/
+exports/
+/work/
+work/
+
+# ---------------------------
+# Repository-local raw, generated, and retired material
+# ---------------------------
+/Intersection Crash Analysis Layers/
+/artifacts/
+/legacy/
+
+# ---------------------------
+# Runtime spill under tracked artifact roots
+# ---------------------------
+artifacts/Users/
+artifacts/pycompile/
+artifacts/pycompile_verify/
+
+# ---------------------------
+# Secrets / machine-specific config
+# ---------------------------
+.env
+.env.*
+*.local
+
+# ---------------------------
+# Optional: large data artifacts
+# Keep heavy geospatial/data products out of the active repo.
+# ---------------------------
+*.gdb/
+*.gpkg
+*.gpkg-journal
+*.parquet
+*.feather
+*.arrow
+*.geojson
+*.csv
+*.xlsx
+*.xls
+*.shp
+*.shx
+*.dbf
+*.cpg
+*.sbn
+*.sbx
+*.prj
+*.tif
+*.tiff
+*.img
+*.las
+*.laz
+*.zip
+*.7z
+*.rar
+*.aprx
+*.lyrx
+
+# Reviewed small configuration/evidence tables may be versioned explicitly.
+!docs/workflow/context_enrichment_access_same_corridor_seed_families.csv

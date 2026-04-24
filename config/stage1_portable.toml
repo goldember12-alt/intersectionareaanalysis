@@ -1,0 +1,45 @@
+[project]
+name = "IntersectionCrashAnalysis"
+raw_data_dir = "Intersection Crash Analysis Layers"
+staging_dir = "artifacts/staging"
+normalized_dir = "artifacts/normalized"
+output_dir = "work/output"
+parity_dir = "work/parity"
+working_crs = "EPSG:3968"
+
+[entrypoints]
+stage1 = "python -m src"
+
+[inputs.roads]
+layer_name = "Travelway"
+source_gdb = "Travelway.gdb"
+source_layer_name = "Travelway"
+
+[inputs.signals]
+layer_name = "Master_Signal_Layer"
+source_gdb = "HMMS_Traffic_Signals.gdb"
+source_layer_name = "HMMS_TrafficSignals_Flat"
+derived = true
+notes = "Transitional merged signal surface preserved from the earlier portability pass."
+merge_sources = [
+  "HMMS_Traffic_Signals.gdb|HMMS_TrafficSignals_Flat",
+  "Traffic_Signals_-_City_of_Norfolk.gdb|Norfolk_Signals",
+  "Hampton_Analysis.gdb|Hampton_Signals",
+]
+
+[inputs.crashes]
+layer_name = "CrashData_Basic"
+source_gdb = "crashdata.gdb"
+source_layer_name = "CrashData_Basic"
+notes = "Active evidence input for the first bounded directionality comparison pass. It is staged and normalized now even though the minimal slice runners do not consume it yet."
+
+[inputs.aadt]
+layer_name = "New_AADT"
+source_gdb = "New_AADT.gdb"
+source_layer_name = "New_AADT"
+active_stage = false
+notes = "Optional diagnostic input kept only for the traffic-volume inspection commands. It is not part of the required minimal active slice."
+
+[supplemental.traffic_volume]
+geojson_path = "VDOT_Bidirectional_Traffic_Volume_2024.geojson"
+shapefile_dir = "VDOT_Bidirectional_Traffic_Volume_2024 (1)"

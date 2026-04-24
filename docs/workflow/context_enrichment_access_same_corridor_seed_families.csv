@@ -1,0 +1,14 @@
+FamilyKey,ReviewDecision,AccessRouteNorm,StudyRouteNorm,LocalDistanceMaxFt,ReviewReason,ReviewNotes
+e_hundred_rd__sr00010eb,include,S-VA020PR E HUNDRED RD,R-VA SR00010EB,5,same_corridor_zero_distance_repeated,Repeated near-zero-distance family across three signals; measures are incompatible but local corridor support is strong enough for prototype review.
+hampton_blvd__sr00337eb,include,S-VA122PR HAMPTON BLVD,R-VA SR00337EB,5,same_corridor_zero_distance_repeated,EB carriageway behaves as a near-zero-distance family and is cleaner than the WB split.
+w_broad_st_np__us00250eb,include,S-VA043NP W BROAD ST,R-VA US00250EB,5,same_corridor_zero_distance_repeated,NP subset repeatedly lands on the study row with essentially zero offset; the PR subset is materially offset and excluded.
+warrenton_rd__us00017nb,include,S-VA089PR WARRENTON RD,R-VA US00017NB,5,same_corridor_zero_distance_repeated,Repeated near-zero-distance family with strong local corridor support in the latest review.
+jefferson_davis_hwy_np__us00001nb,include,S-VA076NP JEFFERSON DAVIS HWY,R-VA US00001NB,5,same_corridor_zero_distance_repeated,NP subset repeatedly aligns to the study row with near-zero offset; production route exactness is the practical blocker.
+richmond_hwy__us00001nb,exclude,S-VA029PR RICHMOND HWY,R-VA US00001NB,,offset_frontage_risk,Family is materially offset by roughly 44 to 59 feet and is too exposed to frontage or parallel-facility contamination for this prototype.
+w_broad_st_pr__us00250eb,exclude,S-VA043PR W BROAD ST,R-VA US00250EB,,offset_parallel_risk,PR subset is offset roughly 45 to 62 feet from the study row and should not be auto-linked in the bounded prototype.
+hampton_blvd__sr00337wb,exclude,S-VA122PR HAMPTON BLVD,R-VA SR00337WB,,wrong_carriageway_risk,WB behavior differs from the cleaner EB family and remains offset enough to raise wrong-carriageway risk.
+jefferson_davis_hwy_pr__us00001nb,exclude,S-VA076PR JEFFERSON DAVIS HWY,R-VA US00001NB,,offset_parallel_risk,PR subset remains materially offset and should stay out of the prototype.
+us00058_alt_opposite_direction,exclude,R-VA US00058WBALT001,R-VA US00058EBALT001,,opposite_direction_should_remain_unmatched,Opposite-direction same-number family; route relaxation would point to the wrong carriageway.
+us00019_opposite_direction,exclude,R-VA US00019NB,R-VA US00019SB,,opposite_direction_should_remain_unmatched,Opposite-direction same-number family should remain explicitly unmatched.
+us00250_opposite_direction,exclude,R-VA US00250WB,R-VA US00250EB,,opposite_direction_should_remain_unmatched,Opposite-direction same-number family should remain explicitly unmatched even though route-only relaxation would recover rows.
+secondary_connector__us00001nb,exclude,R-VA029SC00779SB,R-VA US00001NB,,secondary_route_not_parent_corridor,Secondary connector or local route should not be treated as a same-corridor alias for the parent US-1 carriageway.

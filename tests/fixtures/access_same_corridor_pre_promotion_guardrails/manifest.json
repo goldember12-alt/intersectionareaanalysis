@@ -1,0 +1,47 @@
+{
+  "fixture": "access_same_corridor_pre_promotion_guardrails",
+  "purpose": "Frozen pre-production same-corridor prototype outputs used as guardrails after production promotion.",
+  "source": "work/output/context_enrichment_access_same_corridor_prototype current outputs before rerunning the prototype against promoted production.",
+  "files": {
+    "all_route_conflict_local_geometry_diagnostic.csv": {
+      "bytes": 55672,
+      "sha256": "6cd67260cbdc161df9b81dbab0bf7614f57e1a43aed9fdac14cd1a3f22ff71d5"
+    },
+    "approach_row_impact_summary.csv": {
+      "bytes": 1890,
+      "sha256": "35af534f4d4bd639b31d9c4172f590b1a0dc28a0cbecb521d4316473909c9c74"
+    },
+    "recovered_same_corridor_assignments.geojson": {
+      "bytes": 111016,
+      "sha256": "d2de9e0eba4847b4ee98f4ce188d6c74ea42c25b508f489d7af3a0a31ed4597e"
+    },
+    "refused_same_corridor_candidates.geojson": {
+      "bytes": 20736,
+      "sha256": "6903df6431f091f6b520315cef9b163919cc6a57df3cd888a212280f337c659c"
+    },
+    "reviewed_same_corridor_family_table.csv": {
+      "bytes": 2941,
+      "sha256": "b147d6aac21655ca192ad3846e258b66c6b367c619b2b072940dda86fe956257"
+    },
+    "same_corridor_prototype_assignments.csv": {
+      "bytes": 176222,
+      "sha256": "498e3b497cf3750d27f6c9b3f0ec7c5046f38c4f0e06c06eba65657fd1821618"
+    },
+    "signal_approach_impact_summary.csv": {
+      "bytes": 3823,
+      "sha256": "33cb77e56e3df0381a059e0590c220ebf3747832cf7914b074339759b02c0391"
+    }
+  },
+  "guardrails": {
+    "production_route_conflict_rows": 288,
+    "reviewed_family_rows_evaluated": 66,
+    "recovered_rows": 55,
+    "recovered_unique_access_points": 52,
+    "prototype_effective_status_counts": {
+      "route_conflict": 233,
+      "matched": 110,
+      "near_signal": 16,
+      "measure_conflict": 3
+    }
+  }
+}

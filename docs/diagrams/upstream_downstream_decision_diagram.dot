@@ -1,0 +1,572 @@
+// Render example:
+//   dot -Tsvg docs/diagrams/upstream_downstream_decision_diagram.dot -o docs/diagrams/upstream_downstream_decision_diagram.svg
+//   dot -Tpng docs/diagrams/upstream_downstream_decision_diagram.dot -o docs/diagrams/upstream_downstream_decision_diagram.png
+
+digraph upstream_downstream_decision_diagram {
+  graph [
+    rankdir=TB,
+    splines=ortho,
+    newrank=true,
+    nodesep=0.08,
+    ranksep=0.18,
+    pad=0.08,
+    bgcolor="white",
+    fontname="Arial",
+    labelloc=t,
+    labeljust=c,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="20"><B>Signal-Centered Upstream/Downstream Crash Classification Workflow</B></FONT></TD></TR>
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="13">For a crash near one signal, can the crash be placed before or after the signal along travel direction, or should it stay unresolved under the current conservative prototype?</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  node [
+    fontname="Arial",
+    fontsize=12,
+    margin="0.17,0.11",
+    shape=box,
+    style="rounded,filled",
+    color="#3B6F8E",
+    fillcolor="#EAF3F9",
+    fontcolor="#1F2A33",
+    penwidth=1.2
+  ];
+
+  edge [
+    fontname="Arial",
+    fontsize=11,
+    color="#4E5B66",
+    arrowsize=0.82,
+    penwidth=1.05
+  ];
+
+  subgraph cluster_starts {
+    label="Inputs / Starts Here";
+    color="#E9D3AF";
+    penwidth=1.0;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=10,
+      margin="0.12,0.08"
+    ];
+
+    input_scope [
+      label="Starting point\nsignals, study rows, crashes,\nand row-level local flow already exist",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+
+    input_context [
+      label="Context already available\nnearest-row signal context,\nroute-ready crash locations,\nand posted speed",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+  }
+
+  subgraph cluster_spine {
+    label="Main Classification Spine";
+    color="#D7E2EA";
+    penwidth=1.1;
+    style="rounded";
+    bgcolor="#FFFFFF";
+
+    node [
+      width=2.30,
+      margin="0.15,0.10"
+    ];
+
+    start [
+      label="Review one signal\nand nearby crashes",
+      group="spine"
+    ];
+
+    phase1_hdr [
+      shape=plaintext,
+      label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="11"><B>Phase 1</B></FONT></TD></TR>
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="9">screen, route, and row-direction checks</FONT></TD></TR>
+        </TABLE>
+      >,
+      group="spine"
+    ];
+
+    eligible [
+      shape=diamond,
+      label="Inside current prototype scope\nwith usable row-level flow?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.95,
+      group="spine"
+    ];
+
+    excluded_signal [
+      label="Outside prototype scope\nor missing required setup",
+      fillcolor="#E5E7EB",
+      color="#7A828A",
+      group="spine"
+    ];
+
+    speed [
+      label="Set the speed-informed\napproach length",
+      group="spine"
+    ];
+
+    study_area [
+      label="Build a near-signal search area\non the same route",
+      group="spine"
+    ];
+
+    admit [
+      label="Keep only crashes inside\nthat local search area",
+      group="spine"
+    ];
+
+    associate [
+      shape=diamond,
+      label="Clear same-route match?\nCrash and signal remain\non one route",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=3.05,
+      group="spine"
+    ];
+
+    attach [
+      label="Attach the crash to the\nselected signal row",
+      group="spine"
+    ];
+
+    attachment_ok [
+      shape=diamond,
+      label="Credible crash-to-row attachment?\nClose enough to the chosen row\nand signal context",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.95,
+      group="spine"
+    ];
+
+    flow_ok [
+      shape=diamond,
+      label="Trusted row direction\navailable from diagram 1?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.95,
+      group="spine"
+    ];
+
+    fail_lane_1 [
+      shape=point,
+      label="",
+      width=0,
+      height=0,
+      style=invis,
+      group="fail"
+    ];
+
+    phase2_hdr [
+      shape=plaintext,
+      label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="11"><B>Phase 2</B></FONT></TD></TR>
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="9">order on one directed row and classify</FONT></TD></TR>
+        </TABLE>
+      >,
+      group="spine"
+    ];
+
+    directed_line [
+      label="Place crash and signal\non one directed row",
+      group="spine"
+    ];
+
+    compare_ok [
+      shape=diamond,
+      label="Can crash and signal be reliably\nordered on that row?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=3.05,
+      group="spine"
+    ];
+
+    fail_lane_2 [
+      shape=point,
+      label="",
+      width=0,
+      height=0,
+      style=invis,
+      group="fail"
+    ];
+
+    fail_lane_3 [
+      shape=point,
+      label="",
+      width=0,
+      height=0,
+      style=invis,
+      group="fail"
+    ];
+
+    fail_lane_4 [
+      shape=point,
+      label="",
+      width=0,
+      height=0,
+      style=invis,
+      group="fail"
+    ];
+
+    position [
+      shape=diamond,
+      label="Is the crash before or after the signal\nin travel direction?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=3.20,
+      group="spine"
+    ];
+
+    upstream [
+      label="Upstream\ncrash before signal\nin travel direction",
+      fillcolor="#CFECCF",
+      color="#4D8B4D",
+      group="spine"
+    ];
+
+    unresolved [
+      label="Unresolved\nno clear same-route match,\nweak attachment,\nmissing trusted row direction,\nor unreliable along-row ordering",
+      fillcolor="#E5E7EB",
+      color="#7A828A",
+      group="spine"
+    ];
+
+    downstream [
+      label="Downstream\ncrash after signal\nin travel direction",
+      fillcolor="#DDF2D8",
+      color="#5E9B58",
+      group="spine"
+    ];
+
+    start -> eligible;
+    eligible -> speed [xlabel="Yes"];
+    eligible -> excluded_signal [xlabel="No"];
+    speed -> study_area;
+    study_area -> admit;
+    admit -> associate;
+    associate -> attach [xlabel="Yes"];
+    attach -> attachment_ok;
+    attachment_ok -> flow_ok [xlabel="Yes"];
+    flow_ok -> directed_line [xlabel="Yes"];
+    directed_line -> compare_ok;
+    compare_ok -> position [xlabel="Yes"];
+    position -> upstream [xlabel="Before", tailport=sw];
+    position -> downstream [xlabel="After", tailport=se];
+  }
+
+  subgraph cluster_rules {
+    label="Definitions / Prototype Mechanics";
+    color="#E9D3AF";
+    penwidth=0.95;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=9,
+      margin="0.10,0.07"
+    ];
+
+    rule_signal [
+      label="Prototype scope and same-route meaning\nuse signals whose nearest row already has\nStrictUnanimous or Empirical90Pct flow;\ncrash and signal must stay on the same route",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_area [
+      label="Local search area\nnear-signal geometry on the same route,\nclipped to the speed-informed approach length,\nthen buffered and connected by a small hub",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_attachment [
+      label="Attachment quality gate\ncrash must be credibly tied\nto the selected row and signal context",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_line [
+      label="Directed row comparison\nuse the row-level flow result from diagram 1\nto order crash and signal on one row,\nthen compare which comes first in travel direction",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+  }
+
+  subgraph cluster_outputs {
+    label="Outputs / Review";
+    color="#E9D3AF";
+    penwidth=1.1;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    out_classification [
+      label="Primary classification result\nupstream, downstream, or unresolved",
+      fillcolor="#EAF3F9",
+      color="#3B6F8E",
+      group="spine"
+    ];
+
+    out_meaning [
+      label="Meaning\nupstream = before the signal in travel direction\ndownstream = after the signal in travel direction",
+      fillcolor="#EAF3F9",
+      color="#3B6F8E",
+      group="bottom"
+    ];
+
+    out_slice [
+      label="Optional later reporting filter\nstrongest-confidence subset only:\nclassified crashes with high attachment\nand strict empirical flow",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="bottom"
+    ];
+
+    out_review [
+      label="Review posture\nunresolved stays unresolved;\nthe optional later filter is not the core output",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      fontsize=10,
+      margin="0.11,0.08",
+      group="bottom"
+    ];
+
+    out_classification -> out_meaning;
+    out_classification -> out_slice [
+      color="#4C94A0",
+      fontcolor="#4C94A0",
+      style=dashed,
+      xlabel="optional later filter"
+    ];
+    out_meaning -> out_review [
+      style=invis,
+      weight=24,
+      minlen=2
+    ];
+    out_slice -> out_review [
+      style=invis,
+      weight=20,
+      minlen=2
+    ];
+  }
+
+  output_anchor [
+    shape=point,
+    label="",
+    width=0,
+    height=0,
+    style=invis,
+    group="spine"
+  ];
+
+  start -> phase1_hdr [
+    style=invis,
+    weight=30
+  ];
+
+  phase1_hdr -> eligible [
+    style=invis,
+    weight=30
+  ];
+
+  flow_ok -> phase2_hdr [
+    style=invis,
+    weight=30
+  ];
+
+  phase2_hdr -> directed_line [
+    style=invis,
+    weight=30
+  ];
+
+  associate -> fail_lane_1 [
+    xlabel="No",
+    constraint=false
+  ];
+  attachment_ok -> fail_lane_2 [
+    xlabel="No",
+    constraint=false
+  ];
+  flow_ok -> fail_lane_3 [
+    xlabel="No",
+    constraint=false
+  ];
+  compare_ok -> fail_lane_4 [
+    xlabel="No",
+    constraint=false
+  ];
+
+  fail_lane_1 -> fail_lane_2 [
+    arrowhead=none,
+    weight=24
+  ];
+  fail_lane_2 -> fail_lane_3 [
+    arrowhead=none,
+    weight=24
+  ];
+  fail_lane_3 -> fail_lane_4 [
+    arrowhead=none,
+    weight=24
+  ];
+  fail_lane_4 -> unresolved [
+    weight=24
+  ];
+
+  upstream -> unresolved [
+    style=invis,
+    weight=20
+  ];
+  unresolved -> downstream [
+    style=invis,
+    weight=20
+  ];
+
+  upstream -> output_anchor [
+    style=invis,
+    weight=24
+  ];
+  unresolved -> output_anchor [
+    style=invis,
+    weight=28
+  ];
+  downstream -> output_anchor [
+    style=invis,
+    weight=24
+  ];
+  output_anchor -> out_classification [
+    style=invis,
+    weight=60
+  ];
+
+  upstream -> out_classification [weight=20];
+  unresolved -> out_classification [weight=20];
+  downstream -> out_classification [weight=20];
+
+  input_scope -> start [
+    style=invis,
+    weight=24
+  ];
+
+  start -> rule_signal [
+    style=invis,
+    weight=18
+  ];
+
+  input_context -> speed [
+    style=invis,
+    weight=18
+  ];
+
+  study_area -> rule_area [
+    style=invis,
+    weight=16
+  ];
+
+  attachment_ok -> rule_attachment [
+    style=invis,
+    weight=16
+  ];
+
+  directed_line -> rule_line [
+    style=invis,
+    weight=16
+  ];
+
+  {
+    rank=same;
+    input_scope;
+    start;
+    rule_signal;
+  }
+
+  {
+    rank=same;
+    input_context;
+    eligible;
+    excluded_signal;
+  }
+
+  {
+    rank=same;
+    phase1_hdr;
+  }
+
+  {
+    rank=same;
+    study_area;
+    rule_area;
+  }
+
+  {
+    rank=same;
+    attachment_ok;
+    fail_lane_2;
+    rule_attachment;
+  }
+
+  {
+    rank=same;
+    flow_ok;
+    fail_lane_3;
+  }
+
+  {
+    rank=same;
+    compare_ok;
+    fail_lane_4;
+  }
+
+  {
+    rank=same;
+    phase2_hdr;
+  }
+
+  {
+    rank=same;
+    directed_line;
+    rule_line;
+  }
+
+  {
+    rank=same;
+    upstream;
+    unresolved;
+    downstream;
+  }
+
+  {
+    rank=same;
+    out_classification;
+  }
+
+  {
+    rank=same;
+    out_meaning;
+    out_slice;
+  }
+
+  {
+    rank=same;
+    out_review;
+  }
+}
