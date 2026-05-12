@@ -26,7 +26,7 @@ Use these first:
 
 ## Historical and recovery notes
 
-- [legacy/](legacy/) - recent dated recovery and cleanup notes retained for historical context
-- `legacy/docs/` - older archived documentation outside the active docs set
+- [../legacy/](../legacy/) - consolidated historical preservation root
+- [../legacy/docs/](../legacy/docs/) - archived documentation and dated recovery audits outside the active docs set
 
 The active docs set is intentionally small. Treat dated recovery, cleanup, and classification memos as historical context rather than current workflow authority.

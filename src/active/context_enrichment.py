@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -37,6 +38,8 @@ ACCESS_SAME_CORRIDOR_FAMILY_TABLE = Path("docs/workflow/context_enrichment_acces
 ACCESS_SAME_CORRIDOR_RULE = "reviewed_family_local_distance_unique_row_project_compare"
 ACCESS_SAME_CORRIDOR_DISTANCE_TIE_TOLERANCE_FT = 0.01
 AADT_LOCAL_DISTANCE_MAX_FT = 3.0
+DISTANCE_BAND_WIDTH_FT = 50.0
+DISTANCE_BAND_FAMILY = "fixed_50ft_from_signal_within_study_area"
 MIN_RU_DOMINANT_COUNT = 3
 MIN_RU_DOMINANT_SHARE = 0.67
 
@@ -320,6 +323,67 @@ def _normalize_route_name(value: object) -> str | None:
         return None
     normalized = " ".join(str(value).strip().split())
     return normalized or None
+
+
+def _distance_band_start_ft(distance_ft: object) -> float | None:
+    numeric = pd.to_numeric(pd.Series([distance_ft]), errors="coerce").iloc[0]
+    if pd.isna(numeric) or float(numeric) < 0:
+        return None
+    return float(int(float(numeric) // DISTANCE_BAND_WIDTH_FT) * int(DISTANCE_BAND_WIDTH_FT))
+
+
+def _distance_band_fields(distance_ft: object) -> dict[str, object]:
+    start_ft = _distance_band_start_ft(distance_ft)
+    if start_ft is None:
+        return {
+            "DistanceBandFamily": None,
+            "DistanceBandStartFt": None,
+            "DistanceBandEndFt": None,
+            "DistanceBandLabel": None,
+        }
+    end_ft = float(start_ft + DISTANCE_BAND_WIDTH_FT)
+    return {
+        "DistanceBandFamily": DISTANCE_BAND_FAMILY,
+        "DistanceBandStartFt": start_ft,
+        "DistanceBandEndFt": end_ft,
+        "DistanceBandLabel": f"{int(start_ft)}-{int(end_ft)}",
+    }
+
+
+def _study_area_band_records(signal_base: pd.DataFrame) -> pd.DataFrame:
+    records: list[dict[str, object]] = []
+    id_columns = [
+        "StudyAreaID",
+        "Signal_RowID",
+        "REG_SIGNAL_ID",
+        "SIGNAL_NO",
+        "SignalLabel",
+        "SignalRouteName",
+    ]
+    for row in signal_base[id_columns + ["ApproachLengthMeters"]].itertuples(index=False):
+        length_numeric = pd.to_numeric(pd.Series([row.ApproachLengthMeters]), errors="coerce").iloc[0]
+        if pd.isna(length_numeric) or float(length_numeric) <= 0:
+            continue
+        approach_length_ft = float(length_numeric) * METERS_TO_FEET
+        band_end_ceiling = int(max(DISTANCE_BAND_WIDTH_FT, DISTANCE_BAND_WIDTH_FT * ((int(approach_length_ft - 1e-9) // int(DISTANCE_BAND_WIDTH_FT)) + 1)))
+        for band_start_ft in range(0, band_end_ceiling, int(DISTANCE_BAND_WIDTH_FT)):
+            band_end_ft = float(band_start_ft + int(DISTANCE_BAND_WIDTH_FT))
+            records.append(
+                {
+                    "StudyAreaID": str(row.StudyAreaID),
+                    "Signal_RowID": _int_or_na(row.Signal_RowID),
+                    "REG_SIGNAL_ID": row.REG_SIGNAL_ID,
+                    "SIGNAL_NO": row.SIGNAL_NO,
+                    "SignalLabel": row.SignalLabel,
+                    "SignalRouteName": row.SignalRouteName,
+                    "StudyAreaApproachLengthFt": approach_length_ft,
+                    "DistanceBandFamily": DISTANCE_BAND_FAMILY,
+                    "DistanceBandStartFt": float(band_start_ft),
+                    "DistanceBandEndFt": band_end_ft,
+                    "DistanceBandLabel": f"{band_start_ft}-{int(band_end_ft)}",
+                }
+            )
+    return pd.DataFrame(records)
 
 
 def _to_int64(series: pd.Series) -> pd.Series:
@@ -773,6 +837,26 @@ def _same_corridor_candidate_decision(
         "reason": "reviewed_family_unique_local_geometry_supported",
         "winner": winner,
     }
+
+
+def _populate_access_signal_distance_fields(final_record: dict[str, object]) -> None:
+    projection_ft = pd.to_numeric(pd.Series([final_record.get("Access_ProjectionFt")]), errors="coerce").iloc[0]
+    signal_projection_ft = pd.to_numeric(pd.Series([final_record.get("Access_SignalProjectionFt")]), errors="coerce").iloc[0]
+    if pd.isna(projection_ft) or pd.isna(signal_projection_ft):
+        return
+    distance_ft = abs(float(projection_ft) - float(signal_projection_ft))
+    final_record["Access_DistanceFromSignalFt"] = distance_ft
+    position = final_record.get("Access_SignalRelativePosition")
+    if position == "downstream":
+        band_fields = _distance_band_fields(distance_ft)
+        final_record["Access_SignalOffsetFt"] = distance_ft
+        final_record["Access_DownstreamDistanceFt"] = distance_ft
+        final_record["Access_DistanceBandFamily"] = band_fields["DistanceBandFamily"]
+        final_record["Access_DistanceBandStartFt"] = band_fields["DistanceBandStartFt"]
+        final_record["Access_DistanceBandEndFt"] = band_fields["DistanceBandEndFt"]
+        final_record["Access_DistanceBandLabel"] = band_fields["DistanceBandLabel"]
+    elif position == "upstream":
+        final_record["Access_SignalOffsetFt"] = -distance_ft
 
 
 def _build_aadt_candidates(
@@ -1412,6 +1496,7 @@ def _apply_reviewed_same_corridor_overlay(
         final_record["Access_AssignmentStatus"] = "near_signal"
         final_record["Access_AssignmentReason"] = "reviewed_same_corridor_projection_within_65_6ft_of_signal"
         final_record["Access_SignalRelativePosition"] = "near_signal"
+        _populate_access_signal_distance_fields(final_record)
         return
 
     if flow_follows_geometry:
@@ -1421,6 +1506,7 @@ def _apply_reviewed_same_corridor_overlay(
     final_record["Access_AssignmentStatus"] = "matched"
     final_record["Access_AssignmentReason"] = "reviewed_same_corridor_unique_local_projection_match"
     final_record["Access_SignalRelativePosition"] = position
+    _populate_access_signal_distance_fields(final_record)
 
 
 def _build_access_assignment_points(
@@ -1454,6 +1540,13 @@ def _build_access_assignment_points(
                 "Access_ToRowDistanceFt",
                 "Access_ProjectionFt",
                 "Access_SignalProjectionFt",
+                "Access_DistanceFromSignalFt",
+                "Access_SignalOffsetFt",
+                "Access_DownstreamDistanceFt",
+                "Access_DistanceBandFamily",
+                "Access_DistanceBandStartFt",
+                "Access_DistanceBandEndFt",
+                "Access_DistanceBandLabel",
                 "Access_SignalRelativePosition",
                 "Access_AssignmentStatus",
                 "Access_AssignmentReason",
@@ -1522,6 +1615,13 @@ def _build_access_assignment_points(
                     "Access_ToRowDistanceFt": None,
                     "Access_ProjectionFt": None,
                     "Access_SignalProjectionFt": None,
+                    "Access_DistanceFromSignalFt": None,
+                    "Access_SignalOffsetFt": None,
+                    "Access_DownstreamDistanceFt": None,
+                    "Access_DistanceBandFamily": None,
+                    "Access_DistanceBandStartFt": None,
+                    "Access_DistanceBandEndFt": None,
+                    "Access_DistanceBandLabel": None,
                     "Access_SignalRelativePosition": "unresolved",
                     "Access_AssignmentStatus": "unresolved",
                     "Access_AssignmentReason": "missing_flow_or_projection",
@@ -1596,6 +1696,13 @@ def _build_access_assignment_points(
             "Access_ToRowDistanceFt": overall_nearest_distance_ft,
             "Access_ProjectionFt": None,
             "Access_SignalProjectionFt": None,
+            "Access_DistanceFromSignalFt": None,
+            "Access_SignalOffsetFt": None,
+            "Access_DownstreamDistanceFt": None,
+            "Access_DistanceBandFamily": None,
+            "Access_DistanceBandStartFt": None,
+            "Access_DistanceBandEndFt": None,
+            "Access_DistanceBandLabel": None,
             "Access_SignalRelativePosition": "unresolved",
             "Access_AssignmentStatus": "unresolved",
             "Access_AssignmentReason": "missing_flow_or_projection",
@@ -1674,6 +1781,7 @@ def _build_access_assignment_points(
                     final_record["Access_AssignmentReason"] = "unique_route_measure_spatial_match"
                     final_record["Access_AssignmentRule"] = "exact_route_measure_distance_unique_row_project_compare"
                     final_record["Access_SignalRelativePosition"] = position
+                _populate_access_signal_distance_fields(final_record)
 
         final_records.append(final_record)
         final_geometries.append(record["geometry"])
@@ -1759,6 +1867,373 @@ def _aggregate_access_to_rows(
             }
         )
     return pd.DataFrame(row_records)
+
+
+def _route_direction_token(route_name: object) -> str | None:
+    normalized = _normalize_route_name(route_name)
+    if normalized is None:
+        return None
+    match = re.search(r"(NB|SB|EB|WB)(?=ALT|\b|$)", normalized)
+    return match.group(1) if match else None
+
+
+def _route_without_direction_token(route_name: object) -> str | None:
+    normalized = _normalize_route_name(route_name)
+    if normalized is None:
+        return None
+    return re.sub(r"(NB|SB|EB|WB)(?=ALT|\b|$)", "", normalized)
+
+
+def _has_opposite_direction_warning(access_route: object, study_route: object) -> bool:
+    access_direction = _route_direction_token(access_route)
+    study_direction = _route_direction_token(study_route)
+    if access_direction is None or study_direction is None:
+        return False
+    if {access_direction, study_direction} not in ({"NB", "SB"}, {"EB", "WB"}):
+        return False
+    return _route_without_direction_token(access_route) == _route_without_direction_token(study_route)
+
+
+def _nearest_row_review_record(
+    family_table: pd.DataFrame,
+    access_route_norm: object,
+    study_route_norm: object,
+) -> dict[str, object]:
+    exact_pair = family_table.loc[
+        family_table["AccessRouteNorm"].eq(access_route_norm)
+        & family_table["StudyRouteNorm"].eq(study_route_norm)
+    ].copy()
+    access_family = family_table.loc[family_table["AccessRouteNorm"].eq(access_route_norm)].copy()
+    if not exact_pair.empty:
+        row = exact_pair.iloc[0]
+        return {
+            "HasCurrentReviewedFamily": True,
+            "CurrentReviewDecision": row["ReviewDecision"],
+            "CurrentRefusalRisk": row["ReviewReason"] if "ReviewReason" in row.index else None,
+            "CurrentFamilyKey": row["FamilyKey"],
+        }
+    if not access_family.empty:
+        decisions = _list_to_pipe(access_family["ReviewDecision"].astype(str).drop_duplicates().tolist())
+        reasons = _list_to_pipe(access_family["ReviewReason"].astype(str).drop_duplicates().tolist()) if "ReviewReason" in access_family.columns else None
+        return {
+            "HasCurrentReviewedFamily": False,
+            "CurrentReviewDecision": f"access_route_reviewed_elsewhere:{decisions}",
+            "CurrentRefusalRisk": reasons,
+            "CurrentFamilyKey": _list_to_pipe(access_family["FamilyKey"].astype(str).tolist()),
+        }
+    return {
+        "HasCurrentReviewedFamily": False,
+        "CurrentReviewDecision": None,
+        "CurrentRefusalRisk": None,
+        "CurrentFamilyKey": None,
+    }
+
+
+def _review_bucket_from_route_conflict(row: pd.Series) -> tuple[str, int, str]:
+    review_status = row.get("ExistingSameCorridorReviewStatus")
+    current_decision = row.get("CurrentReviewDecision")
+    conflict_count = int(row.get("ConflictPointCount") or 0)
+    distinct_signal_count = int(row.get("DistinctSignalCount") or 0)
+    nearest_distance = pd.to_numeric(pd.Series([row.get("NearestDistanceFt")]), errors="coerce").iloc[0]
+    median_distance = pd.to_numeric(pd.Series([row.get("MedianDistanceFt")]), errors="coerce").iloc[0]
+    within_5_count = int(row.get("Within5FtCount") or 0)
+    measure_compatible = bool(row.get("MeasureCompatibleIfRouteIgnored"))
+    opposite_warning = bool(row.get("OppositeDirectionWarning"))
+
+    if (
+        opposite_warning
+        or review_status == "family_excluded"
+        or str(current_decision).strip().lower() == "exclude"
+    ):
+        return (
+            "likely_wrong_carriageway_or_parallel_facility",
+            5,
+            "retain_refusal_wrong_carriageway_or_parallel_risk",
+        )
+    if review_status == "approved_study_route_not_present":
+        return (
+            "candidate_direction_variant",
+            2,
+            "review_family_table_coverage_for_missing_carriageway",
+        )
+    if (
+        conflict_count >= 2
+        and (distinct_signal_count >= 2 or within_5_count >= 2)
+        and within_5_count >= 2
+        and pd.notna(median_distance)
+        and float(median_distance) <= 5.0
+    ):
+        return (
+            "candidate_same_corridor_alias",
+            1,
+            "review_repeated_near_zero_family_for_explicit_include",
+        )
+    if measure_compatible and pd.notna(nearest_distance) and float(nearest_distance) <= ACCESS_MAX_TO_ROW_DISTANCE_FT:
+        return (
+            "candidate_measure_supported_but_unreviewed",
+            3,
+            "review_measure_supported_local_route_conflict",
+        )
+    if pd.notna(nearest_distance) and float(nearest_distance) <= ACCESS_MAX_TO_ROW_DISTANCE_FT and conflict_count == 1:
+        return (
+            "likely_cross_street_or_local_access",
+            4,
+            "inspect_one_off_local_geometry_before_any_promotion",
+        )
+    return (
+        "insufficient_evidence",
+        6,
+        "retain_unresolved_pending_repeated_or_reviewed_evidence",
+    )
+
+
+def _build_access_route_conflict_diagnostics(
+    access_points: pd.DataFrame,
+    access_points_geo: gpd.GeoDataFrame,
+    approach_row_geometry: gpd.GeoDataFrame,
+    same_corridor_family_table: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, gpd.GeoDataFrame]:
+    required_columns = [
+        "Access_PointID",
+        "StudyAreaID",
+        "Signal_RowID",
+        "Access_Route",
+        "NearestStudyRoad_RowID",
+        "NearestStudyRoute",
+        "NearestStudyRouteCommon",
+        "NearestDistanceFt",
+        "SignalRouteName",
+        "FlowDirection",
+        "Access_Measure",
+        "NearestRowFromMeasure",
+        "NearestRowToMeasure",
+        "MeasureCompatibleIfRouteIgnored",
+        "ReviewBucket",
+        "ReviewPriority",
+        "ExistingSameCorridorReviewStatus",
+        "ExistingSameCorridorRefusalReason",
+        "AccessRouteNorm",
+        "StudyRouteNorm",
+        "SecondNearestStudyRoad_RowID",
+        "SecondNearestDistanceFt",
+        "NearestDistanceGapFt",
+        "OppositeDirectionWarning",
+        "HasCurrentReviewedFamily",
+        "CurrentReviewDecision",
+        "CurrentRefusalRisk",
+        "CandidatePromotionRecommendation",
+        "NearestStudyRoadGeometry",
+    ]
+
+    route_conflicts = access_points_geo.loc[
+        access_points_geo["Access_AssignmentStatus"].eq("route_conflict")
+    ].copy()
+    if route_conflicts.empty:
+        empty = pd.DataFrame(columns=required_columns)
+        empty_geo = gpd.GeoDataFrame(empty.copy(), geometry=gpd.GeoSeries([], crs=access_points_geo.crs), crs=access_points_geo.crs)
+        family_columns = [
+            "AccessRouteNorm",
+            "StudyRouteNorm",
+            "ConflictPointCount",
+            "DistinctSignalCount",
+            "MinDistanceFt",
+            "MedianDistanceFt",
+            "MaxDistanceFt",
+            "NearZeroCount",
+            "Within5FtCount",
+            "Within15FtCount",
+            "Within30FtCount",
+            "Within60FtCount",
+            "HasCurrentReviewedFamily",
+            "CurrentReviewDecision",
+            "CurrentRefusalRisk",
+            "DominantReviewBucket",
+            "MinReviewPriority",
+        ]
+        return empty.drop(columns=["NearestStudyRoadGeometry"]), pd.DataFrame(columns=family_columns), empty_geo
+
+    row_context = approach_row_geometry[
+        [
+            "StudyAreaID",
+            "StudyRoad_RowID",
+            "SignalRouteName",
+            "ApproachRoad_RTE_NM",
+            "ApproachRoad_RTE_COMMON",
+            "ApproachRoad_FROM_MEASURE",
+            "ApproachRoad_TO_MEASURE",
+            "FlowDirection",
+            "geometry",
+        ]
+    ].copy()
+    row_context["StudyRouteNorm"] = row_context["ApproachRoad_RTE_NM"].map(_normalize_route_name)
+    rows_by_study_area = {
+        str(study_area_id): frame.copy()
+        for study_area_id, frame in row_context.groupby("StudyAreaID", dropna=False)
+    }
+
+    records: list[dict[str, object]] = []
+    geometries: list[object] = []
+    for _, point in route_conflicts.iterrows():
+        study_area_id = str(point["StudyAreaID"])
+        candidate_rows = rows_by_study_area.get(study_area_id, pd.DataFrame())
+        access_route_norm = _normalize_route_name(point["Access_Route"])
+        access_measure = pd.to_numeric(pd.Series([point["Access_Measure"]]), errors="coerce").iloc[0]
+        nearest_candidates: list[dict[str, object]] = []
+        for _, row in candidate_rows.iterrows():
+            line = _normalize_line_geometry(row["geometry"])
+            distance_ft = float(point.geometry.distance(line) * METERS_TO_FEET) if line is not None else None
+            from_measure, to_measure = _ordered_measure_range(
+                row["ApproachRoad_FROM_MEASURE"],
+                row["ApproachRoad_TO_MEASURE"],
+            )
+            measure_compatible = (
+                from_measure is not None
+                and to_measure is not None
+                and not pd.isna(access_measure)
+                and float(access_measure) >= from_measure - ACCESS_MEASURE_TOLERANCE_MI
+                and float(access_measure) <= to_measure + ACCESS_MEASURE_TOLERANCE_MI
+            )
+            nearest_candidates.append(
+                {
+                    "StudyRoad_RowID": int(row["StudyRoad_RowID"]),
+                    "SignalRouteName": row["SignalRouteName"],
+                    "StudyRouteNorm": row["StudyRouteNorm"],
+                    "ApproachRoad_RTE_NM": row["ApproachRoad_RTE_NM"],
+                    "ApproachRoad_RTE_COMMON": row["ApproachRoad_RTE_COMMON"],
+                    "ApproachRoad_FROM_MEASURE": row["ApproachRoad_FROM_MEASURE"],
+                    "ApproachRoad_TO_MEASURE": row["ApproachRoad_TO_MEASURE"],
+                    "FlowDirection": row["FlowDirection"],
+                    "LineGeometry": line,
+                    "DistanceFt": distance_ft,
+                    "MeasureCompatibleIfRouteIgnored": measure_compatible,
+                }
+            )
+
+        nearest_candidates = sorted(
+            [item for item in nearest_candidates if item["DistanceFt"] is not None],
+            key=lambda item: (float(item["DistanceFt"]), int(item["StudyRoad_RowID"])),
+        )
+        nearest = nearest_candidates[0] if nearest_candidates else {}
+        second_nearest = nearest_candidates[1] if len(nearest_candidates) > 1 else {}
+        nearest_distance = nearest.get("DistanceFt")
+        second_distance = second_nearest.get("DistanceFt")
+        review = _nearest_row_review_record(
+            same_corridor_family_table,
+            access_route_norm,
+            nearest.get("StudyRouteNorm"),
+        )
+        record = {
+            "Access_PointID": point["Access_PointID"],
+            "StudyAreaID": study_area_id,
+            "Signal_RowID": _int_or_na(point["Signal_RowID"]),
+            "Access_Route": point["Access_Route"],
+            "NearestStudyRoad_RowID": nearest.get("StudyRoad_RowID"),
+            "NearestStudyRoute": nearest.get("ApproachRoad_RTE_NM"),
+            "NearestStudyRouteCommon": nearest.get("ApproachRoad_RTE_COMMON"),
+            "NearestDistanceFt": nearest_distance,
+            "SignalRouteName": nearest.get("SignalRouteName"),
+            "FlowDirection": nearest.get("FlowDirection"),
+            "Access_Measure": point["Access_Measure"],
+            "NearestRowFromMeasure": nearest.get("ApproachRoad_FROM_MEASURE"),
+            "NearestRowToMeasure": nearest.get("ApproachRoad_TO_MEASURE"),
+            "MeasureCompatibleIfRouteIgnored": bool(nearest.get("MeasureCompatibleIfRouteIgnored", False)),
+            "ReviewBucket": None,
+            "ReviewPriority": None,
+            "ExistingSameCorridorReviewStatus": point.get("Access_SameCorridorReviewStatus"),
+            "ExistingSameCorridorRefusalReason": point.get("Access_SameCorridorRefusalReason"),
+            "AccessRouteNorm": access_route_norm,
+            "StudyRouteNorm": nearest.get("StudyRouteNorm"),
+            "SecondNearestStudyRoad_RowID": second_nearest.get("StudyRoad_RowID"),
+            "SecondNearestDistanceFt": second_distance,
+            "NearestDistanceGapFt": (
+                float(second_distance) - float(nearest_distance)
+                if second_distance is not None and nearest_distance is not None
+                else None
+            ),
+            "OppositeDirectionWarning": _has_opposite_direction_warning(access_route_norm, nearest.get("StudyRouteNorm")),
+            "HasCurrentReviewedFamily": review["HasCurrentReviewedFamily"],
+            "CurrentReviewDecision": review["CurrentReviewDecision"],
+            "CurrentRefusalRisk": review["CurrentRefusalRisk"],
+            "CurrentFamilyKey": review["CurrentFamilyKey"],
+            "CandidatePromotionRecommendation": None,
+            "NearestStudyRoadGeometry": nearest.get("LineGeometry"),
+        }
+        records.append(record)
+        geometries.append(point.geometry)
+
+    diagnostics = pd.DataFrame(records)
+    family_stats = (
+        diagnostics.groupby(["AccessRouteNorm", "StudyRouteNorm"], dropna=False)
+        .agg(
+            ConflictPointCount=("Access_PointID", "size"),
+            DistinctSignalCount=("StudyAreaID", "nunique"),
+            MinDistanceFt=("NearestDistanceFt", "min"),
+            MedianDistanceFt=("NearestDistanceFt", "median"),
+            MaxDistanceFt=("NearestDistanceFt", "max"),
+            NearZeroCount=("NearestDistanceFt", lambda values: int(pd.to_numeric(values, errors="coerce").le(0.5).sum())),
+            Within5FtCount=("NearestDistanceFt", lambda values: int(pd.to_numeric(values, errors="coerce").le(5.0).sum())),
+            Within15FtCount=("NearestDistanceFt", lambda values: int(pd.to_numeric(values, errors="coerce").le(15.0).sum())),
+            Within30FtCount=("NearestDistanceFt", lambda values: int(pd.to_numeric(values, errors="coerce").le(30.0).sum())),
+            Within60FtCount=("NearestDistanceFt", lambda values: int(pd.to_numeric(values, errors="coerce").le(60.0).sum())),
+            HasCurrentReviewedFamily=("HasCurrentReviewedFamily", "max"),
+            CurrentReviewDecision=("CurrentReviewDecision", lambda values: _list_to_pipe(pd.Series(values).dropna().drop_duplicates().tolist())),
+            CurrentRefusalRisk=("CurrentRefusalRisk", lambda values: _list_to_pipe(pd.Series(values).dropna().drop_duplicates().tolist())),
+        )
+        .reset_index()
+    )
+    diagnostics = diagnostics.merge(
+        family_stats[
+            [
+                "AccessRouteNorm",
+                "StudyRouteNorm",
+                "ConflictPointCount",
+                "DistinctSignalCount",
+                "MedianDistanceFt",
+                "Within5FtCount",
+            ]
+        ],
+        on=["AccessRouteNorm", "StudyRouteNorm"],
+        how="left",
+        validate="many_to_one",
+    )
+    bucket_results = diagnostics.apply(_review_bucket_from_route_conflict, axis=1)
+    diagnostics["ReviewBucket"] = bucket_results.map(lambda value: value[0])
+    diagnostics["ReviewPriority"] = bucket_results.map(lambda value: value[1])
+    diagnostics["CandidatePromotionRecommendation"] = bucket_results.map(lambda value: value[2])
+    family_bucket = (
+        diagnostics.sort_values(["AccessRouteNorm", "StudyRouteNorm", "ReviewPriority"])
+        .groupby(["AccessRouteNorm", "StudyRouteNorm"], dropna=False)
+        .agg(
+            DominantReviewBucket=("ReviewBucket", "first"),
+            MinReviewPriority=("ReviewPriority", "min"),
+        )
+        .reset_index()
+    )
+    family_summary = family_stats.merge(
+        family_bucket,
+        on=["AccessRouteNorm", "StudyRouteNorm"],
+        how="left",
+        validate="one_to_one",
+    ).sort_values(
+        ["MinReviewPriority", "Within5FtCount", "ConflictPointCount", "MedianDistanceFt"],
+        ascending=[True, False, False, True],
+    )
+
+    output_columns = required_columns + [
+        "CurrentFamilyKey",
+        "ConflictPointCount",
+        "DistinctSignalCount",
+        "MedianDistanceFt",
+        "Within5FtCount",
+    ]
+    diagnostics_geo = gpd.GeoDataFrame(
+        diagnostics[output_columns].copy(),
+        geometry=gpd.GeoSeries(geometries, crs=access_points_geo.crs),
+        crs=access_points_geo.crs,
+    )
+    diagnostics_table = diagnostics_geo.drop(columns=["geometry", "NearestStudyRoadGeometry"])
+    family_summary["HasCurrentReviewedFamily"] = family_summary["HasCurrentReviewedFamily"].astype(bool)
+    return diagnostics_table, family_summary.reset_index(drop=True), diagnostics_geo
 
 
 def _aggregate_access_to_signals(
@@ -1909,11 +2384,137 @@ def _build_rural_urban_outputs(
     return crash_context, pd.DataFrame(row_records), pd.DataFrame(signal_records)
 
 
+def _append_crash_distance_fields(crash_context: pd.DataFrame) -> pd.DataFrame:
+    enriched = crash_context.copy()
+    signal_projection_ft = _to_numeric(enriched["SignalProjectionMeters"]) * METERS_TO_FEET
+    crash_projection_ft = _to_numeric(enriched["CrashProjectionMeters"]) * METERS_TO_FEET
+    distance_ft = (crash_projection_ft - signal_projection_ft).abs()
+
+    enriched["Crash_DistanceFromSignalFt"] = pd.NA
+    enriched["Crash_SignalOffsetFt"] = pd.NA
+    enriched["Crash_DownstreamDistanceFt"] = pd.NA
+    enriched["Crash_DistanceBandFamily"] = pd.NA
+    enriched["Crash_DistanceBandStartFt"] = pd.NA
+    enriched["Crash_DistanceBandEndFt"] = pd.NA
+    enriched["Crash_DistanceBandLabel"] = pd.NA
+
+    downstream_mask = (
+        enriched["SignalRelativeClassification"].eq("downstream")
+        & signal_projection_ft.notna()
+        & crash_projection_ft.notna()
+    )
+    upstream_mask = (
+        enriched["SignalRelativeClassification"].eq("upstream")
+        & signal_projection_ft.notna()
+        & crash_projection_ft.notna()
+    )
+
+    enriched.loc[downstream_mask | upstream_mask, "Crash_DistanceFromSignalFt"] = distance_ft.loc[downstream_mask | upstream_mask]
+    enriched.loc[downstream_mask, "Crash_SignalOffsetFt"] = distance_ft.loc[downstream_mask]
+    enriched.loc[upstream_mask, "Crash_SignalOffsetFt"] = -distance_ft.loc[upstream_mask]
+    enriched.loc[downstream_mask, "Crash_DownstreamDistanceFt"] = distance_ft.loc[downstream_mask]
+
+    downstream_distances = enriched.loc[downstream_mask, "Crash_DownstreamDistanceFt"]
+    if not downstream_distances.empty:
+        band_fields = downstream_distances.map(_distance_band_fields)
+        enriched.loc[downstream_mask, "Crash_DistanceBandFamily"] = band_fields.map(lambda value: value["DistanceBandFamily"])
+        enriched.loc[downstream_mask, "Crash_DistanceBandStartFt"] = band_fields.map(lambda value: value["DistanceBandStartFt"])
+        enriched.loc[downstream_mask, "Crash_DistanceBandEndFt"] = band_fields.map(lambda value: value["DistanceBandEndFt"])
+        enriched.loc[downstream_mask, "Crash_DistanceBandLabel"] = band_fields.map(lambda value: value["DistanceBandLabel"])
+
+    return enriched
+
+
+def _build_signal_downstream_distance_band_summary(
+    signal_base: pd.DataFrame,
+    access_points: pd.DataFrame,
+    crash_context_enriched: pd.DataFrame,
+) -> pd.DataFrame:
+    band_spine = _study_area_band_records(signal_base)
+    if band_spine.empty:
+        return pd.DataFrame(
+            columns=[
+                "StudyAreaID",
+                "Signal_RowID",
+                "REG_SIGNAL_ID",
+                "SIGNAL_NO",
+                "SignalLabel",
+                "SignalRouteName",
+                "StudyAreaApproachLengthFt",
+                "DistanceBandFamily",
+                "DistanceBandStartFt",
+                "DistanceBandEndFt",
+                "DistanceBandLabel",
+                "DownstreamAccessCount",
+                "DownstreamCrashCount",
+            ]
+        )
+
+    access_counts = (
+        access_points.loc[
+            access_points["Access_SignalRelativePosition"].eq("downstream")
+            & access_points["Access_DistanceBandLabel"].notna(),
+            ["StudyAreaID", "Access_DistanceBandFamily", "Access_DistanceBandStartFt", "Access_DistanceBandEndFt", "Access_DistanceBandLabel", "Access_PointID"],
+        ]
+        .groupby(
+            ["StudyAreaID", "Access_DistanceBandFamily", "Access_DistanceBandStartFt", "Access_DistanceBandEndFt", "Access_DistanceBandLabel"],
+            dropna=False,
+        )["Access_PointID"]
+        .nunique()
+        .reset_index(name="DownstreamAccessCount")
+        .rename(
+            columns={
+                "Access_DistanceBandFamily": "DistanceBandFamily",
+                "Access_DistanceBandStartFt": "DistanceBandStartFt",
+                "Access_DistanceBandEndFt": "DistanceBandEndFt",
+                "Access_DistanceBandLabel": "DistanceBandLabel",
+            }
+        )
+    )
+    crash_counts = (
+        crash_context_enriched.loc[
+            crash_context_enriched["SignalRelativeClassification"].eq("downstream")
+            & crash_context_enriched["Crash_DistanceBandLabel"].notna(),
+            ["StudyAreaID", "Crash_DistanceBandFamily", "Crash_DistanceBandStartFt", "Crash_DistanceBandEndFt", "Crash_DistanceBandLabel", "Crash_RowID"],
+        ]
+        .groupby(
+            ["StudyAreaID", "Crash_DistanceBandFamily", "Crash_DistanceBandStartFt", "Crash_DistanceBandEndFt", "Crash_DistanceBandLabel"],
+            dropna=False,
+        )["Crash_RowID"]
+        .nunique()
+        .reset_index(name="DownstreamCrashCount")
+        .rename(
+            columns={
+                "Crash_DistanceBandFamily": "DistanceBandFamily",
+                "Crash_DistanceBandStartFt": "DistanceBandStartFt",
+                "Crash_DistanceBandEndFt": "DistanceBandEndFt",
+                "Crash_DistanceBandLabel": "DistanceBandLabel",
+            }
+        )
+    )
+
+    summary = band_spine.merge(
+        access_counts,
+        on=["StudyAreaID", "DistanceBandFamily", "DistanceBandStartFt", "DistanceBandEndFt", "DistanceBandLabel"],
+        how="left",
+        validate="one_to_one",
+    ).merge(
+        crash_counts,
+        on=["StudyAreaID", "DistanceBandFamily", "DistanceBandStartFt", "DistanceBandEndFt", "DistanceBandLabel"],
+        how="left",
+        validate="one_to_one",
+    )
+    summary["DownstreamAccessCount"] = summary["DownstreamAccessCount"].fillna(0).astype(int)
+    summary["DownstreamCrashCount"] = summary["DownstreamCrashCount"].fillna(0).astype(int)
+    return summary.sort_values(["StudyAreaID", "DistanceBandStartFt"]).reset_index(drop=True)
+
+
 def _build_classified_crash_context_enriched(
     crash_context: pd.DataFrame,
     approach_enriched: pd.DataFrame,
     signal_enriched: pd.DataFrame,
 ) -> pd.DataFrame:
+    crash_context = _append_crash_distance_fields(crash_context)
     row_columns = [
         "StudyAreaID",
         "StudyRoad_RowID",
@@ -2180,8 +2781,11 @@ def _build_validation_metrics(
     aadt_diagnostics: dict[str, object],
     approach_enriched: pd.DataFrame,
     access_points: pd.DataFrame,
+    access_route_conflict_diagnostics: pd.DataFrame,
+    access_route_conflict_family_summary: pd.DataFrame,
     crash_context_enriched: pd.DataFrame,
     signal_enriched: pd.DataFrame,
+    signal_downstream_distance_bands: pd.DataFrame,
 ) -> dict[str, object]:
     selected_aadt = approach_enriched.loc[approach_enriched["AADT_Status"].eq("matched")].copy()
     matched_access = access_points.loc[access_points["Access_AssignmentStatus"].isin(["matched", "near_signal"])].copy()
@@ -2210,6 +2814,11 @@ def _build_validation_metrics(
     access_route_supported_candidate_point_count = int(access_points["RouteSupportedStudyRoadRowIDs"].fillna("").astype(str).ne("").sum())
     access_measure_supported_candidate_point_count = int(access_points["MeasureSupportedStudyRoadRowIDs"].fillna("").astype(str).ne("").sum())
     access_distance_supported_candidate_point_count = int(access_points["DistancePassedStudyRoadRowIDs"].fillna("").astype(str).ne("").sum())
+    route_conflict_nearest_distance = (
+        pd.to_numeric(access_route_conflict_diagnostics["NearestDistanceFt"], errors="coerce")
+        if not access_route_conflict_diagnostics.empty
+        else pd.Series(dtype="float64")
+    )
 
     signal_aadt_states = signal_enriched.loc[signal_enriched["AADT_MatchedApproachRowCount"].gt(0), "StudyAreaID"].astype(str)
     aadt_ambiguous_or_unresolved = signal_enriched.loc[
@@ -2282,6 +2891,36 @@ def _build_validation_metrics(
             "near_signal_count": int(access_points["Access_AssignmentStatus"].eq("near_signal").sum()),
             "unresolved_point_count": int(access_points["Access_AssignmentStatus"].eq("unresolved").sum()),
             "approach_rows_with_nonzero_access_density": int(approach_enriched["Access_Density_Per1000Ft"].fillna(0).gt(0).sum()),
+            "route_conflict_diagnostic_row_count": int(len(access_route_conflict_diagnostics)),
+            "route_conflict_family_count": int(len(access_route_conflict_family_summary)),
+            "route_conflict_review_status_counts": (
+                access_route_conflict_diagnostics["ExistingSameCorridorReviewStatus"].fillna("<null>").value_counts(dropna=False).to_dict()
+                if not access_route_conflict_diagnostics.empty
+                else {}
+            ),
+            "route_conflict_review_bucket_counts": (
+                access_route_conflict_diagnostics["ReviewBucket"].fillna("<null>").value_counts(dropna=False).to_dict()
+                if not access_route_conflict_diagnostics.empty
+                else {}
+            ),
+            "route_conflicts_within_5ft_nearest_row": int(route_conflict_nearest_distance.le(5.0).sum()),
+            "route_conflicts_within_60ft_nearest_row": int(route_conflict_nearest_distance.le(ACCESS_MAX_TO_ROW_DISTANCE_FT).sum()),
+            "route_conflict_high_priority_family_count": (
+                int(access_route_conflict_family_summary["MinReviewPriority"].le(2).sum())
+                if not access_route_conflict_family_summary.empty
+                else 0
+            ),
+        },
+        "downstream_distance_bands": {
+            "band_family": DISTANCE_BAND_FAMILY,
+            "signal_band_row_count": int(len(signal_downstream_distance_bands)),
+            "signals_with_band_rows": int(signal_downstream_distance_bands["StudyAreaID"].nunique()) if not signal_downstream_distance_bands.empty else 0,
+            "downstream_access_points_with_bands": int(access_points["Access_DistanceBandLabel"].notna().sum()),
+            "downstream_crashes_with_bands": int(crash_context_enriched["Crash_DistanceBandLabel"].notna().sum()),
+            "bands_with_downstream_access": int(signal_downstream_distance_bands["DownstreamAccessCount"].gt(0).sum()) if not signal_downstream_distance_bands.empty else 0,
+            "bands_with_downstream_crashes": int(signal_downstream_distance_bands["DownstreamCrashCount"].gt(0).sum()) if not signal_downstream_distance_bands.empty else 0,
+            "max_downstream_access_distance_ft": float(access_points["Access_DownstreamDistanceFt"].dropna().max()) if access_points["Access_DownstreamDistanceFt"].notna().any() else None,
+            "max_downstream_crash_distance_ft": float(crash_context_enriched["Crash_DownstreamDistanceFt"].dropna().max()) if crash_context_enriched["Crash_DownstreamDistanceFt"].notna().any() else None,
         },
         "rural_urban": {
             "crash_area_type_completeness_source": round(inputs.crash_area_type["AREA_TYPE"].notna().mean(), 4),
@@ -2314,6 +2953,8 @@ def _build_methodology_markdown(paths: ResolvedPaths, source_paths: dict[str, Pa
         "- AADT selection: exact route support, positive measure overlap, local geometry distance `<= 3.0` feet, positive AADT, latest non-null year, unique best candidate",
         "- access assignment: exact route support, measure tolerance `0.005` miles, row distance `<= 60.0` feet, near-signal threshold `<= 65.6` feet",
         "- reviewed same-corridor access overlay: after exact-route `route_conflict`, recover only `ReviewDecision = include` families with one approved route row within the reviewed local threshold and no nearer/tied non-approved row",
+        "- route-conflict diagnostics: advisory review buckets and family summaries only; these outputs do not change production access assignment",
+        f"- downstream distance outputs: descriptive fixed `{int(DISTANCE_BAND_WIDTH_FT)}`-foot bins from the signal within the current approach-shaped study area only; not a downstream boundary rule",
         "- rural/urban: crash-context aggregation only from crash `AREA_TYPE`",
         "",
         "## Source files",
@@ -2343,6 +2984,7 @@ def _build_validation_summary_markdown(validation: dict[str, object]) -> str:
     field_validation = validation["field_validation"]
     aadt = validation["aadt"]
     access = validation["access"]
+    downstream_distance_bands = validation["downstream_distance_bands"]
     rural_urban = validation["rural_urban"]
     signal_summary_duplicates = validation["signal_summary_duplicates"]
     spot_checks = validation["required_spot_check_signal_ids"]
@@ -2395,6 +3037,24 @@ def _build_validation_summary_markdown(validation: dict[str, object]) -> str:
             f"- near-signal access point count: `{access['near_signal_count']}`",
             f"- unresolved access point count: `{access['unresolved_point_count']}`",
             f"- approach rows with nonzero access density: `{access['approach_rows_with_nonzero_access_density']}`",
+            f"- route-conflict diagnostic rows: `{access['route_conflict_diagnostic_row_count']}`",
+            f"- route-conflict family rows: `{access['route_conflict_family_count']}`",
+            f"- route-conflict reviewed-family status counts: `{json.dumps(access['route_conflict_review_status_counts'], sort_keys=True)}`",
+            f"- route-conflict review-bucket counts: `{json.dumps(access['route_conflict_review_bucket_counts'], sort_keys=True)}`",
+            f"- route conflicts within 5 ft of nearest study row: `{access['route_conflicts_within_5ft_nearest_row']}`",
+            f"- route conflicts within 60 ft of nearest study row: `{access['route_conflicts_within_60ft_nearest_row']}`",
+            f"- high-priority route-conflict family count: `{access['route_conflict_high_priority_family_count']}`",
+            "",
+            "## Downstream Distance Bands",
+            f"- band family: `{downstream_distance_bands['band_family']}`",
+            f"- signal-band rows: `{downstream_distance_bands['signal_band_row_count']}`",
+            f"- signals with band rows: `{downstream_distance_bands['signals_with_band_rows']}`",
+            f"- downstream access points with band assignments: `{downstream_distance_bands['downstream_access_points_with_bands']}`",
+            f"- downstream crashes with band assignments: `{downstream_distance_bands['downstream_crashes_with_bands']}`",
+            f"- bands with downstream access: `{downstream_distance_bands['bands_with_downstream_access']}`",
+            f"- bands with downstream crashes: `{downstream_distance_bands['bands_with_downstream_crashes']}`",
+            f"- max downstream access distance (ft): `{downstream_distance_bands['max_downstream_access_distance_ft']}`",
+            f"- max downstream crash distance (ft): `{downstream_distance_bands['max_downstream_crash_distance_ft']}`",
             "",
             "## Rural/Urban",
             f"- crash `AREA_TYPE` completeness in normalized source: `{rural_urban['crash_area_type_completeness_source']}`",
@@ -2527,6 +3187,14 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
         inputs.access,
         inputs.same_corridor_family_table,
     )
+    access_route_conflict_diagnostics, access_route_conflict_family_summary, access_route_conflict_geo = (
+        _build_access_route_conflict_diagnostics(
+            access_points,
+            access_points_geo,
+            approach_row_geometry,
+            inputs.same_corridor_family_table,
+        )
+    )
     access_row_agg = _aggregate_access_to_rows(approach_with_aadt, access_points)
     access_signal_agg = _aggregate_access_to_signals(signal_base, approach_with_aadt, access_points)
 
@@ -2544,6 +3212,11 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
     )
     signal_enriched = _fill_missing_ru_context(signal_enriched)
     crash_context_enriched = _build_classified_crash_context_enriched(crash_context, approach_enriched, signal_enriched)
+    signal_downstream_distance_bands = _build_signal_downstream_distance_band_summary(
+        signal_base,
+        access_points,
+        crash_context_enriched,
+    )
 
     validation = _build_validation_metrics(
         inputs,
@@ -2553,8 +3226,11 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
         aadt_diagnostics,
         approach_enriched,
         access_points,
+        access_route_conflict_diagnostics,
+        access_route_conflict_family_summary,
         crash_context_enriched,
         signal_enriched,
+        signal_downstream_distance_bands,
     )
 
     approach_review = approach_row_geometry[["StudyAreaID", "StudyRoad_RowID", "geometry"]].merge(
@@ -2627,6 +3303,20 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
                 history_dir=tables_history_dir,
             )
         ),
+        "access_route_conflict_diagnostics": str(
+            _write_csv_frame(
+                access_route_conflict_diagnostics,
+                tables_current_dir / "access_route_conflict_diagnostics.csv",
+                history_dir=tables_history_dir,
+            )
+        ),
+        "access_route_conflict_family_summary": str(
+            _write_csv_frame(
+                access_route_conflict_family_summary,
+                tables_current_dir / "access_route_conflict_family_summary.csv",
+                history_dir=tables_history_dir,
+            )
+        ),
         "rural_urban_crash_context_summary": str(
             _write_csv_frame(
                 signal_enriched[
@@ -2645,6 +3335,13 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
                     ]
                 ],
                 tables_current_dir / "rural_urban_crash_context_summary.csv",
+                history_dir=tables_history_dir,
+            )
+        ),
+        "signal_downstream_distance_band_summary": str(
+            _write_csv_frame(
+                signal_downstream_distance_bands,
+                tables_current_dir / "signal_downstream_distance_band_summary.csv",
                 history_dir=tables_history_dir,
             )
         ),
@@ -2690,6 +3387,13 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
                 history_dir=review_geojson_history_dir,
             )
         ),
+        "access_route_conflict_candidates_geojson": str(
+            _write_geojson_frame(
+                gpd.GeoDataFrame(access_route_conflict_geo, geometry="geometry", crs=inputs.access.crs),
+                review_geojson_current_dir / "access_route_conflict_candidates.geojson",
+                history_dir=review_geojson_history_dir,
+            )
+        ),
         "aadt_ambiguous_rows_geojson": str(
             _write_geojson_frame(
                 gpd.GeoDataFrame(aadt_ambiguous_review, geometry="geometry", crs=approach_row_geometry.crs),
@@ -2712,6 +3416,8 @@ def run_context_enrichment(argv: list[str] | None = None) -> int:
             "AADT matching uses exact route support plus positive measure overlap and local geometry distance <= 3.0 feet; it does not fall back to proximity-only or measure-only support.",
             "When all rule-supported positive AADT candidates have null years, selection falls through to route support, measure overlap, and local distance without inventing a year ranking.",
             "Sparse same-class rural/urban crash context below the minimum dominant-count threshold is treated as unresolved.",
+            "Route-conflict review buckets are diagnostic only and do not auto-recover unreviewed access-route mismatches.",
+            f"Downstream distance bands are descriptive {int(DISTANCE_BAND_WIDTH_FT)}-foot bins within the current approach-shaped study area, not a limiting-value or next-signal boundary.",
         ],
     }
     run_summary_path = runs_current_dir / "context_enrichment_run_summary.json"

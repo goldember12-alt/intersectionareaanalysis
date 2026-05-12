@@ -66,11 +66,10 @@ Manual QGIS PNG exports are not regenerated automatically by the Python steps.
 - `src/transitional/` - transitional diagnostics still referenced by the narrowed workflow
 - `config/` - active runtime config
 - `scripts/` - bootstrap and environment entrypoints
-- `artifacts/` - tracked staged and normalized intermediates
+- `artifacts/` - active local staged and normalized intermediates
 - `work/` - ignored runtime outputs and review products
 - `docs/` - active methodology, workflow, planning, and design docs
-- `docs/legacy/` - recent dated recovery and cleanup notes kept for historical context
-- `legacy/` - older archived code, docs, and reference material
+- `legacy/` - consolidated historical preservation root for retired code, archived docs, recovery audits, old outputs, and reference material
 
 
 

@@ -1,4 +1,4 @@
-# Core Methodology: Signal-Centered Downstream Functional Area Analysis
+# Core Methodology: Directed Segment Downstream Functional Area Analysis
 
 ## Purpose
 
@@ -9,7 +9,7 @@ The goal is not to preserve a legacy implementation path. The goal is to produce
 This repository should therefore be treated as an active analytical redesign effort. Existing code, outputs, contracts, and workflow assumptions are inputs for evaluation, not assumptions that must be preserved. Any existing component may be retained, repurposed, rewritten, moved to legacy storage, or discarded depending on whether it helps accomplish the analytical goals of the project clearly and truthfully.
 
 This document is the core methodology for the repository. The companion document
-`docs/methodology/proposal_alignment_growth_plan.md` translates the VTRC final proposal into a repository-facing growth plan. That companion should be read as project-charter alignment and future expansion guidance; it does not replace the bounded signal-centered methodology here.
+`docs/methodology/proposal_alignment_growth_plan.md` translates the VTRC final proposal into a repository-facing growth plan. That companion should be read as project-charter alignment and future expansion guidance; it does not replace the bounded directed segment methodology here.
 
 ## Core Project Principle
 
@@ -28,25 +28,33 @@ The project should favor methods that are:
 
 ## Current Scope
 
-The current practical focus is a signal-centered workflow for downstream analysis on divided roadways. Signals are the anchor object. Around each signal, the workflow needs a bounded near-signal evidence model that preserves the nearby roadway, crash, and signal-adjacent context needed to decide which crashes are approaching the signal, which are leaving it, and how downstream segments should be interpreted.
+The current practical focus is pivoting to a road-network-first workflow that first builds a full-roadway graph foundation from Travelway geometry. Signals remain critical nodes, but the active graph foundation must retain both divided and undivided roads before crashes, access-context summaries, or other events are attached.
 
-This narrower scope is intentional. A truthful and effective method for divided roadways is more valuable than an unfinished universal method covering every roadway type.
+The earlier divided-road directed signal-leg scaffold remains useful as a preserved prototype, but it is superseded for graph foundation purposes. The active graph foundation is documented in `docs/methodology/roadway_graph_methodology.md` and `docs/workflow/roadway_graph_workflow.md`.
 
-The methodology should therefore allow scope reduction when it improves clarity, validity, and deliverability.
+The earlier signal-centered crash/access classification workflow remains preserved as an active-but-separate prototype until a later task explicitly migrates it. The directed segment workflow must not use crash records or crash direction fields to infer true vehicle travel direction.
 
-## Signal-Centered Evidence Model
+The detailed directed segment methodology is documented in `docs/methodology/directed_segment_methodology.md`.
 
-The working dataset should be a bounded near-signal evidence model rather than a general roadway-direction engine.
+The directed segment workflow must still not use crash records or crash direction fields to infer true vehicle travel direction. For the full-roadway graph foundation, divided/undivided classification is descriptive source-roadway context only. Divided roads may later support directional/carriageway records, while undivided roads remain centerline/logical segment records until a later crash-direction assignment phase is explicitly implemented.
+
+The prior divided-road vertical slice remains valuable, but the graph foundation should no longer exclude undivided roads.
+
+The methodology should still allow scope reduction when it improves clarity, validity, and deliverability, but graph-foundation scope reduction must be explicit and must not silently discard undivided roads.
+
+## Directed Segment Evidence Scaffold
+
+The working dataset should first be a bounded oriented roadway scaffold rather than a crash-first signal buffer. The scaffold is road-network-first, but still signal-anchored: signals define the primary nodes and divided-road carriageways define oriented legs to adjacent signals, access points, or roadway endpoints.
 
 In practical terms, that means:
 
-1. start from a signalized intersection or signal
-2. define a bounded near-signal area or influence window
-3. pull the nearby roadway or carriageway context needed to interpret signal-relative position
-4. pull the nearby crashes and preserve the attributes needed to reason about movement and location
-5. infer local flow orientation only where needed to classify crashes as upstream or downstream, or approaching or leaving, relative to the signal
+1. start from signalized intersection nodes
+2. attach each usable signal node to divided-road route/carriageway context
+3. build signal-anchored roadway legs on the same route/carriageway
+4. order those leg geometries from one fixed anchor to another without claiming true vehicle movement
+5. cut oriented legs into fixed distance bins for later crash, access, speed, AADT, and median joins
 
-This is the conceptual architecture the active workflow should support, even where the current reduced slice still exposes roadway-centered intermediate tables.
+Crashes should be attached to this scaffold in later passes. The current directed segment pass does not use crash data to infer or validate true vehicle travel direction.
 
 ## What the Methodology Must Accomplish
 
@@ -63,7 +71,7 @@ These are the required analytical ends. The exact computational path used to ach
 
 ## Supporting Flow-Orientation Principle
 
-Signal-relative flow orientation is a supporting analytical requirement inside the signal-centered workflow, but the method used to infer it is not fixed in advance. Cardinal labels may be useful intermediate aids, but they are not the final analytical purpose by themselves.
+Signal-relative flow orientation is now a supporting analytical requirement inside the directed segment workflow, but the method used to infer it is not fixed in advance. Cardinal labels may be useful intermediate aids, but they are not the final analytical purpose by themselves.
 
 The methodology must permit multiple candidate flow-orientation approaches to be explored and compared, including but not limited to:
 
@@ -86,20 +94,9 @@ A method is acceptable if it can state clearly:
 
 ## Empirical Flow Orientation for Divided Roads
 
-For divided-road analysis, filtered empirical crash evidence may be sufficient in cases where it provides a simpler and more direct route to local flow-orientation support than inherited network-linkage logic. Roadway context should be treated as support-only unless it has been validated for stronger use.
+Prior divided-road experiments found that filtered empirical crash evidence may be useful for diagnostic comparison in some contexts. That remains legacy/prototype evidence only for the current pivot. The directed segment workflow must first use road-network/source evidence and must not use crash evidence to infer or validate direction in this pass.
 
-Examples of potentially valid evidence sources include:
-
-- crash direction-of-travel attributes
-- crash maneuver types
-- restrictions to single-vehicle or straight-ahead crash subsets
-- roadway-side consistency across connected segments
-- strong agreement among multiple observations on the same carriageway
-- agreement with roadway naming or directional context fields when available
-
-Such evidence should not be dismissed merely because it is not inherited from the prior workflow. If it is strong, interpretable, conservative, and easier to validate for the current scope, it may be preferable.
-
-Recent bounded experiment work supports continuing in this direction. The current read is:
+Historical crash-evidence experiments remain useful as background, not as an active direction source for the directed segment build. The prior read was:
 
 - a non-Oracle empirical method can produce credible local carriageway flow orientation in at least some divided-road contexts
 - strict unanimity is trustworthy but sparse
@@ -107,7 +104,7 @@ Recent bounded experiment work supports continuing in this direction. The curren
 - single-vehicle-clean cases are diagnostically useful
 - route-name fallback remains secondary and low-trust
 
-That work answered an important subproblem. It did not change the larger architectural point that the project is trying to classify crashes relative to signals, not produce cardinal direction labels as the final product.
+That work answered an important subproblem for the older prototype. It does not govern the current directed segment pass, which must keep roadway direction independent from crash observations.
 
 ## Required Method-Design Behavior
 

@@ -10,7 +10,11 @@ This repository is still in redesign mode, but the restored workflow is now conc
 
 ## Workflow surface
 
-The active workflow currently has one standard CLI slice plus five direct-entry analytical modules.
+The active workflow currently has one standard CLI slice plus direct-entry analytical modules.
+
+The road-network-first directed segment workflow is now a separate active direct-entry family. It builds divided-road signal nodes, oriented signal-anchored legs, optional access termini, and 50-foot bins without reading crash data, inferring true vehicle travel direction, or changing the existing crash classification modules. Its contract is documented in `docs/workflow/directed_segment_workflow.md`.
+
+The full-roadway graph foundation prototype is now the active graph-foundation path. It uses normalized Travelway roads, retains divided and undivided roadways, and supersedes the divided-only directed segment workflow for graph foundation purposes. Its contract is documented in `docs/workflow/roadway_graph_workflow.md`.
 
 ### Standard package CLI slice
 
@@ -53,6 +57,18 @@ These modules are active and useful again, but they are not currently exposed th
   - reviewed same-corridor access prototype outside production matching
   - direct-entry only
   - uses an explicit reviewed family table and prototype-only outputs
+- `python -m src.active.directed_segments`
+  - road-network-first oriented divided-road signal-leg and 50-foot bin workflow
+  - direct-entry only
+  - uses `Study_Roads_Divided.parquet` and `Study_Signals_NearestRoad.parquet`
+  - uses `artifacts/normalized/access.parquet` only for optional access termini
+  - does not read crash data, infer true vehicle travel direction, or modify crash classification logic
+- `python -m src.active.roadway_graph`
+  - full-roadway signal-adjacent graph foundation prototype
+  - direct-entry only
+  - uses `artifacts/normalized/roads.parquet` and `artifacts/normalized/signals.parquet`
+  - retains both divided and undivided Travelway roads
+  - does not read crash data, assign crashes, infer true vehicle travel direction, or modify crash/access modules
 
 ## Bootstrap entry story
 
@@ -136,6 +152,39 @@ Expected outputs for the standard slice:
 - `work/parity/stage1_parity_manifest.json`
 
 Those outputs are currently present in this working tree.
+
+## Roadway graph foundation prototype
+
+Run:
+
+```powershell
+<bootstrap-reported-python> -m src.active.roadway_graph
+```
+
+Role:
+
+- full-roadway graph foundation prototype for signal-adjacent roadway legs
+- retains both divided and undivided roads from normalized Travelway
+- supersedes the divided-only directed segment workflow for graph foundation purposes
+- does not read crash data, assign crashes, infer true vehicle direction, or implement analysis-ready gating
+
+Current output contract under `work/output/roadway_graph/`:
+
+- `tables/current/roadway_graph_nodes.csv`
+- `tables/current/roadway_graph_edges.csv`
+- `tables/current/signal_graph_nodes.csv`
+- `tables/current/signal_adjacent_edges.csv`
+- `tables/current/signal_graph_edge_bins_50ft.csv`
+- `tables/current/graph_gap_review.csv`
+- `tables/current/divided_edge_directional_candidates.csv`
+- `tables/current/undivided_edge_candidates.csv`
+- `review/current/graph_build_summary.csv`
+- `review/current/signal_adjacent_edge_count_summary.csv`
+- `review/current/sample_signal_graph_review.csv`
+- `review/geojson/current/*.geojson`
+- `runs/current/run_summary.json`
+
+The detailed contract is documented in `docs/workflow/roadway_graph_workflow.md`.
 
 ## Directionality experiment
 
@@ -249,6 +298,8 @@ It covers:
 
 - AADT enrichment from `New_AADT.gdb` using exact route support, positive measure overlap, and local geometry distance `<= 3.0` feet
 - access-point counts and densities from `accesspoints.gdb`
+- route-conflict access diagnostics and review queues that do not change production assignment
+- descriptive signal-relative distance fields and fixed `50`-foot downstream band summaries within the current approach-shaped study area
 - rural/urban crash-context summaries from crash `AREA_TYPE`
 
 The current bounded implementation keeps access matching conservative and reviewable:
@@ -258,6 +309,41 @@ The current bounded implementation keeps access matching conservative and review
 - excluded, unreviewed, opposite-direction, and non-unique local-geometry candidates remain refused
 - review outputs and validation summaries should make route-conflict and measure-conflict behavior explicit
 - rural/urban remains crash-context only, with explicit no-crash-context rows instead of blank approach-row fields
+
+The current first manual route-conflict family review queue is documented in:
+
+- `docs/workflow/access_route_conflict_family_review_batch_001.md`
+
+The first explicit same-corridor promotion comparison is documented in:
+
+- `docs/workflow/access_route_conflict_promotion_batch_001_comparison.md`
+
+The closure/integration check against the active upstream/downstream workflow is documented in:
+
+- `docs/workflow/context_enrichment_upstream_downstream_integration_memo.md`
+
+The April 28, 2026 raw-input and artifact recovery audit is documented in:
+
+- `docs/workflow/repo_input_artifact_recovery_audit_20260428.md`
+
+The current proposal-facing descriptive packaging phase is documented in:
+
+- `docs/workflow/proposal_facing_descriptive_analysis_package_001.md`
+- `docs/workflow/proposal_facing_descriptive_table_contracts_001.md`
+- `docs/workflow/proposal_facing_distance_band_family_design_002.md`
+- `docs/workflow/proposal_facing_descriptive_analysis_package_002.md`
+- `docs/workflow/proposal_facing_descriptive_findings_package_003.md`
+
+Current status:
+
+- context enrichment is sufficient for the current divided-road vertical slice
+- access route-conflict recovery batch 001 is closed for now
+- remaining access route conflicts stay unresolved unless a later bounded analysis exposes a specific review need
+- the current phase is proposal-facing descriptive table packaging, not matching recovery or modeling
+- Package 001 is the frozen descriptive baseline
+- Package 002 adds expanded descriptive downstream band families without changing Package 001
+- Package 003 is the initial descriptive findings/readout phase and produces review queues, not model claims
+- next future phases are manual review of Package 003 queues, limiting/desirable/policy band design from documented sources, comparison-ready table refinement, and a roadway-level geographic-context source decision
 
 The current implementation location and invocation are:
 
@@ -279,6 +365,7 @@ Optional overrides:
 - `--run-label`
 
 The active implementation enriches the current approach-row, signal-study-area, and classified-crash outputs rather than creating a universal statewide segment product.
+The same run now also writes exploratory signal-level downstream distance-band summaries for the current approach-shaped study area.
 It remains outside the standard Stage 1A CLI slice as a bounded direct-entry step.
 
 ## Same-corridor access validation prototype
@@ -351,6 +438,8 @@ Active code and commands are currently:
 - `src/active/directionality_experiment.py` as a direct-entry supporting experiment
 - `src/active/upstream_downstream_prototype.py` as a direct-entry prototype
 - `src/active/high_confidence_upstream_downstream_analysis.py` as a restored direct-entry downstream extension
+- `src/active/directed_segments/` as the preserved divided-road directed signal-leg prototype
+- `src/active/roadway_graph/` as the full-roadway graph foundation prototype
 - `src/transitional/bridge_key_audit.py` and `src/transitional/bridge_key_geojson_audit.py` as transitional diagnostics
 
 

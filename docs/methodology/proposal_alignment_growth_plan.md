@@ -9,15 +9,15 @@ It should be kept under `docs/methodology/` because it is not merely a workflow 
 - clearer Virginia guidance for calculating downstream functional area dimensions at signalized intersections
 - evidence for Appendix F of VDOT's Road Design Manual
 - exploratory crash/access analysis that can inform, but not solely determine, downstream functional area guidance
-- controlled growth from the current divided-road workflow into comparison-ready analytical outputs
+- controlled growth from the full-roadway graph foundation and preserved divided-road vertical slice into comparison-ready analytical outputs
 
-This document is a companion to `docs/methodology/overview_methodology.md`. The overview remains the core active methodology for how this repo should work today. This proposal-alignment document explains why that active methodology matters to the larger research project and how it can grow without losing methodological discipline.
+This document is a companion to `docs/methodology/overview_methodology.md`. The overview remains the core active methodology for how this repo should work today. The current graph-foundation pivot is a full-roadway signal-adjacent graph that retains both divided and undivided Travelway roads, documented further in `docs/methodology/roadway_graph_methodology.md`. The older divided-road directed segment workflow remains useful as a preserved vertical-slice prototype. This proposal-alignment document explains why that active methodology matters to the larger research project and how it can grow without losing methodological discipline.
 
 ## Relationship to the Core Methodology
 
-The core methodology asks a bounded implementation question:
+The core methodology now asks a bounded implementation question:
 
-- how can the repo build a signal-centered, near-signal evidence model that truthfully supports downstream, upstream, approaching, and leaving interpretation, especially on divided roadways?
+- how can the repo build a full-roadway signal-adjacent graph and distance bins that retain both divided and undivided roads so later crash, access, AADT, speed, and median evidence can be attached to a stable roadway scaffold without prematurely claiming true vehicle travel direction?
 
 The proposal asks a broader research question:
 
@@ -25,7 +25,7 @@ The proposal asks a broader research question:
 
 Those questions are aligned but not identical.
 
-The current repository should not try to become the full proposal in one step. It should first produce a trustworthy divided-road vertical slice. Once that slice is validated, it can become the analytical backend for the proposal's exploratory crash analysis and later guidance development.
+The current repository should not try to become the full proposal in one step. It should first produce a trustworthy roadway graph foundation, while preserving the divided-road vertical slice as a comparison and validation prototype. Once the graph foundation is reviewed, it can become the analytical backend for the proposal's exploratory crash analysis and later guidance development.
 
 ## Core Ideas from the Final Proposal
 
@@ -111,7 +111,7 @@ The current repo is not yet the full proposal.
 
 Important gaps:
 
-- it is intentionally focused on divided roads, not all signalized intersection designs
+- the prior analytical vertical slice was intentionally focused on divided roads; the active graph foundation now retains divided and undivided roads but is still a prototype requiring QA
 - it does not yet implement explicit downstream distance bands from the proposal
 - it does not yet produce regression-ready or model-ready analysis tables as a stable output contract
 - it does not yet provide a spreadsheet-style calculation tool
@@ -125,11 +125,11 @@ These gaps are expected. They should not be solved by reactivating old broad mac
 
 The repository can become the analytical backend for the proposal if it grows in controlled phases:
 
-1. Keep the current divided-road workflow as the first trustworthy vertical slice.
-2. Use it to produce downstream-zone crash/access/AADT/speed/median summaries by signal.
+1. Keep the full-roadway graph foundation as the active roadway scaffold while preserving the divided-road workflow as a validation prototype.
+2. Use the reviewed graph foundation to produce downstream-zone crash/access/AADT/speed/median summaries by signal.
 3. Add explicit downstream distance bands matching proposal concepts, such as physical area to limiting value, limiting value to desirable value, fixed buffers, and speed-based bands.
 4. Add comparison-ready outputs for regression or descriptive analysis.
-5. Expand cautiously beyond divided roads only after the divided-road method is validated.
+5. Expand analysis cautiously beyond reviewed graph contexts only after graph QA and divided/undivided handling are validated.
 6. Add roadway-level rural/suburban/urban context from a better source before using those classes as policy variables.
 7. Treat crash findings as safety evidence that informs guidance, not as the sole basis for distance calculation.
 
@@ -137,14 +137,14 @@ These steps are the preferred growth sequence for proposal alignment.
 
 ## Phase Guidance for Repo Implementation
 
-### Phase 1: Preserve the Divided-Road Vertical Slice
+### Phase 1: Build and Review the Full-Roadway Graph Foundation
 
-The current active workflow should remain bounded to divided-road, signal-centered analysis until it is easier to validate and explain.
+The active roadway scaffold should retain both divided and undivided roads. The older divided-road vertical slice should remain preserved for comparison, but it should not be the only graph foundation.
 
 Required behavior:
 
-- keep flow orientation as supporting evidence, not the final product
-- preserve upstream/downstream and approaching/leaving interpretation as the analytical purpose
+- keep graph adjacency separate from true vehicle travel direction
+- preserve divided/undivided source-roadway status as descriptive context
 - keep strict and empirical directionality evidence separate from low-trust support fields
 - report unresolved rates and conflict rates
 - keep current/history output lanes stable

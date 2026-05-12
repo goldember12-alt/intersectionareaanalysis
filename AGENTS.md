@@ -295,7 +295,7 @@ Documentation roles:
 - `docs/workflow/active_workflow.md`: current commands and output contracts
 - `docs/workflow/enrichment_plan.md`: active context-enrichment contract
 - `AGENTS.md`: Codex operating contract
-- `docs/legacy/` and `legacy/`: historical context only
+- `legacy/`: consolidated historical preservation root for legacy docs, code, outputs, and reference material
 
 Do not let active docs drift behind code changes.
 

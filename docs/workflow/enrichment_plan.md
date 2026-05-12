@@ -2,7 +2,7 @@
 
 ## Bounded question
 
-How should the current divided-road, signal-centered upstream/downstream outputs be enriched with AADT, access-point, and crash-context rural/urban information without broadening into statewide segment enrichment, Oracle revival, Stage 1C packaging, or legacy crash/access ladders?
+How should the current divided-road, signal-centered upstream/downstream outputs be enriched with AADT, access-point, crash-context rural/urban information, and descriptive signal-relative distance outputs without broadening into statewide segment enrichment, Oracle revival, Stage 1C packaging, or legacy crash/access ladders?
 
 This document is the active implementation contract for that bounded slice.
 It replaces a conceptual plan with a conservative, implementation-grade specification.
@@ -13,6 +13,7 @@ It replaces a conceptual plan with a conservative, implementation-grade specific
 - The enrichment step is post-prototype and post-study-slice. It does not expand the standard Stage 1A CLI slice.
 - The first implementation remains direct-entry only.
 - The enrichment outputs are signal-centered context products, not a statewide road-segment inventory.
+- Exploratory downstream distance bins remain descriptive outputs inside the current approach-shaped study area only. They do not define a limiting value, desirable value, next-signal boundary, or policy distance.
 - Crash-rate denominator claims remain out of scope until AADT coverage and ambiguity are reviewed.
 
 ## Implementation location and invocation
@@ -369,6 +370,152 @@ After a point is matched to a row:
 
 `Access_Density_Per1000Ft` uses `ApproachLengthMeters * 3.28084 / 1000.0` as the denominator.
 
+## Access route-conflict diagnostics
+
+Route-conflict diagnostics are review outputs only.
+They do not change `Access_AssignmentStatus`, same-corridor recovery behavior, or the reviewed family table.
+
+Write:
+
+- `access_route_conflict_diagnostics.csv`
+- `access_route_conflict_family_summary.csv`
+- `access_route_conflict_candidates.geojson`
+
+Required point-level diagnostic fields:
+
+- `Access_PointID`
+- `StudyAreaID`
+- `Signal_RowID`
+- `Access_Route`
+- `NearestStudyRoad_RowID`
+- `NearestStudyRoute`
+- `NearestStudyRouteCommon`
+- `NearestDistanceFt`
+- `SignalRouteName`
+- `FlowDirection`
+- `Access_Measure`
+- `NearestRowFromMeasure`
+- `NearestRowToMeasure`
+- `MeasureCompatibleIfRouteIgnored`
+- `ReviewBucket`
+- `ReviewPriority`
+- `ExistingSameCorridorReviewStatus`
+- `ExistingSameCorridorRefusalReason`
+
+Required family-summary fields:
+
+- `AccessRouteNorm`
+- `StudyRouteNorm`
+- `ConflictPointCount`
+- `DistinctSignalCount`
+- `MinDistanceFt`
+- `MedianDistanceFt`
+- `MaxDistanceFt`
+- `NearZeroCount`
+- `Within5FtCount`
+- `Within15FtCount`
+- `Within30FtCount`
+- `Within60FtCount`
+- `HasCurrentReviewedFamily`
+- `CurrentReviewDecision`
+- `CurrentRefusalRisk`
+
+Diagnostic review buckets:
+
+- `candidate_same_corridor_alias`
+- `candidate_direction_variant`
+- `candidate_measure_supported_but_unreviewed`
+- `likely_cross_street_or_local_access`
+- `likely_wrong_carriageway_or_parallel_facility`
+- `insufficient_evidence`
+
+No production auto-recovery should happen from these diagnostic buckets alone.
+Promotion still requires explicit edits to `docs/workflow/context_enrichment_access_same_corridor_seed_families.csv`.
+
+The first ranked manual review batch is documented in:
+
+- `docs/workflow/access_route_conflict_family_review_batch_001.md`
+
+The first explicit same-corridor promotion comparison is documented in:
+
+- `docs/workflow/access_route_conflict_promotion_batch_001_comparison.md`
+
+The post-promotion enrichment closure and upstream/downstream integration check is documented in:
+
+- `docs/workflow/context_enrichment_upstream_downstream_integration_memo.md`
+
+## Exploratory downstream distance outputs
+
+These outputs are descriptive only.
+They use the current approach-shaped study area and the existing signal/point or signal/crash projection fields.
+They do not answer the separate proposal question of where the downstream functional area should end.
+
+### Fixed-band family for the current implementation
+
+- `fixed_50ft_from_signal_within_study_area`
+- band width: `50` feet
+- band extent: from the signal to the current approach-shaped study-area length for that signal
+- not used to change AADT matching, access matching, or upstream/downstream classification
+
+### Access distance fields
+
+When an access point has usable row projection support, write:
+
+- `Access_DistanceFromSignalFt`
+- `Access_SignalOffsetFt`
+- `Access_DownstreamDistanceFt`
+- `Access_DistanceBandFamily`
+- `Access_DistanceBandStartFt`
+- `Access_DistanceBandEndFt`
+- `Access_DistanceBandLabel`
+
+Rules:
+
+- `Access_DistanceFromSignalFt` is the absolute along-row projection distance from the signal
+- `Access_SignalOffsetFt` is positive for downstream, negative for upstream, and null for `near_signal` or unresolved rows
+- downstream band fields populate only when `Access_SignalRelativePosition == "downstream"`
+- `near_signal` access points keep their absolute distance field but do not receive a downstream band assignment
+
+### Crash distance fields
+
+When a classified crash has usable signal and crash projections, write:
+
+- `Crash_DistanceFromSignalFt`
+- `Crash_SignalOffsetFt`
+- `Crash_DownstreamDistanceFt`
+- `Crash_DistanceBandFamily`
+- `Crash_DistanceBandStartFt`
+- `Crash_DistanceBandEndFt`
+- `Crash_DistanceBandLabel`
+
+Rules:
+
+- crash distance uses the absolute difference between `SignalProjectionMeters` and `CrashProjectionMeters`
+- `Crash_SignalOffsetFt` is positive for downstream and negative for upstream
+- downstream band fields populate only when `SignalRelativeClassification == "downstream"`
+
+### Signal-level band summary output
+
+Write one descriptive signal-centered table:
+
+- `signal_downstream_distance_band_summary.csv`
+
+Required fields:
+
+- `StudyAreaID`
+- `Signal_RowID`
+- `REG_SIGNAL_ID`
+- `SIGNAL_NO`
+- `SignalLabel`
+- `SignalRouteName`
+- `StudyAreaApproachLengthFt`
+- `DistanceBandFamily`
+- `DistanceBandStartFt`
+- `DistanceBandEndFt`
+- `DistanceBandLabel`
+- `DownstreamAccessCount`
+- `DownstreamCrashCount`
+
 ## Crash-context rural/urban contract
 
 Use crash `AREA_TYPE` only as crash-context evidence.
@@ -531,7 +678,10 @@ When a study area contains candidate access points but none can be assigned conf
 - `classified_crash_context_enriched.csv`
 - `aadt_match_candidates.csv`
 - `access_assignment_points.csv`
+- `access_route_conflict_diagnostics.csv`
+- `access_route_conflict_family_summary.csv`
 - `rural_urban_crash_context_summary.csv`
+- `signal_downstream_distance_band_summary.csv`
 
 ### Required `review/current/` filenames
 
@@ -544,6 +694,7 @@ When a study area contains candidate access points but none can be assigned conf
 - `signal_study_area_context_enriched.geojson`
 - `classified_crash_context_high_confidence.geojson`
 - `access_assignment_points.geojson`
+- `access_route_conflict_candidates.geojson`
 - `aadt_ambiguous_rows.geojson`
 
 ### Required `runs/current/` filename
@@ -593,6 +744,13 @@ At minimum, the first implementation must write:
 - distribution of `Access_ToRowDistanceFt`
 - count of `near_signal` access points
 - count of approach rows with nonzero access density
+- count of route-conflict diagnostic rows
+- route-conflict reviewed-family status counts
+- route-conflict review-bucket counts
+- count of route conflicts within `5` feet and `60` feet of the nearest study row
+- count of downstream access points with band assignments
+- count of downstream crashes with band assignments
+- count of signal-band rows written for the fixed-distance family
 - crash `AREA_TYPE` completeness in the normalized crash source
 - crash `AREA_TYPE` completeness in the enriched classified-crash output
 - rural/urban dominant-class distribution by signal

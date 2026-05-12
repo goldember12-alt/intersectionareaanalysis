@@ -19,4 +19,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["src", "src.active", "src.transitional"]
+packages = ["src", "src.active", "src.active.directed_segments", "src.active.roadway_graph", "src.transitional"]

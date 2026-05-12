@@ -100,7 +100,13 @@ work/
 # ---------------------------
 /Intersection Crash Analysis Layers/
 /artifacts/
-/legacy/
+/legacy/*
+!/legacy/README.md
+!/legacy/docs/
+/legacy/docs/*
+!/legacy/docs/README.md
+!/legacy/docs/recovery_audits/
+!/legacy/docs/recovery_audits/**
 
 # ---------------------------
 # Runtime spill under tracked artifact roots
