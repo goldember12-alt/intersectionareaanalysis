@@ -718,6 +718,1025 @@ def _to_csv_frame(frame: gpd.GeoDataFrame | pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _adjacent_count_band(value: int) -> str:
+    if value == 0:
+        return "0"
+    if value == 1:
+        return "1"
+    if value == 2:
+        return "2"
+    if value in (3, 4):
+        return "3-4"
+    return "more_than_4"
+
+
+def _normalize_manual_signal_id(raw_value: object) -> str:
+    text = "" if raw_value is None or pd.isna(raw_value) else str(raw_value).strip()
+    if text.startswith("signal_"):
+        return text
+    if re.fullmatch(r"\d+", text):
+        return _signal_id(int(text))
+    return text
+
+
+def _source_signal_id(row: pd.Series) -> object:
+    for column in ("source_signal_id", "REG_SIGNAL_ID", "SIGNAL_NO", "INTNO", "source_signal_row_id"):
+        if column in row.index:
+            value = row.get(column)
+            if value is not None and not pd.isna(value) and str(value).strip():
+                return value
+    return None
+
+
+def _read_manual_signal_diagnosis(review_current: Path) -> pd.DataFrame:
+    path = review_current / "manual_review_signal_classification.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    manual = pd.read_csv(path, dtype=str, keep_default_na=False)
+    if "signal_id" not in manual.columns:
+        return pd.DataFrame()
+    manual = manual.copy()
+    manual["signal_id"] = manual["signal_id"].map(_normalize_manual_signal_id)
+    return manual
+
+
+def _bool_text(value: object) -> bool:
+    return str(value).strip().upper() == "TRUE"
+
+
+def _build_signal_step5_eligibility(
+    signals: gpd.GeoDataFrame,
+    adjacent: gpd.GeoDataFrame,
+    gap_review: gpd.GeoDataFrame,
+    manual: pd.DataFrame,
+) -> gpd.GeoDataFrame:
+    adjacent_counts = adjacent.groupby("signal_id").size().rename("observed_adjacent_edge_count") if not adjacent.empty else pd.Series(dtype="int64")
+    if adjacent.empty:
+        divided_counts = pd.Series(dtype="int64", name="observed_divided_edge_count")
+        undivided_counts = pd.Series(dtype="int64", name="observed_undivided_edge_count")
+    else:
+        divided_counts = (
+            adjacent.loc[adjacent["roadway_division_status"].isin(["divided", "likely_divided"])]
+            .groupby("signal_id")
+            .size()
+            .rename("observed_divided_edge_count")
+        )
+        undivided_counts = (
+            adjacent.loc[adjacent["roadway_division_status"].eq("undivided")]
+            .groupby("signal_id")
+            .size()
+            .rename("observed_undivided_edge_count")
+        )
+
+    gap_lookup = {}
+    if not gap_review.empty:
+        for row in gap_review.itertuples(index=False):
+            gap_lookup[str(row.signal_id)] = {
+                "issue_flags": str(getattr(row, "issue_flags", "") or ""),
+                "matched_branch_count": getattr(row, "matched_branch_count", ""),
+                "min_match_distance_ft": getattr(row, "min_match_distance_ft", ""),
+            }
+
+    manual_lookup = {}
+    if not manual.empty:
+        for row in manual.itertuples(index=False):
+            row_dict = row._asdict()
+            manual_lookup[str(row_dict.get("signal_id", ""))] = row_dict
+
+    records: list[dict[str, object]] = []
+    geometries: list[Point] = []
+    for signal in signals.itertuples(index=False):
+        signal_id = str(signal.signal_id)
+        count = int(adjacent_counts.get(signal_id, 0))
+        divided_count = int(divided_counts.get(signal_id, 0))
+        undivided_count = int(undivided_counts.get(signal_id, 0))
+        gap = gap_lookup.get(signal_id, {})
+        manual_row = manual_lookup.get(signal_id, {})
+        manual_class = str(manual_row.get("primary_diagnosis", "") or "")
+
+        source_complete = "TRUE"
+        usable = "TRUE"
+        exclusion_reason = ""
+        manual_promotion_allowed = "FALSE"
+        requires_manual_review = "FALSE"
+        notes: list[str] = []
+
+        if count == 0:
+            source_complete = "FALSE"
+            usable = "FALSE"
+            exclusion_reason = "adjacent_leg_count_zero"
+            manual_promotion_allowed = "TRUE"
+            requires_manual_review = "TRUE"
+            notes.append("Zero adjacent graph edges; excluded by default before Step 5.")
+        elif count == 1:
+            source_complete = "FALSE"
+            usable = "FALSE"
+            exclusion_reason = "adjacent_leg_count_one"
+            manual_promotion_allowed = "TRUE"
+            requires_manual_review = "TRUE"
+            notes.append("One adjacent graph edge; excluded by default before Step 5.")
+        elif count == 2:
+            source_complete = "UNKNOWN"
+            usable = "CONDITIONAL"
+            exclusion_reason = "two_edge_suspect_review_required"
+            manual_promotion_allowed = "TRUE"
+            requires_manual_review = "TRUE"
+            notes.append("Two-edge signal; suspect unless confirmed as a valid two-legged or one-roadway analysis case.")
+        elif count > 4:
+            source_complete = "UNKNOWN"
+            usable = "CONDITIONAL"
+            exclusion_reason = "high_adjacent_edge_count_review_required"
+            manual_promotion_allowed = "TRUE"
+            requires_manual_review = "TRUE"
+            notes.append("More than four adjacent graph edges; review required before Step 5.")
+
+        if gap:
+            issue_flags = str(gap.get("issue_flags", "") or "")
+            if usable == "TRUE":
+                source_complete = "UNKNOWN"
+                usable = "CONDITIONAL"
+                exclusion_reason = "graph_gap_review_required"
+                manual_promotion_allowed = "TRUE"
+                requires_manual_review = "TRUE"
+            notes.append(f"Graph gap/count review flags: {issue_flags}.")
+
+        if manual_row:
+            manual_note = str(manual_row.get("manual_notes", "") or "")
+            if manual_note:
+                notes.append(f"Manual review: {manual_note}")
+            if _bool_text(manual_row.get("source_roadway_incomplete", "")):
+                source_complete = "FALSE"
+                usable = "FALSE"
+                exclusion_reason = "source_roadway_incomplete"
+                manual_promotion_allowed = "TRUE"
+                requires_manual_review = "TRUE"
+            elif _bool_text(manual_row.get("signal_location_questionable", "")):
+                source_complete = "UNKNOWN"
+                usable = "FALSE"
+                exclusion_reason = "signal_location_questionable"
+                manual_promotion_allowed = "TRUE"
+                requires_manual_review = "TRUE"
+            elif _bool_text(manual_row.get("edge_termination_too_far", "")):
+                if usable != "FALSE":
+                    source_complete = "TRUE" if source_complete == "TRUE" else source_complete
+                    usable = "CONDITIONAL"
+                    exclusion_reason = "edge_termination_rule_unresolved"
+                    manual_promotion_allowed = "TRUE"
+                    requires_manual_review = "TRUE"
+
+        if usable == "TRUE":
+            notes.append("Eligible for future Step 5 input gating; no true vehicle direction is inferred.")
+
+        signal_series = pd.Series(signal._asdict())
+        records.append(
+            {
+                "signal_id": signal_id,
+                "source_signal_id": _source_signal_id(signal_series),
+                "source_signal_row_id": getattr(signal, "source_signal_row_id", None),
+                "observed_adjacent_edge_count": count,
+                "observed_divided_edge_count": divided_count,
+                "observed_undivided_edge_count": undivided_count,
+                "adjacent_edge_count_band": _adjacent_count_band(count),
+                "graph_gap_flag": "TRUE" if gap else "FALSE",
+                "graph_gap_issue_flags": str(gap.get("issue_flags", "") or ""),
+                "source_roadway_complete_enough": source_complete,
+                "usable_for_step5": usable,
+                "step5_exclusion_reason": exclusion_reason,
+                "manual_review_status": str(manual_row.get("manual_review_status", "") or ""),
+                "manual_diagnosis_class": manual_class,
+                "manual_promotion_allowed": manual_promotion_allowed,
+                "requires_manual_review": requires_manual_review,
+                "notes": " ".join(notes),
+            }
+        )
+        geometries.append(signal.geometry)
+
+    return gpd.GeoDataFrame(records, geometry=geometries, crs=signals.crs)
+
+
+def _node_type_lookup(nodes: gpd.GeoDataFrame) -> dict[str, str]:
+    if nodes.empty:
+        return {}
+    return {str(row.graph_node_id): str(row.node_type) for row in nodes.itertuples(index=False)}
+
+
+def _edge_anchor_type(from_type: str, to_type: str) -> str:
+    types = [from_type, to_type]
+    if types.count("signal") == 2:
+        return "signal_to_signal"
+    if "road_intersection" in types:
+        return "road_intersection"
+    if "road_endpoint" in types:
+        return "road_endpoint"
+    if "signal" in types:
+        return "signal"
+    return "unknown"
+
+
+def _edge_termination_status(anchor_type: str) -> str:
+    if anchor_type == "signal_to_signal":
+        return "valid_signal_anchor"
+    if anchor_type == "road_intersection":
+        return "valid_non_signalized_intersection_anchor"
+    if anchor_type == "road_endpoint":
+        return "valid_roadway_endpoint_anchor"
+    return "unresolved"
+
+
+def _roadway_directionality_type(status: object) -> str:
+    text = str(status or "").strip()
+    if text in {"divided", "likely_divided"}:
+        return "divided"
+    if text == "undivided":
+        return "undivided"
+    return "unknown"
+
+
+def _build_edges_eligible(
+    edges: gpd.GeoDataFrame,
+    nodes: gpd.GeoDataFrame,
+    adjacent: gpd.GeoDataFrame,
+    signal_eligibility: gpd.GeoDataFrame,
+) -> gpd.GeoDataFrame:
+    if edges.empty:
+        return gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=nodes.crs if not nodes.empty else None)
+
+    signal_status = signal_eligibility[["signal_id", "usable_for_step5", "step5_exclusion_reason", "requires_manual_review"]].copy()
+    if adjacent.empty:
+        edge_signal_summary = pd.DataFrame(columns=["graph_edge_id", "adjacent_step5_signal_ids", "edge_signal_usable_for_step5", "edge_signal_reasons"])
+    else:
+        edge_signal_rows = pd.DataFrame(adjacent[["graph_edge_id", "signal_id"]].drop_duplicates()).merge(signal_status, on="signal_id", how="left")
+
+        def summarize_signal_status(group: pd.DataFrame) -> pd.Series:
+            statuses = set(group["usable_for_step5"].fillna("FALSE").astype(str))
+            if "TRUE" in statuses:
+                usable = "TRUE"
+            elif "CONDITIONAL" in statuses:
+                usable = "CONDITIONAL"
+            else:
+                usable = "FALSE"
+            reasons = sorted({str(value) for value in group["step5_exclusion_reason"].fillna("").astype(str) if str(value)})
+            if not reasons and usable == "FALSE":
+                reasons = ["no_eligible_adjacent_signal"]
+            return pd.Series(
+                {
+                    "adjacent_step5_signal_ids": ";".join(sorted(group["signal_id"].astype(str).unique())),
+                    "edge_signal_usable_for_step5": usable,
+                    "edge_signal_reasons": ";".join(reasons),
+                }
+            )
+
+        edge_signal_summary = edge_signal_rows.groupby("graph_edge_id", sort=False).apply(summarize_signal_status).reset_index()
+
+    node_types = _node_type_lookup(nodes)
+    frame = edges.copy()
+    frame["from_node_id"] = frame["from_graph_node_id"]
+    frame["to_node_id"] = frame["to_graph_node_id"]
+    frame["from_node_type"] = frame["from_node_id"].astype(str).map(node_types).fillna("unknown")
+    frame["to_node_type"] = frame["to_node_id"].astype(str).map(node_types).fillna("unknown")
+    frame["roadway_directionality_type"] = frame["roadway_division_status"].map(_roadway_directionality_type)
+    frame["edge_termination_anchor_type"] = [
+        _edge_anchor_type(from_type, to_type) for from_type, to_type in zip(frame["from_node_type"], frame["to_node_type"])
+    ]
+    frame["edge_termination_status"] = frame["edge_termination_anchor_type"].map(_edge_termination_status)
+    frame["intermediate_intersection_crossed_flag"] = "UNKNOWN"
+    frame["intermediate_intersection_crossed_note"] = "Not derivable from current graph output; future termination logic must test first valid roadway-network anchor."
+    frame = frame.merge(edge_signal_summary, on="graph_edge_id", how="left")
+    frame["usable_for_step5"] = frame["edge_signal_usable_for_step5"].fillna("FALSE")
+    frame["step5_exclusion_reason"] = frame["edge_signal_reasons"].fillna("no_eligible_adjacent_signal")
+    frame.loc[frame["usable_for_step5"].eq("TRUE"), "step5_exclusion_reason"] = ""
+    frame["requires_manual_review"] = frame["usable_for_step5"].map(lambda value: "FALSE" if value == "TRUE" else "TRUE")
+    frame["adjacent_step5_signal_ids"] = frame["adjacent_step5_signal_ids"].fillna("")
+
+    required = [
+        "graph_edge_id",
+        "from_node_id",
+        "to_node_id",
+        "roadway_directionality_type",
+        "edge_termination_status",
+        "edge_termination_anchor_type",
+        "intermediate_intersection_crossed_flag",
+        "usable_for_step5",
+        "step5_exclusion_reason",
+        "requires_manual_review",
+        "adjacent_step5_signal_ids",
+        "route_name",
+        "route_common",
+        "road_component_id",
+        "roadway_division_status",
+        "length_ft",
+        "geometry",
+    ]
+    available = [column for column in required if column in frame.columns]
+    return gpd.GeoDataFrame(frame[available].copy(), geometry="geometry", crs=edges.crs)
+
+
+def _step5_summary(signal_eligibility: gpd.GeoDataFrame) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+
+    def add_counts(group_name: str, column: str) -> None:
+        counts = signal_eligibility[column].fillna("").astype(str).replace("", "blank").value_counts(dropna=False)
+        for value, count in counts.items():
+            rows.append({"summary_group": group_name, "summary_value": value, "signal_count": int(count)})
+
+    add_counts("usable_for_step5", "usable_for_step5")
+    add_counts("step5_exclusion_reason", "step5_exclusion_reason")
+    add_counts("source_roadway_complete_enough", "source_roadway_complete_enough")
+    add_counts("manual_diagnosis_class", "manual_diagnosis_class")
+    add_counts("adjacent_edge_count_band", "adjacent_edge_count_band")
+    return pd.DataFrame(rows)
+
+
+def _termination_anchor_type(node_type: object) -> str:
+    text = str(node_type or "")
+    if text == "signal":
+        return "signalized_intersection"
+    if text == "road_intersection":
+        return "non_signalized_roadway_intersection"
+    if text == "road_endpoint":
+        return "road_endpoint_dead_end"
+    return "unresolved_cutoff"
+
+
+def _termination_status(anchor_type: str, refined: bool) -> str:
+    if refined and anchor_type == "non_signalized_roadway_intersection":
+        return "refined_to_first_non_signalized_intersection"
+    if anchor_type == "signalized_intersection":
+        return "terminated_at_signalized_intersection"
+    if anchor_type == "non_signalized_roadway_intersection":
+        return "terminated_at_non_signalized_roadway_intersection"
+    if anchor_type == "road_endpoint_dead_end":
+        return "terminated_at_road_endpoint_dead_end"
+    return "unresolved_or_cutoff_review_only"
+
+
+def _manual_termination_issue_signal_ids(review_current: Path) -> set[str]:
+    path = review_current / "manual_review_signal_classification.csv"
+    if not path.exists():
+        return set()
+    manual = pd.read_csv(path, dtype=str, keep_default_na=False)
+    if not {"signal_id", "edge_termination_too_far"}.issubset(manual.columns):
+        return set()
+    rows = manual.loc[manual["edge_termination_too_far"].astype(str).str.upper().eq("TRUE")]
+    return {_normalize_manual_signal_id(value) for value in rows["signal_id"]}
+
+
+def _refine_signal_adjacent_edge_termination(
+    adjacent: gpd.GeoDataFrame,
+    nodes: gpd.GeoDataFrame,
+    *,
+    review_current: Path,
+) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoDataFrame]:
+    if adjacent.empty:
+        empty = gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=adjacent.crs)
+        return empty, empty.copy(), empty.copy()
+
+    intersection_nodes = nodes.loc[nodes["node_type"].eq("road_intersection")].copy() if not nodes.empty else nodes.head(0).copy()
+    node_lookup = {str(row.graph_node_id): row for row in nodes.itertuples(index=False)} if not nodes.empty else {}
+    manual_issue_ids = _manual_termination_issue_signal_ids(review_current)
+    tolerance_m = 3.0 / FEET_PER_METER
+    min_interior_m = MIN_SPLIT_SEPARATION_FT / FEET_PER_METER
+    short_fragment_ft = 25.0
+
+    if not intersection_nodes.empty:
+        intersection_nodes = intersection_nodes.reset_index(drop=True)
+        tree = STRtree(intersection_nodes.geometry.values)
+    else:
+        tree = None
+
+    adjacent_records: list[dict[str, object]] = []
+    adjacent_geometries: list[LineString] = []
+    edge_records: list[dict[str, object]] = []
+    edge_geometries: list[LineString] = []
+    example_records: list[dict[str, object]] = []
+
+    def first_intersection(line: LineString, current_anchor_id: str) -> tuple[str, Point, float] | None:
+        if tree is None or line.length <= min_interior_m * 2:
+            return None
+        candidate_indices = tree.query(line.buffer(tolerance_m), predicate="intersects")
+        candidates: list[tuple[float, str, Point]] = []
+        for idx in candidate_indices:
+            node = intersection_nodes.iloc[int(idx)]
+            node_id = str(node.graph_node_id)
+            if node_id == current_anchor_id:
+                continue
+            point = node.geometry
+            if line.distance(point) > tolerance_m:
+                continue
+            projection_m = float(line.project(point))
+            if projection_m <= min_interior_m or projection_m >= line.length - min_interior_m:
+                continue
+            candidates.append((projection_m, node_id, point))
+        if not candidates:
+            return None
+        projection_m, node_id, point = min(candidates, key=lambda item: item[0])
+        return node_id, point, projection_m
+
+    for row in adjacent.itertuples(index=False):
+        row_dict = row._asdict()
+        line = row.geometry
+        current_anchor_id = str(row_dict.get("adjacent_node_id", ""))
+        current_node = node_lookup.get(current_anchor_id)
+        current_node_type = str(getattr(current_node, "node_type", row_dict.get("adjacent_node_type", "")) or "")
+        current_anchor_type = _termination_anchor_type(current_node_type)
+        first_anchor = first_intersection(line, current_anchor_id)
+
+        pre_length_ft = float(row_dict.get("length_ft") or 0.0)
+        refined = first_anchor is not None
+        if refined:
+            anchor_id, _anchor_point, projection_m = first_anchor
+            refined_line = _line_substring(line, 0.0, projection_m)
+            anchor_type = "non_signalized_roadway_intersection"
+            anchor_node_type = "road_intersection"
+            reason = "first_existing_road_intersection_node_along_signal_adjacent_edge"
+        else:
+            anchor_id = current_anchor_id
+            refined_line = line
+            anchor_type = current_anchor_type
+            anchor_node_type = current_node_type
+            reason = "current_endpoint_is_first_supported_graph_anchor_or_no_supported_intermediate_intersection_found"
+
+        post_length_ft = refined_line.length * FEET_PER_METER
+        zero_length = post_length_ft <= 1.0
+        suspicious_short = 1.0 < post_length_ft < short_fragment_ft
+        new_suspicious_short = refined and pre_length_ft >= short_fragment_ft and post_length_ft < short_fragment_ft
+        refined_edge_id = f"rget_{_slugify(row.signal_id)}_{_slugify(row.graph_edge_id)}"
+        termination_status = _termination_status(anchor_type, refined)
+        requires_review = bool(zero_length or suspicious_short)
+        remaining_crossed = False
+        remaining_anchor = first_intersection(refined_line, str(anchor_id))
+        if remaining_anchor is not None:
+            remaining_crossed = True
+            requires_review = True
+
+        adjacent_out = dict(row_dict)
+        adjacent_out["original_graph_edge_id"] = row.graph_edge_id
+        adjacent_out["graph_edge_id"] = refined_edge_id
+        adjacent_out["refined_edge_id"] = refined_edge_id
+        adjacent_out["adjacent_node_id"] = anchor_id
+        adjacent_out["adjacent_node_type"] = anchor_node_type
+        adjacent_out["pre_refinement_length_ft"] = pre_length_ft
+        adjacent_out["post_refinement_length_ft"] = post_length_ft
+        adjacent_out["length_ft"] = post_length_ft
+        adjacent_out["edge_termination_status"] = termination_status
+        adjacent_out["edge_termination_anchor_type"] = anchor_type
+        adjacent_out["edge_termination_anchor_id"] = anchor_id
+        adjacent_out["edge_termination_reason"] = reason
+        adjacent_out["intermediate_intersection_crossed_flag"] = "TRUE" if refined else "FALSE"
+        adjacent_out["remaining_intermediate_intersection_crossed_flag"] = "TRUE" if remaining_crossed else "FALSE"
+        adjacent_out["termination_refinement_applied"] = "TRUE" if refined else "FALSE"
+        adjacent_out["manual_edge_termination_issue_signal"] = "TRUE" if row.signal_id in manual_issue_ids else "FALSE"
+        adjacent_out["zero_length_after_refinement"] = "TRUE" if zero_length else "FALSE"
+        adjacent_out["suspicious_short_segment_after_refinement"] = "TRUE" if suspicious_short else "FALSE"
+        adjacent_out["new_suspicious_short_segment_created"] = "TRUE" if new_suspicious_short else "FALSE"
+        adjacent_out["requires_manual_review"] = "TRUE" if requires_review else "FALSE"
+        adjacent_records.append(adjacent_out)
+        adjacent_geometries.append(refined_line)
+
+        edge_records.append(
+            {
+                "graph_edge_id": refined_edge_id,
+                "original_graph_edge_id": row.graph_edge_id,
+                "from_graph_node_id": row.signal_graph_node_id,
+                "to_graph_node_id": anchor_id,
+                "signal_id": row.signal_id,
+                "signal_graph_node_id": row.signal_graph_node_id,
+                "route_name": row.route_name,
+                "route_common": row.route_common,
+                "route_id": row.route_id,
+                "event_source": row.event_source,
+                "road_component_id": row.road_component_id,
+                "roadway_division_status": row.roadway_division_status,
+                "logical_segment_mode": row.logical_segment_mode,
+                "facility_code": row.facility_code,
+                "median_code": row.median_code,
+                "roadway_directionality_type": _roadway_directionality_type(row.roadway_division_status),
+                "length_ft": post_length_ft,
+                "pre_refinement_length_ft": pre_length_ft,
+                "post_refinement_length_ft": post_length_ft,
+                "edge_termination_status": termination_status,
+                "edge_termination_anchor_type": anchor_type,
+                "edge_termination_anchor_id": anchor_id,
+                "edge_termination_reason": reason,
+                "intermediate_intersection_crossed_flag": "TRUE" if refined else "FALSE",
+                "remaining_intermediate_intersection_crossed_flag": "TRUE" if remaining_crossed else "FALSE",
+                "termination_refinement_applied": "TRUE" if refined else "FALSE",
+                "new_suspicious_short_segment_created": "TRUE" if new_suspicious_short else "FALSE",
+                "requires_manual_review": "TRUE" if requires_review else "FALSE",
+                "true_vehicle_direction_inferred": False,
+            }
+        )
+        edge_geometries.append(refined_line)
+
+        if refined or remaining_crossed or row.signal_id in manual_issue_ids or zero_length or suspicious_short:
+            example_records.append(
+                {
+                    "signal_id": row.signal_id,
+                    "refined_edge_id": refined_edge_id,
+                    "original_graph_edge_id": row.graph_edge_id,
+                    "route_name": row.route_name,
+                    "route_common": row.route_common,
+                    "termination_refinement_applied": "TRUE" if refined else "FALSE",
+                    "edge_termination_status": termination_status,
+                    "edge_termination_anchor_type": anchor_type,
+                    "edge_termination_anchor_id": anchor_id,
+                    "pre_refinement_length_ft": pre_length_ft,
+                    "post_refinement_length_ft": post_length_ft,
+                    "length_delta_ft": pre_length_ft - post_length_ft,
+                    "remaining_intermediate_intersection_crossed_flag": "TRUE" if remaining_crossed else "FALSE",
+                    "manual_edge_termination_issue_signal": "TRUE" if row.signal_id in manual_issue_ids else "FALSE",
+                    "zero_length_after_refinement": "TRUE" if zero_length else "FALSE",
+                    "suspicious_short_segment_after_refinement": "TRUE" if suspicious_short else "FALSE",
+                    "new_suspicious_short_segment_created": "TRUE" if new_suspicious_short else "FALSE",
+                    "requires_manual_review": "TRUE" if requires_review else "FALSE",
+                }
+            )
+
+    refined_adjacent = gpd.GeoDataFrame(adjacent_records, geometry=adjacent_geometries, crs=adjacent.crs)
+    refined_edges = gpd.GeoDataFrame(edge_records, geometry=edge_geometries, crs=adjacent.crs)
+    examples = pd.DataFrame(example_records)
+    return refined_edges, refined_adjacent, examples
+
+
+def _build_refined_edges_eligible(refined_edges: gpd.GeoDataFrame, signal_eligibility: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    if refined_edges.empty:
+        return refined_edges.copy()
+    signal_status = signal_eligibility[["signal_id", "usable_for_step5", "step5_exclusion_reason"]].copy()
+    out = refined_edges.merge(signal_status, on="signal_id", how="left", suffixes=("", "_signal_gate"))
+    out["usable_for_step5"] = out["usable_for_step5"].fillna("FALSE")
+    out["step5_exclusion_reason"] = out["step5_exclusion_reason"].fillna("no_eligible_adjacent_signal")
+    out.loc[out["usable_for_step5"].eq("TRUE"), "step5_exclusion_reason"] = ""
+    out["requires_manual_review"] = out.apply(
+        lambda row: "TRUE"
+        if str(row.get("requires_manual_review", "")) == "TRUE" or str(row.get("usable_for_step5", "")) != "TRUE"
+        else "FALSE",
+        axis=1,
+    )
+    columns = [
+        "graph_edge_id",
+        "original_graph_edge_id",
+        "from_graph_node_id",
+        "to_graph_node_id",
+        "signal_id",
+        "roadway_directionality_type",
+        "edge_termination_status",
+        "edge_termination_anchor_type",
+        "edge_termination_anchor_id",
+        "edge_termination_reason",
+        "intermediate_intersection_crossed_flag",
+        "remaining_intermediate_intersection_crossed_flag",
+        "pre_refinement_length_ft",
+        "post_refinement_length_ft",
+        "termination_refinement_applied",
+        "usable_for_step5",
+        "step5_exclusion_reason",
+        "requires_manual_review",
+        "route_name",
+        "route_common",
+        "road_component_id",
+        "roadway_division_status",
+        "geometry",
+    ]
+    return gpd.GeoDataFrame(out[[column for column in columns if column in out.columns]].copy(), geometry="geometry", crs=refined_edges.crs)
+
+
+def _termination_refinement_summary(
+    adjacent: gpd.GeoDataFrame,
+    refined_adjacent: gpd.GeoDataFrame,
+    bins: gpd.GeoDataFrame,
+    refined_bins: gpd.GeoDataFrame,
+    signal_eligibility: gpd.GeoDataFrame,
+    refined_edges_eligible: gpd.GeoDataFrame,
+    first_prototype_signals: pd.DataFrame,
+) -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+
+    def add(metric: str, value: object, notes: str) -> None:
+        rows.append({"metric": metric, "value": value, "notes": notes})
+
+    add("base_signal_adjacent_edge_rows", len(adjacent), "Original signal-adjacent edge rows.")
+    add("refined_signal_adjacent_edge_rows", len(refined_adjacent), "Candidate refined signal-adjacent edge rows.")
+    add(
+        "termination_refinement_applied_edges",
+        int(refined_adjacent["termination_refinement_applied"].eq("TRUE").sum()) if not refined_adjacent.empty else 0,
+        "Edges shortened to an existing intermediate road_intersection graph node.",
+    )
+    add(
+        "remaining_intermediate_intersection_crossed_edges",
+        int(refined_adjacent["remaining_intermediate_intersection_crossed_flag"].eq("TRUE").sum()) if not refined_adjacent.empty else 0,
+        "Refined candidate rows that still appear to contain a supported intermediate intersection.",
+    )
+    add("base_50ft_bin_rows", len(bins), "Original 50-foot bin rows.")
+    add("refined_50ft_bin_rows", len(refined_bins), "50-foot bin rows after candidate termination refinement.")
+    add("bin_row_delta", len(refined_bins) - len(bins), "Refined bins minus base bins.")
+    add(
+        "zero_length_after_refinement_edges",
+        int(refined_adjacent["zero_length_after_refinement"].eq("TRUE").sum()) if not refined_adjacent.empty else 0,
+        "Rows with post-refinement length <= 1 foot.",
+    )
+    add(
+        "suspicious_short_segment_after_refinement_edges",
+        int(refined_adjacent["suspicious_short_segment_after_refinement"].eq("TRUE").sum()) if not refined_adjacent.empty else 0,
+        "Rows with post-refinement length between 1 and 25 feet.",
+    )
+    add(
+        "new_suspicious_short_segment_created_edges",
+        int(refined_adjacent["new_suspicious_short_segment_created"].eq("TRUE").sum()) if not refined_adjacent.empty else 0,
+        "Rows shortened by refinement from >=25 feet to <25 feet.",
+    )
+
+    if not refined_adjacent.empty:
+        for anchor_type, count in refined_adjacent["edge_termination_anchor_type"].value_counts().items():
+            add(f"refined_termination_anchor_type_{anchor_type}", int(count), "Refined edge termination anchor type count.")
+        for status, count in refined_adjacent["edge_termination_status"].value_counts().items():
+            add(f"refined_termination_status_{status}", int(count), "Refined edge termination status count.")
+
+    before_counts = signal_eligibility["usable_for_step5"].value_counts()
+    for status in ["TRUE", "CONDITIONAL", "FALSE"]:
+        add(f"signal_gate_before_{status}", int(before_counts.get(status, 0)), "Signal eligibility before termination refinement.")
+        add(
+            f"signal_gate_after_{status}",
+            int(before_counts.get(status, 0)),
+            "Signal-level eligibility is not promoted by this review-only termination refinement.",
+        )
+
+    if not first_prototype_signals.empty:
+        first_ids = set(first_prototype_signals["signal_id"].astype(str))
+        changed = signal_eligibility.loc[signal_eligibility["signal_id"].astype(str).isin(first_ids)]
+        add(
+            "first_prototype_input_signals_changed_eligibility",
+            0,
+            f"{len(changed)} first-prototype TRUE input signals retained their signal-level eligibility status.",
+        )
+    return pd.DataFrame(rows)
+
+
+def _step5_before_after_refinement(signal_eligibility: gpd.GeoDataFrame) -> pd.DataFrame:
+    counts = signal_eligibility["usable_for_step5"].value_counts()
+    rows = []
+    for status in ["TRUE", "CONDITIONAL", "FALSE"]:
+        before = int(counts.get(status, 0))
+        rows.append(
+            {
+                "usable_for_step5": status,
+                "before_signal_count": before,
+                "after_signal_count": before,
+                "delta": 0,
+                "notes": "Termination refinement outputs are review-only candidates and do not promote or demote signal-level Step 5 eligibility.",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _extract_signal_id_from_node_id(node_id: object) -> str:
+    match = re.search(r"signal_\d{6}", str(node_id or ""))
+    return match.group(0) if match else ""
+
+
+def _step5_anchor_type(node_type: object) -> str:
+    text = str(node_type or "")
+    if text == "signal":
+        return "signalized_intersection"
+    if text == "road_intersection":
+        return "non_signalized_roadway_intersection"
+    if text == "road_endpoint":
+        return "road_endpoint_dead_end"
+    return "unresolved"
+
+
+def _build_step5_oriented_segments(
+    first_prototype_signals: pd.DataFrame,
+    adjacent: gpd.GeoDataFrame,
+) -> gpd.GeoDataFrame:
+    if first_prototype_signals.empty or adjacent.empty:
+        return gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=adjacent.crs)
+
+    true_signal_ids = set(first_prototype_signals["signal_id"].astype(str))
+    source_signal_lookup = {
+        str(row.signal_id): str(getattr(row, "source_signal_id", "") or "")
+        for row in first_prototype_signals.itertuples(index=False)
+    }
+    work = adjacent.loc[adjacent["signal_id"].astype(str).isin(true_signal_ids)].copy()
+    if work.empty:
+        return gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=adjacent.crs)
+
+    records: list[dict[str, object]] = []
+    geometries: list[LineString] = []
+    short_ft = 50.0
+
+    for graph_edge_id, group in work.groupby("graph_edge_id", sort=True):
+        group = group.sort_values(["signal_id", "leg_index"]).copy()
+        first = group.iloc[0]
+        roadway_type = _roadway_directionality_type(first["roadway_division_status"])
+        segment_family_id = f"segfam_{_slugify(graph_edge_id)}"
+
+        if roadway_type == "undivided":
+            signal_ids = list(group["signal_id"].astype(str).drop_duplicates())
+            row = group.iloc[0]
+            adjacent_signal_id = _extract_signal_id_from_node_id(row["adjacent_node_id"])
+            to_signal_id = ""
+            if len(signal_ids) > 1:
+                to_signal_id = signal_ids[1]
+            elif adjacent_signal_id in true_signal_ids:
+                to_signal_id = adjacent_signal_id
+            length_ft = float(row["length_ft"])
+            requires_review = length_ft <= 0 or length_ft < short_ft or str(row["roadway_division_status"]) != "undivided"
+            records.append(
+                {
+                    "oriented_segment_id": f"oseg_{_slugify(graph_edge_id)}_undivided_centerline",
+                    "segment_family_id": segment_family_id,
+                    "base_graph_edge_id": graph_edge_id,
+                    "source_signal_id": source_signal_lookup.get(str(row["signal_id"]), ""),
+                    "from_anchor_type": "signalized_intersection",
+                    "from_anchor_id": row["signal_graph_node_id"],
+                    "to_anchor_type": _step5_anchor_type(row["adjacent_node_type"]),
+                    "to_anchor_id": row["adjacent_node_id"],
+                    "from_signal_id": row["signal_id"],
+                    "to_signal_id": to_signal_id,
+                    "downstream_of_signal_id": "",
+                    "upstream_of_signal_id": "",
+                    "roadway_directionality_type": roadway_type,
+                    "orientation_record_type": "undivided_logical_centerline",
+                    "true_vehicle_direction_inferred": False,
+                    "segment_orientation_only": True,
+                    "physical_directional_carriageway": False,
+                    "undivided_event_direction_requires_crash_direction": True,
+                    "route_name": row["route_name"],
+                    "route_common": row["route_common"],
+                    "route_id": row["route_id"],
+                    "event_source": row["event_source"],
+                    "road_component_id": row["road_component_id"],
+                    "roadway_division_status": row["roadway_division_status"],
+                    "logical_segment_mode": row["logical_segment_mode"],
+                    "length_ft": length_ft,
+                    "bin_count": max(1, int(math.ceil(length_ft / BIN_LENGTH_FT))) if length_ft > 0 else 0,
+                    "qa_status": "undivided_centerline_geometry_only_requires_later_crash_direction",
+                    "requires_manual_review": requires_review,
+                    "usable_for_later_crash_assignment": not requires_review,
+                }
+            )
+            geometries.append(row.geometry)
+            continue
+
+        for ordinal, row in enumerate(group.itertuples(index=False), start=1):
+            row_dict = row._asdict()
+            signal_id = str(row.signal_id)
+            adjacent_signal_id = _extract_signal_id_from_node_id(row.adjacent_node_id)
+            adjacent_signal_is_true = adjacent_signal_id in true_signal_ids
+            length_ft = float(row.length_ft)
+            requires_review = length_ft <= 0 or length_ft < short_ft
+
+            if roadway_type == "unknown":
+                orientation_type = "review_only"
+                requires_review = True
+                qa_status = "unknown_roadway_directionality_review_required"
+            elif row.adjacent_node_type == "signal" and adjacent_signal_is_true and len(group["signal_id"].astype(str).drop_duplicates()) >= 2:
+                orientation_type = "divided_oriented_candidate" if ordinal == 1 else "reciprocal_orientation_candidate"
+                qa_status = "divided_paired_geometry_orientation_candidate_no_true_vehicle_direction"
+            elif row.adjacent_node_type in {"road_intersection", "road_endpoint"}:
+                orientation_type = "endpoint_oriented_candidate"
+                qa_status = "divided_oriented_to_non_signal_or_endpoint_anchor_no_true_vehicle_direction"
+            else:
+                orientation_type = "review_only"
+                requires_review = True
+                qa_status = "divided_unpaired_or_non_true_signal_anchor_review_required"
+
+            records.append(
+                {
+                    "oriented_segment_id": f"oseg_{_slugify(graph_edge_id)}_{_slugify(signal_id)}_{ordinal:02d}",
+                    "segment_family_id": segment_family_id,
+                    "base_graph_edge_id": graph_edge_id,
+                    "source_signal_id": source_signal_lookup.get(signal_id, ""),
+                    "from_anchor_type": "signalized_intersection",
+                    "from_anchor_id": row.signal_graph_node_id,
+                    "to_anchor_type": _step5_anchor_type(row.adjacent_node_type),
+                    "to_anchor_id": row.adjacent_node_id,
+                    "from_signal_id": signal_id,
+                    "to_signal_id": adjacent_signal_id if adjacent_signal_is_true else "",
+                    "downstream_of_signal_id": signal_id if orientation_type != "review_only" else "",
+                    "upstream_of_signal_id": adjacent_signal_id if adjacent_signal_is_true and orientation_type != "review_only" else "",
+                    "roadway_directionality_type": roadway_type,
+                    "orientation_record_type": orientation_type,
+                    "true_vehicle_direction_inferred": False,
+                    "segment_orientation_only": True,
+                    "physical_directional_carriageway": roadway_type == "divided",
+                    "undivided_event_direction_requires_crash_direction": False,
+                    "route_name": row.route_name,
+                    "route_common": row.route_common,
+                    "route_id": row.route_id,
+                    "event_source": row.event_source,
+                    "road_component_id": row.road_component_id,
+                    "roadway_division_status": row.roadway_division_status,
+                    "logical_segment_mode": row.logical_segment_mode,
+                    "length_ft": length_ft,
+                    "bin_count": max(1, int(math.ceil(length_ft / BIN_LENGTH_FT))) if length_ft > 0 else 0,
+                    "qa_status": qa_status,
+                    "requires_manual_review": requires_review,
+                    "usable_for_later_crash_assignment": not requires_review and orientation_type != "review_only",
+                }
+            )
+            geometries.append(row.geometry)
+
+    return gpd.GeoDataFrame(records, geometry=geometries, crs=adjacent.crs)
+
+
+def _build_oriented_segment_bins(segments: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    records: list[dict[str, object]] = []
+    geometries: list[LineString] = []
+    for row in segments.itertuples(index=False):
+        length_ft = float(row.length_ft)
+        if length_ft <= 0 or row.geometry is None or row.geometry.is_empty:
+            continue
+        bin_count = max(1, int(math.ceil(length_ft / BIN_LENGTH_FT)))
+        for bin_index in range(bin_count):
+            start_ft = bin_index * BIN_LENGTH_FT
+            end_ft = min(length_ft, (bin_index + 1) * BIN_LENGTH_FT)
+            midpoint_ft = (start_ft + end_ft) / 2.0
+            geometry = _line_substring(row.geometry, start_ft / FEET_PER_METER, end_ft / FEET_PER_METER)
+            records.append(
+                {
+                    "oriented_segment_id": row.oriented_segment_id,
+                    "segment_family_id": row.segment_family_id,
+                    "base_graph_edge_id": row.base_graph_edge_id,
+                    "bin_id": f"{row.oriented_segment_id}_bin_{bin_index:04d}",
+                    "bin_index": bin_index,
+                    "bin_start_ft": start_ft,
+                    "bin_end_ft": end_ft,
+                    "bin_midpoint_ft": midpoint_ft,
+                    "from_anchor_id": row.from_anchor_id,
+                    "to_anchor_id": row.to_anchor_id,
+                    "downstream_of_signal_id": row.downstream_of_signal_id,
+                    "upstream_of_signal_id": row.upstream_of_signal_id,
+                    "roadway_directionality_type": row.roadway_directionality_type,
+                    "orientation_record_type": row.orientation_record_type,
+                    "true_vehicle_direction_inferred": False,
+                    "physical_directional_carriageway": row.physical_directional_carriageway,
+                    "undivided_event_direction_requires_crash_direction": row.undivided_event_direction_requires_crash_direction,
+                }
+            )
+            geometries.append(geometry)
+    if not records:
+        return gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=segments.crs)
+    return gpd.GeoDataFrame(records, geometry=geometries, crs=segments.crs)
+
+
+def _step5_oriented_segment_reviews(
+    first_prototype_signals: pd.DataFrame,
+    signal_eligibility: gpd.GeoDataFrame,
+    segments: gpd.GeoDataFrame,
+    bins: gpd.GeoDataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    true_ids = set(first_prototype_signals["signal_id"].astype(str)) if not first_prototype_signals.empty else set()
+    all_non_true_ids = set(signal_eligibility.loc[~signal_eligibility["usable_for_step5"].eq("TRUE"), "signal_id"].astype(str))
+    represented_ids: set[str] = set()
+    if not segments.empty:
+        represented_ids.update(segments["from_signal_id"].fillna("").astype(str).loc[segments["from_signal_id"].fillna("").astype(str).ne("")])
+        represented_ids.update(segments["to_signal_id"].fillna("").astype(str).loc[segments["to_signal_id"].fillna("").astype(str).ne("")])
+
+    rows: list[dict[str, object]] = []
+
+    def add(metric: str, value: object, notes: str) -> None:
+        rows.append({"metric": metric, "value": value, "notes": notes})
+
+    add("true_input_signal_count", len(true_ids), "Signals from step5_first_prototype_input_signals.csv.")
+    add("true_input_signals_represented", len(true_ids & represented_ids), "TRUE input signals appearing as from/to signal ids in oriented segments.")
+    add("oriented_segment_rows", len(segments), "Total oriented segment prototype rows.")
+    add("oriented_segment_bin_rows_50ft", len(bins), "50-foot bins generated from oriented segment rows.")
+    add("non_true_signals_entered_prototype", len(represented_ids & all_non_true_ids), "FALSE/CONDITIONAL signal ids represented in the prototype; expected 0.")
+    add(
+        "zero_length_segments",
+        int((pd.to_numeric(segments["length_ft"], errors="coerce") <= 0).sum()) if not segments.empty else 0,
+        "Segments with non-positive length.",
+    )
+    add(
+        "suspicious_short_segments_under_50ft",
+        int(((pd.to_numeric(segments["length_ft"], errors="coerce") > 0) & (pd.to_numeric(segments["length_ft"], errors="coerce") < 50)).sum())
+        if not segments.empty
+        else 0,
+        "Segments shorter than one 50-foot bin.",
+    )
+    add(
+        "true_vehicle_direction_inferred_rows",
+        int(segments["true_vehicle_direction_inferred"].astype(str).str.upper().ne("FALSE").sum()) if not segments.empty else 0,
+        "Expected 0.",
+    )
+    add(
+        "undivided_physical_directional_carriageway_true_rows",
+        int(
+            (
+                segments["roadway_directionality_type"].eq("undivided")
+                & segments["physical_directional_carriageway"].astype(str).str.upper().eq("TRUE")
+            ).sum()
+        )
+        if not segments.empty
+        else 0,
+        "Expected 0.",
+    )
+    add(
+        "undivided_requires_crash_direction_false_rows",
+        int(
+            (
+                segments["roadway_directionality_type"].eq("undivided")
+                & segments["undivided_event_direction_requires_crash_direction"].astype(str).str.upper().ne("TRUE")
+            ).sum()
+        )
+        if not segments.empty
+        else 0,
+        "Expected 0.",
+    )
+    add(
+        "endpoint_or_review_only_segments",
+        int(segments["orientation_record_type"].isin(["endpoint_oriented_candidate", "review_only"]).sum()) if not segments.empty else 0,
+        "Endpoint-oriented or review-only segment rows.",
+    )
+
+    if not segments.empty:
+        for value, count in segments["roadway_directionality_type"].value_counts().items():
+            add(f"segments_by_roadway_directionality_type_{value}", int(count), "Oriented segment rows by roadway source directionality class.")
+        for value, count in segments["orientation_record_type"].value_counts().items():
+            add(f"segments_by_orientation_record_type_{value}", int(count), "Oriented segment rows by orientation record type.")
+
+    problem_records: list[dict[str, object]] = []
+    if not segments.empty:
+        for row in segments.itertuples(index=False):
+            problems: list[str] = []
+            length_ft = float(row.length_ft)
+            if row.from_signal_id in all_non_true_ids or row.to_signal_id in all_non_true_ids:
+                problems.append("non_true_signal_represented")
+            if length_ft <= 0:
+                problems.append("zero_length")
+            elif length_ft < 50:
+                problems.append("suspicious_short_under_50ft")
+            if str(row.true_vehicle_direction_inferred).upper() != "FALSE":
+                problems.append("true_vehicle_direction_inferred_not_false")
+            if row.roadway_directionality_type == "undivided" and str(row.physical_directional_carriageway).upper() == "TRUE":
+                problems.append("undivided_marked_physical_directional_carriageway")
+            if row.roadway_directionality_type == "undivided" and str(row.undivided_event_direction_requires_crash_direction).upper() != "TRUE":
+                problems.append("undivided_not_marked_requires_crash_direction")
+            if row.orientation_record_type == "review_only":
+                problems.append("review_only")
+            if problems:
+                problem_records.append(
+                    {
+                        "oriented_segment_id": row.oriented_segment_id,
+                        "segment_family_id": row.segment_family_id,
+                        "base_graph_edge_id": row.base_graph_edge_id,
+                        "from_signal_id": row.from_signal_id,
+                        "to_signal_id": row.to_signal_id,
+                        "roadway_directionality_type": row.roadway_directionality_type,
+                        "orientation_record_type": row.orientation_record_type,
+                        "length_ft": row.length_ft,
+                        "problem_flags": ";".join(problems),
+                    }
+                )
+
+    problem_rows = pd.DataFrame(problem_records)
+
+    if segments.empty:
+        pairing_summary = pd.DataFrame()
+    else:
+        pairing_records = []
+        for family_id, group in segments.groupby("segment_family_id", sort=True):
+            roadway_types = sorted(group["roadway_directionality_type"].astype(str).unique())
+            orientation_types = sorted(group["orientation_record_type"].astype(str).unique())
+            is_divided = "divided" in roadway_types
+            paired = is_divided and len(group) >= 2 and {
+                "divided_oriented_candidate",
+                "reciprocal_orientation_candidate",
+            }.issubset(set(orientation_types))
+            pairing_records.append(
+                {
+                    "segment_family_id": family_id,
+                    "roadway_directionality_type": ";".join(roadway_types),
+                    "orientation_record_types": ";".join(orientation_types),
+                    "segment_record_count": len(group),
+                    "divided_family_has_paired_reciprocal_records": paired,
+                    "divided_family_missing_reciprocal_records": bool(is_divided and not paired),
+                    "undivided_family_record_count": len(group) if "undivided" in roadway_types else 0,
+                    "undivided_incorrectly_duplicated": bool("undivided" in roadway_types and len(group) > 1),
+                }
+            )
+        pairing_summary = pd.DataFrame(pairing_records)
+
+    coverage_records = []
+    for row in first_prototype_signals.itertuples(index=False):
+        signal_id = str(row.signal_id)
+        from_count = int(segments["from_signal_id"].astype(str).eq(signal_id).sum()) if not segments.empty else 0
+        to_count = int(segments["to_signal_id"].astype(str).eq(signal_id).sum()) if not segments.empty else 0
+        coverage_records.append(
+            {
+                "signal_id": signal_id,
+                "source_signal_id": getattr(row, "source_signal_id", ""),
+                "represented_in_oriented_segments": from_count + to_count > 0,
+                "from_signal_segment_count": from_count,
+                "to_signal_segment_count": to_count,
+                "total_signal_segment_count": from_count + to_count,
+            }
+        )
+    coverage = pd.DataFrame(coverage_records)
+    return pd.DataFrame(rows), problem_rows, pairing_summary, coverage
+
+
 def build_roadway_graph(
     *,
     normalized_root: Path,
@@ -736,6 +1755,73 @@ def build_roadway_graph(
     nodes, edges, signal_graph, adjacent, _ = _build_graph(signal_points, road_components, associations)
     bins = _build_bins(adjacent)
     gap_review = _graph_gap_review(signal_points, signal_graph, adjacent)
+    manual_diagnosis = _read_manual_signal_diagnosis(layout.review_current)
+    signal_step5_eligibility = _build_signal_step5_eligibility(signal_points, adjacent, gap_review, manual_diagnosis)
+    roadway_graph_edges_eligible = _build_edges_eligible(edges, nodes, adjacent, signal_step5_eligibility)
+    first_prototype_path = layout.review_current / "step5_first_prototype_input_signals.csv"
+    first_prototype_signals = pd.read_csv(first_prototype_path, dtype=str, keep_default_na=False) if first_prototype_path.exists() else pd.DataFrame()
+    if first_prototype_signals.empty:
+        first_prototype_signals = pd.DataFrame(
+            _to_csv_frame(signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].eq("TRUE")])
+        )
+    oriented_segments = _build_step5_oriented_segments(first_prototype_signals, adjacent)
+    oriented_segment_bins = _build_oriented_segment_bins(oriented_segments)
+    (
+        oriented_segment_summary,
+        oriented_segment_problem_rows,
+        oriented_segment_pairing_summary,
+        oriented_segment_signal_coverage,
+    ) = _step5_oriented_segment_reviews(
+        first_prototype_signals,
+        signal_step5_eligibility,
+        oriented_segments,
+        oriented_segment_bins,
+    )
+    refined_edges, refined_adjacent, termination_examples = _refine_signal_adjacent_edge_termination(
+        adjacent,
+        nodes,
+        review_current=layout.review_current,
+    )
+    refined_bins = _build_bins(refined_adjacent)
+    refined_edges_eligible = _build_refined_edges_eligible(refined_edges, signal_step5_eligibility)
+    termination_summary = _termination_refinement_summary(
+        adjacent,
+        refined_adjacent,
+        bins,
+        refined_bins,
+        signal_step5_eligibility,
+        refined_edges_eligible,
+        first_prototype_signals,
+    )
+    step5_before_after_refinement = _step5_before_after_refinement(signal_step5_eligibility)
+    if termination_examples.empty:
+        remaining_termination_candidates = termination_examples.copy()
+        before_after_examples = termination_examples.copy()
+    else:
+        before_after_examples = termination_examples.sort_values(
+            ["termination_refinement_applied", "length_delta_ft"],
+            ascending=[False, False],
+        ).copy()
+        remaining_termination_candidates = termination_examples.loc[
+            termination_examples["remaining_intermediate_intersection_crossed_flag"].eq("TRUE")
+            | termination_examples["manual_edge_termination_issue_signal"].eq("TRUE")
+            | termination_examples["zero_length_after_refinement"].eq("TRUE")
+            | termination_examples["suspicious_short_segment_after_refinement"].eq("TRUE")
+            | termination_examples["new_suspicious_short_segment_created"].eq("TRUE")
+        ].copy()
+    if not remaining_termination_candidates.empty and not refined_adjacent.empty:
+        remaining_termination_candidates_geo = refined_adjacent.merge(
+            remaining_termination_candidates.drop(columns=["geometry"], errors="ignore"),
+            on=["signal_id", "refined_edge_id", "original_graph_edge_id"],
+            how="inner",
+            suffixes=("", "_review"),
+        )
+    else:
+        remaining_termination_candidates_geo = gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=adjacent.crs)
+    step5_eligibility_summary = _step5_summary(signal_step5_eligibility)
+    step5_excluded_signals = signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].eq("FALSE")].copy()
+    step5_candidate_signals = signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].isin(["TRUE", "CONDITIONAL"])].copy()
+    step5_candidate_edges = roadway_graph_edges_eligible.loc[roadway_graph_edges_eligible["usable_for_step5"].isin(["TRUE", "CONDITIONAL"])].copy()
     divided_candidates = edges.loc[edges["roadway_division_status"].isin(["divided", "likely_divided"])].copy() if not edges.empty else edges.copy()
     undivided_candidates = edges.loc[edges["roadway_division_status"].eq("undivided")].copy() if not edges.empty else edges.copy()
     build_summary, count_summary, sample_review = _summary_tables(
@@ -760,6 +1846,32 @@ def build_roadway_graph(
         "graph_gap_review_csv": (gap_review, layout.tables_current / "graph_gap_review.csv"),
         "divided_edge_directional_candidates_csv": (divided_candidates, layout.tables_current / "divided_edge_directional_candidates.csv"),
         "undivided_edge_candidates_csv": (undivided_candidates, layout.tables_current / "undivided_edge_candidates.csv"),
+        "signal_step5_eligibility_csv": (signal_step5_eligibility, layout.tables_current / "signal_step5_eligibility.csv"),
+        "roadway_graph_edges_eligible_csv": (roadway_graph_edges_eligible, layout.tables_current / "roadway_graph_edges_eligible.csv"),
+        "roadway_graph_edges_termination_refined_csv": (
+            refined_edges,
+            layout.tables_current / "roadway_graph_edges_termination_refined.csv",
+        ),
+        "signal_adjacent_edges_termination_refined_csv": (
+            refined_adjacent,
+            layout.tables_current / "signal_adjacent_edges_termination_refined.csv",
+        ),
+        "signal_graph_edge_bins_50ft_termination_refined_csv": (
+            refined_bins,
+            layout.tables_current / "signal_graph_edge_bins_50ft_termination_refined.csv",
+        ),
+        "roadway_graph_edges_eligible_termination_refined_csv": (
+            refined_edges_eligible,
+            layout.tables_current / "roadway_graph_edges_eligible_termination_refined.csv",
+        ),
+        "signal_oriented_roadway_segments_csv": (
+            oriented_segments,
+            layout.tables_current / "signal_oriented_roadway_segments.csv",
+        ),
+        "signal_oriented_segment_bins_50ft_csv": (
+            oriented_segment_bins,
+            layout.tables_current / "signal_oriented_segment_bins_50ft.csv",
+        ),
     }
     for key, (frame, path) in table_outputs.items():
         outputs[key] = str(_write_csv_frame(_to_csv_frame(frame), path))
@@ -768,6 +1880,41 @@ def build_roadway_graph(
         "graph_build_summary_csv": (build_summary, layout.review_current / "graph_build_summary.csv"),
         "signal_adjacent_edge_count_summary_csv": (count_summary, layout.review_current / "signal_adjacent_edge_count_summary.csv"),
         "sample_signal_graph_review_csv": (sample_review, layout.review_current / "sample_signal_graph_review.csv"),
+        "step5_eligibility_summary_csv": (step5_eligibility_summary, layout.review_current / "step5_eligibility_summary.csv"),
+        "step5_excluded_signals_csv": (step5_excluded_signals, layout.review_current / "step5_excluded_signals.csv"),
+        "step5_candidate_signals_csv": (step5_candidate_signals, layout.review_current / "step5_candidate_signals.csv"),
+        "edge_termination_refinement_summary_csv": (
+            termination_summary,
+            layout.review_current / "edge_termination_refinement_summary.csv",
+        ),
+        "edge_termination_before_after_examples_csv": (
+            before_after_examples,
+            layout.review_current / "edge_termination_before_after_examples.csv",
+        ),
+        "remaining_edge_termination_issue_candidates_csv": (
+            remaining_termination_candidates,
+            layout.review_current / "remaining_edge_termination_issue_candidates.csv",
+        ),
+        "step5_eligibility_before_after_termination_refinement_csv": (
+            step5_before_after_refinement,
+            layout.review_current / "step5_eligibility_before_after_termination_refinement.csv",
+        ),
+        "step5_oriented_segment_summary_csv": (
+            oriented_segment_summary,
+            layout.review_current / "step5_oriented_segment_summary.csv",
+        ),
+        "step5_oriented_segment_problem_rows_csv": (
+            oriented_segment_problem_rows,
+            layout.review_current / "step5_oriented_segment_problem_rows.csv",
+        ),
+        "step5_oriented_segment_pairing_summary_csv": (
+            oriented_segment_pairing_summary,
+            layout.review_current / "step5_oriented_segment_pairing_summary.csv",
+        ),
+        "step5_oriented_segment_signal_coverage_csv": (
+            oriented_segment_signal_coverage,
+            layout.review_current / "step5_oriented_segment_signal_coverage.csv",
+        ),
     }
     for key, (frame, path) in review_outputs.items():
         outputs[key] = str(_write_csv_frame(_to_csv_frame(frame), path))
@@ -784,6 +1931,25 @@ def build_roadway_graph(
             layout.review_geojson_current / "divided_edge_directional_candidates.geojson",
         ),
         "undivided_edge_candidates_geojson": (undivided_candidates, layout.review_geojson_current / "undivided_edge_candidates.geojson"),
+        "step5_candidate_signals_geojson": (step5_candidate_signals, layout.review_geojson_current / "step5_candidate_signals.geojson"),
+        "step5_excluded_signals_geojson": (step5_excluded_signals, layout.review_geojson_current / "step5_excluded_signals.geojson"),
+        "step5_candidate_edges_geojson": (step5_candidate_edges, layout.review_geojson_current / "step5_candidate_edges.geojson"),
+        "edge_termination_refined_edges_geojson": (
+            refined_edges,
+            layout.review_geojson_current / "edge_termination_refined_edges.geojson",
+        ),
+        "remaining_edge_termination_issue_candidates_geojson": (
+            remaining_termination_candidates_geo,
+            layout.review_geojson_current / "remaining_edge_termination_issue_candidates.geojson",
+        ),
+        "signal_oriented_roadway_segments_geojson": (
+            oriented_segments,
+            layout.review_geojson_current / "signal_oriented_roadway_segments.geojson",
+        ),
+        "signal_oriented_segment_bins_50ft_geojson": (
+            oriented_segment_bins,
+            layout.review_geojson_current / "signal_oriented_segment_bins_50ft.geojson",
+        ),
     }
     for key, (frame, path) in geojson_outputs.items():
         outputs[key] = str(_write_geojson_frame(frame, path))
@@ -833,4 +1999,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())
-
