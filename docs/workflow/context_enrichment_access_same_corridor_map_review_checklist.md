@@ -1,5 +1,7 @@
 # Same-Corridor Access Map Review Checklist
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment review checklist remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 Use this checklist before adding or promoting reviewed-family same-corridor access matching changes.

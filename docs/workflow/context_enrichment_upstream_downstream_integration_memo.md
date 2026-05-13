@@ -1,5 +1,7 @@
 # Context Enrichment Upstream/Downstream Integration Memo
 
+**Status: SUPPORTING REFERENCE.** This integration memo belongs to the older signal-centered context-enrichment path and remains in place for later graph-first migration review.
+
 ## Bounded Question
 
 Close the current context-enrichment pass and identify the stable post-promotion baseline for the next proposal-facing descriptive analysis phase.
@@ -90,4 +92,3 @@ Use the review GeoJSON layers under `work/output/context_enrichment/review/geojs
 The closed baseline is suitable for descriptive, proposal-facing summaries within the current divided-road, approach-shaped slice. It supports signal-level and approach-row summaries of upstream/downstream crashes, AADT, access points, crash-context rural/urban evidence, and fixed downstream distance bands.
 
 The baseline is not modeling-ready by itself. Remaining limits include unresolved access route conflicts, crash-context rural/urban classification that is not roadway-level geographic truth, lack of a fully rerun raw-input staging chain in the current environment, and distance bands that are descriptive 50-foot bins rather than final limiting-value or next-signal boundaries.
-

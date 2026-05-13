@@ -5,11 +5,14 @@ This repository is in an active redesign state, but the current bounded workflow
 Start with:
 
 - [docs/README.md](docs/README.md)
+- [docs/methodology/current_methodology_index.md](docs/methodology/current_methodology_index.md)
+- [docs/methodology/roadway_graph_methodology.md](docs/methodology/roadway_graph_methodology.md)
+- [docs/workflow/current_workflow_index.md](docs/workflow/current_workflow_index.md)
+- [docs/workflow/roadway_graph_workflow.md](docs/workflow/roadway_graph_workflow.md)
 - [docs/methodology/overview_methodology.md](docs/methodology/overview_methodology.md)
 - [docs/methodology/proposal_alignment_growth_plan.md](docs/methodology/proposal_alignment_growth_plan.md)
 - [AGENTS.md](AGENTS.md)
 - [docs/workflow/active_workflow.md](docs/workflow/active_workflow.md)
-- [docs/workflow/enrichment_plan.md](docs/workflow/enrichment_plan.md)
 
 ## Canonical Working Copy
 
@@ -28,7 +31,11 @@ If you are converting a prior OneDrive working tree into the local canonical cop
 
 Do not rely on moving a repo-local `.venv/` between locations. Use the bootstrap flow to discover or recreate the active interpreter instead.
 
-## Current active workflow surface
+## Current Active Workflow Surface
+
+The current active analytical method is graph-first:
+
+full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
 
 The current active workflow has two layers:
 
@@ -39,16 +46,22 @@ The current active workflow has two layers:
    - `build-study-slice`
    - `enrich-study-signals-nearest-road`
    - `check-parity`
-2. Restored direct-entry analytical modules under `src/active/`
-   - `python -m src.active.directionality_experiment`
-   - `python -m src.active.upstream_downstream_prototype`
-   - `python -m src.active.high_confidence_upstream_downstream_analysis`
+2. Current graph-first direct-entry analytical modules under `src/active/roadway_graph/`
+   - `python -m src.active.roadway_graph`
+   - `python -m src.active.roadway_graph.crash_assignment`
+   - `python -m src.active.roadway_graph.geometric_direction`
+   - `python -m src.active.roadway_graph.divided_carriageway_pairing`
+   - `python -m src.active.roadway_graph.roadway_role_classification`
 
-The direct-entry modules are meaningful again, but they are not yet integrated into the main package CLI.
+The older signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype docs are preserved as historical or supporting reference, not the current methodology.
 
-## Restored output areas
+## Output Areas
 
-The working tree now has regenerated outputs for:
+The current active graph-first outputs are under:
+
+- `work/output/roadway_graph/`
+
+Historical or supporting output areas include:
 
 - `work/output/stage1b_study_slice/`
 - `work/parity/`
@@ -56,13 +69,14 @@ The working tree now has regenerated outputs for:
 - `work/output/upstream_downstream_prototype/`
 - `work/output/upstream_downstream_prototype/high_confidence_descriptive_analysis/`
 
-Grouped `current/` output contracts now exist for directionality, prototype, and high-confidence downstream analysis. Some older flat-layout residue may still remain in parts of `work/` from pre-hardening runs, so trust the grouped `current/` lanes and local `README.md` files over older loose files when both are present.
+Grouped `current/` output contracts still matter where present. Some older flat-layout residue may remain in parts of `work/`, so trust grouped `current/` lanes and local `README.md` files over older loose files when both are present.
 
 Manual QGIS PNG exports are not regenerated automatically by the Python steps.
 
 ## Repo layout
 
-- `src/active/` - current bounded runtime plus restored direct-entry experimental/downstream modules
+- `src/active/roadway_graph/` - current graph-first roadway_graph modules
+- `src/active/` - standard active runtime plus historical/supporting direct-entry modules
 - `src/transitional/` - transitional diagnostics still referenced by the narrowed workflow
 - `config/` - active runtime config
 - `scripts/` - bootstrap and environment entrypoints

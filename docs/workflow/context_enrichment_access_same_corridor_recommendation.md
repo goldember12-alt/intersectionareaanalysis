@@ -1,5 +1,7 @@
 # Context Enrichment Access Same-Corridor Recommendation
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment recommendation remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 This memo investigates whether the current access route gate is too strict for obvious same-corridor cases and whether a bounded alternate evidence chain could replace exact coded-route identity for a small, reviewed subset.

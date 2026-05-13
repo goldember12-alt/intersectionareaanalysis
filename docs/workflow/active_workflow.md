@@ -1,20 +1,26 @@
 # Current Workflow and Output Contracts
 
+**Status: CURRENT ACTIVE.** This file is the operational map for the current repository. The current active analytical method is the graph-first roadway_graph / Step 5 workflow; older signal-centered and directed-segment workflows are preserved as historical or supporting references unless a later task explicitly promotes them.
+
 ## Current bounded problem
 
 The current bounded problem is:
 
-- a signal-centered workflow that builds bounded near-signal evidence around each signal so nearby crashes can later be interpreted as approaching or leaving the signal, or upstream or downstream relative to it
+- a graph-first roadway workflow that builds a clean Travelway-based signal scaffold before crashes are assigned or upstream/downstream interpretation is attempted
 
-This repository is still in redesign mode, but the restored workflow is now concrete enough to describe truthfully.
+The current active method is:
+
+full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
+
+This repository is still in redesign mode, but the roadway_graph workflow is now the lead current method.
 
 ## Workflow surface
 
-The active workflow currently has one standard CLI slice plus direct-entry analytical modules.
+The active workflow currently has one standard CLI slice plus direct-entry roadway_graph analytical modules.
 
-The road-network-first directed segment workflow is now a separate active direct-entry family. It builds divided-road signal nodes, oriented signal-anchored legs, optional access termini, and 50-foot bins without reading crash data, inferring true vehicle travel direction, or changing the existing crash classification modules. Its contract is documented in `docs/workflow/directed_segment_workflow.md`.
+The older directed segment workflow is preserved as a superseded divided-road prototype. It built divided-road signal nodes, oriented signal-anchored legs, optional access termini, and 50-foot bins without reading crash data. It is no longer the current graph foundation.
 
-The full-roadway graph foundation prototype is now the active graph-foundation path. It uses normalized Travelway roads, retains divided and undivided roadways, and supersedes the divided-only directed segment workflow for graph foundation purposes. Its contract is documented in `docs/workflow/roadway_graph_workflow.md`.
+The full-roadway graph foundation prototype is the active graph-first path. It uses normalized Travelway roads, retains divided and undivided roadways, and supersedes the divided-only directed segment workflow for graph foundation purposes. Its contract is documented in `docs/workflow/roadway_graph_workflow.md`.
 
 ### Standard package CLI slice
 
@@ -32,25 +38,24 @@ Optional transitional diagnostics remain available through the same package CLI:
 - `inspect-aadt-traffic-volume-bridge`
 - `inspect-aadt-traffic-volume-geojson-bridge`
 
-### Restored direct-entry modules
+### Direct-entry modules
 
-These modules are active and useful again, but they are not currently exposed through `-m src`:
+These modules still exist, but their methodological status differs. Use roadway_graph modules for current graph-first work. Treat directionality, upstream/downstream, high-confidence downstream, and directed_segments as historical or supporting unless a later task explicitly promotes them.
 
 - `python -m src.active.directionality_experiment`
-  - supporting directionality experiment
-  - restored
+  - historical directionality experiment
+  - supporting reference only
   - direct-entry only
 - `python -m src.active.upstream_downstream_prototype`
-  - first bounded signal-centered crash-classification prototype
-  - restored
+  - historical signal-centered crash-classification prototype
+  - supporting reference only
   - direct-entry only
 - `python -m src.active.high_confidence_upstream_downstream_analysis`
-  - downstream descriptive-analysis extension built from prototype outputs
-  - restored
+  - historical downstream descriptive-analysis extension built from prototype outputs
+  - supporting reference only
   - direct-entry only
-  - still best described as a provisional downstream step rather than a standard CLI step
 - `python -m src.active.context_enrichment`
-  - bounded AADT, access, and crash-context enrichment for current upstream/downstream outputs
+  - supporting AADT, access, and crash-context enrichment for older upstream/downstream outputs
   - direct-entry only
   - implemented outside the standard package CLI slice
 - `python -m src.active.context_enrichment_access_same_corridor_prototype`
@@ -58,7 +63,7 @@ These modules are active and useful again, but they are not currently exposed th
   - direct-entry only
   - uses an explicit reviewed family table and prototype-only outputs
 - `python -m src.active.directed_segments`
-  - road-network-first oriented divided-road signal-leg and 50-foot bin workflow
+  - superseded road-network-first oriented divided-road signal-leg and 50-foot bin workflow
   - direct-entry only
   - uses `Study_Roads_Divided.parquet` and `Study_Signals_NearestRoad.parquet`
   - uses `artifacts/normalized/access.parquet` only for optional access termini
@@ -69,6 +74,26 @@ These modules are active and useful again, but they are not currently exposed th
   - uses `artifacts/normalized/roads.parquet` and `artifacts/normalized/signals.parquet`
   - retains both divided and undivided Travelway roads
   - does not read crash data, assign crashes, infer true vehicle travel direction, or modify crash/access modules
+- `python -m src.active.roadway_graph.geometric_direction`
+  - roadway-geometry-derived direction/orientation model for the Step 5 crash-ready subset
+  - direct-entry only
+  - uses crash-ready Step 5 segment/bin outputs and roadway graph candidate tables
+  - does not read crash data, infer direction from crash distributions, or promote termination-refined outputs
+- `python -m src.active.roadway_graph.divided_carriageway_pairing`
+  - no-crash divided-carriageway pairing diagnostic for TRUE reference-signal Step 5 rows
+  - direct-entry only
+  - uses roadway graph geometry and Step 5 geometry outputs
+  - does not read crash data, assign crashes, or infer direction from crash distributions
+- `python -m src.active.roadway_graph.roadway_role_classification`
+  - no-crash roadway-role classification prototype for crash-ready Step 5 rows and referenced graph edges
+  - direct-entry only
+  - uses normalized roadway source fields, roadway graph fields, and existing divided-pairing status
+  - does not read crash data, assign crashes, infer vehicle direction, revise divided pairing, or overwrite accepted divided pairs
+- `python -m src.active.roadway_graph.crash_assignment`
+  - conservative spatial crash assignment prototype for the crash-ready segment/bin subset
+  - direct-entry only
+  - assigns crashes to nearest crash-ready segment/bin within tolerance
+  - does not finalize event direction or upstream/downstream interpretation
 
 ## Bootstrap entry story
 
@@ -186,7 +211,31 @@ Current output contract under `work/output/roadway_graph/`:
 
 The detailed contract is documented in `docs/workflow/roadway_graph_workflow.md`.
 
-## Directionality experiment
+The roadway-geometry-derived direction/orientation pass is a separate roadway graph module:
+
+```powershell
+<bootstrap-reported-python> -m src.active.roadway_graph.geometric_direction
+```
+
+It writes `signal_oriented_roadway_segments_geometric_direction.csv`, `signal_oriented_segment_bins_geometric_direction.csv`, and review summaries/GeoJSON under `work/output/roadway_graph/`. It is documented in `docs/workflow/roadway_graph_geometric_direction_model.md`.
+
+The divided-carriageway pairing diagnostic is also separate:
+
+```powershell
+<bootstrap-reported-python> -m src.active.roadway_graph.divided_carriageway_pairing
+```
+
+It writes `divided_carriageway_pair_candidates.csv`, `signal_oriented_roadway_segments_divided_pairing_enriched.csv`, and review summaries/GeoJSON under `work/output/roadway_graph/`. It is documented in `docs/workflow/roadway_graph_divided_carriageway_pairing.md`.
+
+The roadway-role classification prototype is a separate pre-recovery review step:
+
+```powershell
+<bootstrap-reported-python> -m src.active.roadway_graph.roadway_role_classification
+```
+
+It writes `roadway_role_classification.csv`, `signal_oriented_roadway_segments_role_enriched.csv`, role summaries, unpaired divided summaries, and review examples/GeoJSON under `work/output/roadway_graph/`. It is documented in `docs/workflow/roadway_graph_roadway_role_classification.md`.
+
+## Historical directionality experiment
 
 Run:
 
@@ -194,12 +243,12 @@ Run:
 <bootstrap-reported-python> -m src.active.directionality_experiment
 ```
 
-Role:
+Historical role:
 
 - supporting flow-orientation experiment for divided roads near signals
-- not the final architecture by itself
+- superseded by the current graph-first roadway geometry method for upstream/downstream interpretation
 
-Current output contract under `work/output/directionality_experiment/`:
+Preserved output contract under `work/output/directionality_experiment/`:
 
 - `README.md`
 - `tables/current/`
@@ -215,7 +264,7 @@ Current output contract under `work/output/directionality_experiment/`:
 
 For grouped output contracts, each run should write both the stable `current/` artifact and a timestamped copy in the matching `history/` folder. `current/` is the active handoff lane; `history/` is the growing retention lane.
 
-## Upstream/downstream prototype
+## Historical upstream/downstream prototype
 
 Run:
 
@@ -223,12 +272,13 @@ Run:
 <bootstrap-reported-python> -m src.active.upstream_downstream_prototype
 ```
 
-Role:
+Historical role:
 
 - first bounded signal-centered upstream/downstream crash-classification prototype
 - depends on grouped current outputs from the directionality experiment
+- not the current roadway_graph method
 
-Current output contract under `work/output/upstream_downstream_prototype/`:
+Preserved output contract under `work/output/upstream_downstream_prototype/`:
 
 - `README.md`
 - `tables/current/`
@@ -242,7 +292,7 @@ Current output contract under `work/output/upstream_downstream_prototype/`:
 
 `review/geopackage/current/` is optional and only appears when GeoPackage export succeeds in the current environment.
 
-## High-confidence downstream descriptive step
+## Historical high-confidence downstream descriptive step
 
 Run:
 
@@ -250,14 +300,13 @@ Run:
 <bootstrap-reported-python> -m src.active.high_confidence_upstream_downstream_analysis
 ```
 
-Role:
+Historical role:
 
 - downstream descriptive-analysis extension built from the restored grouped prototype outputs
-- restored and meaningful again
-- still provisional for workflow integration
+- preserved as prior signal-centered descriptive evidence
 - direct-entry only for now
 
-Current output contract under `work/output/upstream_downstream_prototype/high_confidence_descriptive_analysis/`:
+Preserved output contract under `work/output/upstream_downstream_prototype/high_confidence_descriptive_analysis/`:
 
 - `README.md`
 - `tables/current/`
@@ -288,8 +337,8 @@ If Windows, OneDrive, QGIS, or another process blocks replacement of a `current/
 
 ## Context enrichment
 
-Bounded context enrichment is now implemented as a direct-entry step for the active upstream/downstream outputs.
-The active implementation contract is documented in:
+Bounded context enrichment remains implemented as a direct-entry support step for the older upstream/downstream outputs.
+The supporting implementation contract is documented in:
 
 - `docs/workflow/enrichment_plan.md`
 - `docs/workflow/context_enrichment_implementation_memo.md`
@@ -302,7 +351,7 @@ It covers:
 - descriptive signal-relative distance fields and fixed `50`-foot downstream band summaries within the current approach-shaped study area
 - rural/urban crash-context summaries from crash `AREA_TYPE`
 
-The current bounded implementation keeps access matching conservative and reviewable:
+The supporting bounded implementation keeps access matching conservative and reviewable:
 
 - access runs exact normalized route support plus measure and distance checks first
 - exact-route `route_conflict` rows may then use the reviewed same-corridor overlay, but only for `ReviewDecision = include` route-family pairs in `docs/workflow/context_enrichment_access_same_corridor_seed_families.csv`
@@ -324,7 +373,7 @@ The closure/integration check against the active upstream/downstream workflow is
 
 The April 28, 2026 raw-input and artifact recovery audit is documented in:
 
-- `docs/workflow/repo_input_artifact_recovery_audit_20260428.md`
+- `../../legacy/docs/workflow/repo_input_artifact_recovery_audit_20260428.md`
 
 The current proposal-facing descriptive packaging phase is documented in:
 
@@ -334,18 +383,18 @@ The current proposal-facing descriptive packaging phase is documented in:
 - `docs/workflow/proposal_facing_descriptive_analysis_package_002.md`
 - `docs/workflow/proposal_facing_descriptive_findings_package_003.md`
 
-Current status:
+Supporting historical status:
 
-- context enrichment is sufficient for the current divided-road vertical slice
+- context enrichment is sufficient for the older divided-road signal-centered vertical slice
 - access route-conflict recovery batch 001 is closed for now
 - remaining access route conflicts stay unresolved unless a later bounded analysis exposes a specific review need
-- the current phase is proposal-facing descriptive table packaging, not matching recovery or modeling
-- Package 001 is the frozen descriptive baseline
-- Package 002 adds expanded descriptive downstream band families without changing Package 001
-- Package 003 is the initial descriptive findings/readout phase and produces review queues, not model claims
+- the prior phase was proposal-facing descriptive table packaging, not matching recovery or modeling
+- Package 001 is the frozen historical descriptive baseline
+- Package 002 added expanded descriptive downstream band families without changing Package 001
+- Package 003 was the initial descriptive findings/readout phase and produced review queues, not model claims
 - next future phases are manual review of Package 003 queues, limiting/desirable/policy band design from documented sources, comparison-ready table refinement, and a roadway-level geographic-context source decision
 
-The current implementation location and invocation are:
+The preserved implementation location and invocation are:
 
 ```powershell
 <bootstrap-reported-python> -m src.active.context_enrichment
@@ -364,7 +413,7 @@ Optional overrides:
 - `--same-corridor-family-table`
 - `--run-label`
 
-The active implementation enriches the current approach-row, signal-study-area, and classified-crash outputs rather than creating a universal statewide segment product.
+The preserved implementation enriches the older approach-row, signal-study-area, and classified-crash outputs rather than creating a universal statewide segment product.
 The same run now also writes exploratory signal-level downstream distance-band summaries for the current approach-shaped study area.
 It remains outside the standard Stage 1A CLI slice as a bounded direct-entry step.
 
@@ -402,20 +451,20 @@ Current output contract under `work/output/context_enrichment_access_same_corrid
 - `stage-inputs`, `normalize-stage`, `build-study-slice`, `enrich-study-signals-nearest-road`, and `check-parity` are the standard active workflow.
 - They are CLI-exposed and should be treated as the normal bounded entry path.
 
-### Restored but direct-entry steps
+### Historical or supporting direct-entry steps
 
-- `directionality_experiment` is an active supporting experiment with a grouped output contract.
-- `upstream_downstream_prototype` is an active prototype built on the directionality outputs, but it is still direct-entry only.
-- `high_confidence_upstream_downstream_analysis` is now a restored downstream extension with a grouped output contract, but it remains best described as a provisional downstream step rather than a standard active CLI command.
+- `directionality_experiment` is historical directionality evidence with a grouped output contract.
+- `upstream_downstream_prototype` is a historical signal-centered prototype built on the directionality outputs.
+- `high_confidence_upstream_downstream_analysis` is a historical downstream extension with a grouped output contract.
 
 ## Active repo posture
 
 Treat the active repository as:
 
-- authoritative methodology in `docs/methodology/overview_methodology.md`
+- authoritative current methodology in `docs/methodology/roadway_graph_methodology.md`, with repository-level support in `docs/methodology/overview_methodology.md`
 - proposal alignment and growth guidance in `docs/methodology/proposal_alignment_growth_plan.md`
 - operating instructions in `AGENTS.md`
-- current workflow/status guidance in this file and `docs/workflow/enrichment_plan.md`
+- current workflow/status guidance in this file and `docs/workflow/roadway_graph_workflow.md`
 - a reduced active/transitional workflow in `src/`
 - active runnable modules in `src/active/`
 - transitional diagnostics in `src/transitional/`
@@ -435,12 +484,14 @@ Active code and commands are currently:
 - `src/active/__main__.py`
 - `src/active/config.py`
 - `src/active/study_slice.py` for the standard CLI slice
-- `src/active/directionality_experiment.py` as a direct-entry supporting experiment
-- `src/active/upstream_downstream_prototype.py` as a direct-entry prototype
-- `src/active/high_confidence_upstream_downstream_analysis.py` as a restored direct-entry downstream extension
-- `src/active/directed_segments/` as the preserved divided-road directed signal-leg prototype
 - `src/active/roadway_graph/` as the full-roadway graph foundation prototype
+- `src/active/roadway_graph/crash_assignment.py`, `src/active/roadway_graph/geometric_direction.py`, `src/active/roadway_graph/divided_carriageway_pairing.py`, and `src/active/roadway_graph/roadway_role_classification.py` as current roadway_graph direct-entry modules
+- `src/active/directionality_experiment.py`, `src/active/upstream_downstream_prototype.py`, `src/active/high_confidence_upstream_downstream_analysis.py`, and `src/active/directed_segments/` as historical or supporting direct-entry modules, not the current methodology
 - `src/transitional/bridge_key_audit.py` and `src/transitional/bridge_key_geojson_audit.py` as transitional diagnostics
+
+## Next Recommended Implementation Step
+
+The next technical task is divided-pairing recovery using roadway role classification. Start with `mainline_divided_carriageway` rows that remain unpaired, preserve accepted high/medium-confidence pairs, keep unresolved/review-only cases visible, and avoid broad graph repair or modeling claims.
 
 
 

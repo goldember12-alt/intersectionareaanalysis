@@ -1,5 +1,7 @@
 # Same-Corridor Access Map Review Completed
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment review summary remains in place for later graph-first crash/access migration review.
+
 Date: 2026-04-24
 
 Review basis:

@@ -1,5 +1,7 @@
 # Proposal-Facing Distance Band Family Design 002
 
+**Status: CURRENT SUPPORT.** This distance-band design note remains in place as future proposal-aligned planning support.
+
 ## Bounded Purpose
 
 Package 002 expands downstream distance-band summaries from the frozen Package 001 descriptive baseline.
@@ -171,4 +173,3 @@ The expanded crash/access assignment tables repeat source rows once per implemen
 - `no_assigned_speed`
 
 This keeps downstream-only band counts usable without hiding upstream, near-signal, unresolved, route-conflict, or measure-conflict records.
-

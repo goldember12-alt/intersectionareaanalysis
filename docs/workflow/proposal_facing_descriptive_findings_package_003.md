@@ -1,5 +1,7 @@
 # Proposal-Facing Descriptive Findings Package 003
 
+**Status: LEGACY SIGNAL-CENTERED PACKAGE.** This prior findings package remains in place as historical descriptive evidence. It is not the current roadway_graph method.
+
 ## Bounded Purpose
 
 Package 003 is the first descriptive findings/readout from the current divided-road, signal-centered analysis tables.
@@ -221,4 +223,3 @@ Package 003 does not support:
 Use `signal_outlier_review_queue.csv` for manual map and table review of the current divided-road slice.
 
 The most useful next human review is not modeling. It is confirming whether the high-count signals and interpretation-limited signals are geometrically coherent enough to support the next comparison-ready table refinement.
-

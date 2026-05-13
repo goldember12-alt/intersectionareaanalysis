@@ -1,5 +1,7 @@
 # Roadway Graph Foundation Methodology
 
+**Status: CURRENT ACTIVE.** This is the primary current graph-first methodology document. It describes the roadway scaffold used before crashes are assigned.
+
 ## Bounded Purpose
 
 The roadway graph foundation builds a full-roadway, signal-adjacent scaffold for later downstream functional area analysis.
@@ -126,4 +128,3 @@ Review should focus first on:
 - signals whose snapped road distance exceeds the review threshold
 - interchange, ramp, frontage-road, or grade-separated cases
 - cases where nearby roads appear not to split or intersect correctly
-

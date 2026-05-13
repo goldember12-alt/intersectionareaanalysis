@@ -1,5 +1,7 @@
 # Context Enrichment Rural/Urban Review
 
+**Status: SUPPORTING REFERENCE.** This crash-context review remains in place and must not be treated as roadway-level geographic truth.
+
 ## Scope
 
 This memo reviews the bounded crash-context rural/urban enrichment in `src/active/context_enrichment.py` for the latest rerun of `python -m src.active.context_enrichment`.

@@ -1,5 +1,7 @@
 # Context Enrichment AADT and StudyAreaID Policy Recommendation
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment planning note remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 This memo recommends the smallest correct next-step policy for:

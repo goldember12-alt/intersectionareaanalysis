@@ -1,5 +1,7 @@
 # Context Enrichment AADT and StudyAreaID Diagnostic Memo
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment diagnostic remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 This memo diagnoses two issues from the current bounded `src.active.context_enrichment` run without broadening the workflow:

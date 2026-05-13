@@ -1,5 +1,7 @@
 # Context Enrichment AADT No-Candidate Review
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment result remains in place for later graph-first crash/access migration review.
+
 ## Purpose
 
 This memo reviews the 6 residual `AADT_Status = no_candidate` approach rows from the latest bounded `src.active.context_enrichment` run.

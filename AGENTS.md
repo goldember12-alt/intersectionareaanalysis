@@ -9,12 +9,13 @@ The repository is an active analytical redesign workspace for Virginia downstrea
 Trust hierarchy:
 
 1. User instructions for the current task.
-2. `docs/methodology/overview_methodology.md`, titled **Core Methodology: Signal-Centered Downstream Functional Area Analysis**.
-3. `docs/methodology/proposal_alignment_growth_plan.md`, titled **Proposal Alignment and Growth Plan: Downstream Functional Area Guidance**.
-4. This `AGENTS.md` operating contract.
-5. Current workflow docs, especially `docs/workflow/active_workflow.md` and `docs/workflow/enrichment_plan.md`.
-6. Active source code and generated outputs, treated as evidence to inspect rather than authority to preserve.
-7. Legacy docs, legacy code, and old outputs, used only for reference or comparison.
+2. `docs/methodology/roadway_graph_methodology.md`, titled **Roadway Graph Foundation Methodology**.
+3. `docs/methodology/overview_methodology.md`, titled **Core Methodology: Graph-First Downstream Functional Area Analysis**.
+4. `docs/methodology/proposal_alignment_growth_plan.md`, titled **Proposal Alignment and Growth Plan: Downstream Functional Area Guidance**.
+5. This `AGENTS.md` operating contract.
+6. Current workflow docs, especially `docs/workflow/roadway_graph_workflow.md`, `docs/workflow/current_workflow_index.md`, and `docs/workflow/active_workflow.md`.
+7. Active source code and generated outputs, treated as evidence to inspect rather than authority to preserve.
+8. Legacy docs, legacy code, and old outputs, used only for reference or comparison.
 
 If these sources conflict, follow the higher source and update lower documentation when the task changes methodology, workflow, or output meaning.
 
@@ -37,19 +38,25 @@ The repo exists to support the larger research charter described in the VTRC pro
 
 ## Core Methodology
 
-The core active methodology is signal-centered downstream functional area analysis.
+The core active methodology is graph-first roadway_graph / Step 5 downstream functional area analysis.
 
-Signals are the anchor object. The workflow should build bounded near-signal evidence around each signal, then use roadway, crash, access, speed, AADT, median, and contextual data to interpret downstream conditions.
+The current active method is:
 
-The current practical implementation priority is divided-road analysis. This narrower scope is intentional. A truthful divided-road vertical slice is better than an unfinished universal method.
+full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
+
+Signals remain critical anchor objects, but the active workflow first builds the roadway scaffold from Travelway graph evidence. Crashes, access, AADT, speed, median, and contextual data should be attached only after the roadway scaffold is clean enough for the bounded question.
+
+The current practical implementation priority is the roadway_graph vertical slice. Divided carriageways are paired where geometry supports it, while undivided roads remain shared centerline records by default.
 
 Codex must always state the bounded question being solved. Examples:
 
-- signal-centered near-signal evidence modeling
-- divided-road signal-relative flow orientation
-- upstream/downstream crash classification
-- downstream access assignment
-- downstream distance-band summaries
+- graph-first signal-to-anchor roadway scaffolding
+- signal eligibility gating
+- roadway role classification
+- crash-ready segment/bin subset creation
+- divided carriageway pairing
+- roadway-geometry upstream/downstream interpretation
+- later downstream crash/access assignment after the scaffold is clean
 - proposal-facing descriptive summaries
 - comparison-ready modeling outputs
 
@@ -59,11 +66,11 @@ Methods must not silently broaden from one bounded question into a statewide or 
 
 The proposal companion document gives the repo a disciplined future path. The required controlled growth sequence is:
 
-1. Keep the current divided-road workflow as the first trustworthy vertical slice.
-2. Use it to produce downstream-zone crash/access/AADT/speed/median summaries by signal.
+1. Keep the current roadway_graph / Step 5 graph-first workflow as the first trustworthy vertical slice.
+2. Use it to produce roadway-scaffolded downstream-zone crash/access/AADT/speed/median summaries only after the scaffold is clean.
 3. Add explicit downstream distance bands matching proposal concepts, such as physical area to limiting value, limiting value to desirable value, fixed buffers, and speed-based bands.
 4. Add comparison-ready outputs for regression or descriptive analysis.
-5. Expand cautiously beyond divided roads only after the divided-road method is validated.
+5. Expand cautiously beyond validated graph-first roadway classes only after the current scaffold and unresolved-case handling are reviewed.
 6. Add roadway-level rural/suburban/urban context from a better source before using those classes as policy variables.
 7. Treat crash findings as safety evidence that informs guidance, not as the sole basis for distance calculation.
 
@@ -110,12 +117,16 @@ Raw inputs are protected unless the user explicitly says otherwise.
 
 Current active docs:
 
+- `docs/methodology/current_methodology_index.md`
+- `docs/methodology/roadway_graph_methodology.md`
 - `docs/methodology/overview_methodology.md`
 - `docs/methodology/proposal_alignment_growth_plan.md`
-- `docs/methodology/flow_method_comparison.md`
+- `docs/workflow/current_workflow_index.md`
+- `docs/workflow/roadway_graph_workflow.md`
 - `docs/workflow/active_workflow.md`
 - `docs/workflow/enrichment_plan.md`
-- `docs/results/directionality_experiment_results.md`
+
+Historical or supporting docs now live under `legacy/docs/` or remain in `docs/` with explicit status banners. Signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype material is not the current methodology.
 
 Current active code surface:
 
@@ -128,6 +139,9 @@ Current active code surface:
 - `src/active/high_confidence_upstream_downstream_analysis.py`
 - `src/active/context_enrichment.py`
 - `src/active/context_enrichment_access_same_corridor_prototype.py`
+- `src/active/roadway_graph/`
+
+The directionality, upstream/downstream, high-confidence downstream, context-enrichment, and directed_segments modules may remain runnable, but their current documentation status is historical or supporting unless a later task explicitly promotes them.
 
 Current transitional diagnostics:
 
@@ -158,12 +172,13 @@ The standard package CLI slice is intentionally small:
 The restored active analytical modules are direct-entry:
 
 ```powershell
-<bootstrap-reported-python> -m src.active.directionality_experiment
-<bootstrap-reported-python> -m src.active.upstream_downstream_prototype
-<bootstrap-reported-python> -m src.active.high_confidence_upstream_downstream_analysis
-<bootstrap-reported-python> -m src.active.context_enrichment
-<bootstrap-reported-python> -m src.active.context_enrichment_access_same_corridor_prototype
+<bootstrap-reported-python> -m src.active.roadway_graph
+<bootstrap-reported-python> -m src.active.roadway_graph.geometric_direction
+<bootstrap-reported-python> -m src.active.roadway_graph.divided_carriageway_pairing
+<bootstrap-reported-python> -m src.active.roadway_graph.roadway_role_classification
 ```
+
+Older direct-entry modules are preserved as historical or supporting reference unless explicitly promoted.
 
 Do not invent a new package family or broad orchestration layer unless the bounded implementation proves it is needed.
 
@@ -202,7 +217,7 @@ Candidate flow-orientation methods may include:
 - supplemental traffic-volume support
 - hybrid methods with explicit evidence hierarchy
 
-For divided-road analysis, filtered empirical crash evidence is a serious primary candidate when available and coherent. Roadway context and route naming are support-only unless validated for stronger use.
+For current graph-first work, roadway geometry governs upstream/downstream interpretation. Filtered empirical crash evidence is historical/supporting directionality evidence only unless a later bounded task explicitly re-evaluates it.
 
 Current empirical conclusions to preserve:
 
@@ -216,7 +231,7 @@ Never force signal-relative labels where evidence is weak. Use unresolved, ambig
 
 ## Proposal-Facing Output Rules
 
-When adding proposal-facing outputs, prefer signal-centered units first.
+When adding proposal-facing outputs, prefer signal-centered units built from the graph-first roadway scaffold.
 
 Good next output units include:
 
@@ -290,10 +305,12 @@ Update active docs when changing:
 
 Documentation roles:
 
-- `docs/methodology/overview_methodology.md`: core active methodology
+- `docs/methodology/roadway_graph_methodology.md`: core active graph-first methodology
+- `docs/methodology/overview_methodology.md`: repository-level methodology posture with historical context
 - `docs/methodology/proposal_alignment_growth_plan.md`: proposal alignment and future growth path
+- `docs/workflow/roadway_graph_workflow.md`: current graph-first commands and output contracts
 - `docs/workflow/active_workflow.md`: current commands and output contracts
-- `docs/workflow/enrichment_plan.md`: active context-enrichment contract
+- `docs/workflow/enrichment_plan.md`: supporting context-enrichment reference for older signal-centered outputs
 - `AGENTS.md`: Codex operating contract
 - `legacy/`: consolidated historical preservation root for legacy docs, code, outputs, and reference material
 

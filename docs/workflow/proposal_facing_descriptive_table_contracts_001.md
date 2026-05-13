@@ -1,5 +1,7 @@
 # Proposal-Facing Descriptive Table Contracts 001
 
+**Status: CURRENT SUPPORT.** This design/table-contract note remains in place as planning support, not as a current roadway_graph output contract.
+
 ## Bounded Purpose
 
 These contracts define the first proposal-facing descriptive table package for the current divided-road, signal-centered workflow.
@@ -164,4 +166,3 @@ Requires future methodology work:
 - rural/suburban/urban roadway-level source
 - expanded band families tied to proposal concepts
 - validated access type and land-use intensity fields
-

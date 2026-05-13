@@ -1,5 +1,7 @@
 # Context Enrichment Implementation Contract
 
+**Status: SUPPORTING REFERENCE.** This contract supports the older signal-centered enrichment workflow. It remains useful context, but it is not the current roadway_graph scaffold.
+
 ## Bounded question
 
 How should the current divided-road, signal-centered upstream/downstream outputs be enriched with AADT, access-point, crash-context rural/urban information, and descriptive signal-relative distance outputs without broadening into statewide segment enrichment, Oracle revival, Stage 1C packaging, or legacy crash/access ladders?

@@ -1,235 +1,117 @@
-# Core Methodology: Directed Segment Downstream Functional Area Analysis
+# Core Methodology: Graph-First Downstream Functional Area Analysis
+
+**Status: CURRENT ACTIVE OVERVIEW.** The detailed current method is documented in `roadway_graph_methodology.md`. This file gives the stable repository-level methodology and explains how older signal-centered work relates to the current graph-first path.
 
 ## Purpose
 
-This project exists to evaluate downstream functional area conditions at signalized intersections in Virginia using roadway, signal, crash, access, speed, volume, and related contextual data.
+This project evaluates downstream functional area conditions at signalized intersections in Virginia using roadway, signal, crash, access, speed, volume, median, geographic, and related contextual data.
 
-The goal is not to preserve a legacy implementation path. The goal is to produce a trustworthy, explainable, and maintainable analytical workflow that can support Virginia-specific downstream functional area understanding and guidance.
+The goal is not to preserve a legacy implementation path. The goal is to produce a trustworthy, explainable, maintainable analytical workflow that can support Virginia-specific downstream functional area understanding and eventual guidance.
 
-This repository should therefore be treated as an active analytical redesign effort. Existing code, outputs, contracts, and workflow assumptions are inputs for evaluation, not assumptions that must be preserved. Any existing component may be retained, repurposed, rewritten, moved to legacy storage, or discarded depending on whether it helps accomplish the analytical goals of the project clearly and truthfully.
+The current active methodology is roadway_graph / Step 5 graph-first:
 
-This document is the core methodology for the repository. The companion document
-`docs/methodology/proposal_alignment_growth_plan.md` translates the VTRC final proposal into a repository-facing growth plan. That companion should be read as project-charter alignment and future expansion guidance; it does not replace the bounded directed segment methodology here.
+full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
 
-## Core Project Principle
+## Core Principle
 
 Prefer the simplest method that truthfully solves the current analytical problem.
 
-Complexity is not a virtue by itself. If a proposed method requires repeated bridge logic, fragile lineage recovery, excessive staging layers, or elaborate exception handling, that complexity must be treated as diagnostic information. It may indicate that the method is mismatched to the current problem definition.
+Complexity is not a virtue by itself. If a proposed method requires repeated bridge logic, fragile lineage recovery, excessive staging layers, or elaborate exception handling, that complexity should be treated as diagnostic evidence that the method may be mismatched to the problem.
 
-The project should favor methods that are:
+The workflow should favor methods that are understandable, testable, bounded in scope, empirically grounded where appropriate, easy to validate, and proportionate to the question being asked.
 
-- understandable
-- testable
-- bounded in scope
-- empirically grounded
-- easy to validate
-- proportionate to the actual question being asked
+## Current Graph-First Scaffold
 
-## Current Scope
+The active workflow starts with roadway geometry rather than crashes. It builds a full Travelway graph, associates signals to graph components, applies signal eligibility gates, and then creates signal-to-anchor roadway segments and 50-foot bins.
 
-The current practical focus is pivoting to a road-network-first workflow that first builds a full-roadway graph foundation from Travelway geometry. Signals remain critical nodes, but the active graph foundation must retain both divided and undivided roads before crashes, access-context summaries, or other events are attached.
+This scaffold is signal-centered in analytical purpose, but graph-first in construction. Signals remain the reference object for downstream analysis. Roadway geometry supplies the scaffold that defines which signal-to-anchor segments and bins are eligible for later crash/access/context assignment.
 
-The earlier divided-road directed signal-leg scaffold remains useful as a preserved prototype, but it is superseded for graph foundation purposes. The active graph foundation is documented in `docs/methodology/roadway_graph_methodology.md` and `docs/workflow/roadway_graph_workflow.md`.
+The graph-first scaffold intentionally retains both divided and undivided roads. The current method must not silently narrow the graph to divided roads only.
 
-The earlier signal-centered crash/access classification workflow remains preserved as an active-but-separate prototype until a later task explicitly migrates it. The directed segment workflow must not use crash records or crash direction fields to infer true vehicle travel direction.
+## Why Crashes Are Delayed
 
-The detailed directed segment methodology is documented in `docs/methodology/directed_segment_methodology.md`.
+Crash data is delayed because crashes should not define the roadway scaffold. The scaffold must first answer no-crash questions:
 
-The directed segment workflow must still not use crash records or crash direction fields to infer true vehicle travel direction. For the full-roadway graph foundation, divided/undivided classification is descriptive source-roadway context only. Divided roads may later support directional/carriageway records, while undivided roads remain centerline/logical segment records until a later crash-direction assignment phase is explicitly implemented.
+- Which signals have enough roadway evidence to be reference signals?
+- Which signal-to-anchor segments are usable?
+- Which bins belong to each usable segment?
+- Which rows are divided carriageways, undivided centerlines, ramps, frontage roads, auxiliary lanes, one-way candidates, or unknown review cases?
 
-The prior divided-road vertical slice remains valuable, but the graph foundation should no longer exclude undivided roads.
+Only after those roadway questions are answered should crashes be spatially assigned to segment/bin records. Even then, crash assignment is not the same as final upstream/downstream interpretation. The current crash assignment prototype assigns crashes conservatively to the nearest crash-ready segment/bin and leaves event direction and upstream/downstream status unresolved.
 
-The methodology should still allow scope reduction when it improves clarity, validity, and deliverability, but graph-foundation scope reduction must be explicit and must not silently discard undivided roads.
+## TRUE Signal Eligibility
 
-## Directed Segment Evidence Scaffold
+TRUE signal eligibility exists to protect the reference-signal side of the analysis. A TRUE signal is one whose nearby roadway evidence is complete enough to serve as an analysis anchor under the current graph rules.
 
-The working dataset should first be a bounded oriented roadway scaffold rather than a crash-first signal buffer. The scaffold is road-network-first, but still signal-anchored: signals define the primary nodes and divided-road carriageways define oriented legs to adjacent signals, access points, or roadway endpoints.
+FALSE and CONDITIONAL signals are still useful evidence, but they should not silently enter the analysis as reference signals. They may appear in review outputs, supporting context, or future explicitly documented promotion logic.
 
-In practical terms, that means:
+## Opposite Anchors
 
-1. start from signalized intersection nodes
-2. attach each usable signal node to divided-road route/carriageway context
-3. build signal-anchored roadway legs on the same route/carriageway
-4. order those leg geometries from one fixed anchor to another without claiming true vehicle movement
-5. cut oriented legs into fixed distance bins for later crash, access, speed, AADT, and median joins
+The opposite anchor does not have to be a TRUE signal. Step 5 is A-centered: the reference signal must be TRUE, but the other end of a segment may be a valid signal, roadway intersection, or endpoint boundary.
 
-Crashes should be attached to this scaffold in later passes. The current directed segment pass does not use crash data to infer or validate true vehicle travel direction.
+This distinction matters because a non-TRUE opposite signal can still be a valid boundary even when it is not eligible to act as the reference signal for its own analysis row. The method should preserve that boundary evidence without treating the opposite anchor as an approved reference signal.
 
-## What the Methodology Must Accomplish
+## Roadway Role Before Pairing Recovery
 
-The workflow must ultimately support these outcomes:
+Roadway role classification comes before divided-pairing recovery because not every unpaired divided-looking row should be recovered the same way.
 
-1. Compile and manage the roadway, signal, crash, access, speed, volume, and related contextual data needed for downstream analysis.
-2. Define downstream study areas or comparison zones in a way that can be explained and validated.
-3. Assign roadway-side and downstream context truthfully enough for crash and access interpretation.
-4. Measure crash occurrence and related downstream conditions within those study areas.
-5. Support comparison across intersections, roadway contexts, and downstream conditions.
-6. Identify patterns and outliers that can contribute to Virginia-specific downstream functional area understanding and guidance.
+The current role layer separates mainline divided carriageways from undivided centerlines, ramps/connectors, frontage/service roads, turn lanes/auxiliary features, one-way pair candidates, and unknown review cases. Pairing recovery should focus first on `mainline_divided_carriageway` records and should handle one-way pair candidates only through a separate reviewed one-way method.
 
-These are the required analytical ends. The exact computational path used to achieve them is open to redesign.
+This avoids broad graph repair that treats every unresolved row as the same problem.
 
-## Supporting Flow-Orientation Principle
+## Divided Roads
 
-Signal-relative flow orientation is now a supporting analytical requirement inside the directed segment workflow, but the method used to infer it is not fixed in advance. Cardinal labels may be useful intermediate aids, but they are not the final analytical purpose by themselves.
+For divided roads, upstream/downstream interpretation should use roadway geometry and accepted carriageway pairing, not crash direction.
 
-The methodology must permit multiple candidate flow-orientation approaches to be explored and compared, including but not limited to:
+The geometric direction model and divided carriageway pairing diagnostic are no-crash methods. They use graph geometry, segment geometry, and pairing evidence to identify accepted high/medium-confidence divided carriageway pairs and unresolved cases. Crash direction remains historical/supporting evidence only unless a later bounded task explicitly re-evaluates it.
 
-- network-identity-based methods
-- roadway-context-based methods
-- empirically inferred methods
-- crash-evidence-based methods
-- hybrid methods that combine multiple evidence sources
+## Undivided Roads
 
-No single legacy assumption, including Oracle dependence, should be treated as mandatory unless it is demonstrated to be the simplest trustworthy solution for the current bounded scope.
+Undivided roads are shared centerline records by default. They should not be forced into physical directional carriageways.
 
-A method is acceptable if it can state clearly:
+Later crash interpretation on undivided roads may need side-of-centerline, approach/leaving, or bidirectional logic, but the current scaffold should preserve undivided centerlines as shared/bidirectional geometry until that method is explicitly designed and validated.
 
-- what evidence it uses
-- what assumptions it makes
-- what scope it applies to
-- how ambiguity is handled
-- what outputs it can support
-- where it should refuse to assign a label
+## Unresolved And Review-Only Cases
 
-## Empirical Flow Orientation for Divided Roads
+Unresolved and review-only cases are part of the method, not failures to hide. The workflow should preserve:
 
-Prior divided-road experiments found that filtered empirical crash evidence may be useful for diagnostic comparison in some contexts. That remains legacy/prototype evidence only for the current pivot. The directed segment workflow must first use road-network/source evidence and must not use crash evidence to infer or validate direction in this pass.
+- FALSE and CONDITIONAL signal eligibility rows
+- excluded or review-only segment rows
+- unresolved divided-pairing rows
+- unknown roadway-role rows
+- crash assignment rows whose event direction or upstream/downstream status is not yet interpretable
 
-Historical crash-evidence experiments remain useful as background, not as an active direction source for the directed segment build. The prior read was:
+Coverage should not be improved by forcing weak labels. The repository should make unresolved rates and review queues visible so later work can target the highest-value recovery problem.
 
-- a non-Oracle empirical method can produce credible local carriageway flow orientation in at least some divided-road contexts
-- strict unanimity is trustworthy but sparse
-- a 90% dominant-share relaxation appears promising as a bounded empirical variant
-- single-vehicle-clean cases are diagnostically useful
-- route-name fallback remains secondary and low-trust
+## Historical Signal-Centered Work
 
-That work answered an important subproblem for the older prototype. It does not govern the current directed segment pass, which must keep roadway direction independent from crash observations.
+Older signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype documentation is preserved as historical or supporting reference.
 
-## Required Method-Design Behavior
+That work remains useful because it records earlier divided-road vertical-slice assumptions, crash-evidence directionality experiments, downstream descriptive package designs, and context-enrichment ideas. It is not the current methodology.
 
-Any redesigned method must do the following:
+Current graph-first work may reuse concepts from those packages only after the graph scaffold, crash-ready subset, roadway role classification, divided-pairing recovery, and crash assignment QA make the reuse appropriate.
 
-### 1. Be explicit about the question it is solving
+## Proposal Alignment
 
-For example:
-- full-network flow orientation
-- signal-relative flow orientation on divided carriageways near signals
-- upstream/downstream labeling relative to the signal
-- approaching-versus-leaving interpretation support
-- crash-side assignment
-- access-side assignment
+The companion document `proposal_alignment_growth_plan.md` describes how this analytical backend should grow toward the larger VTRC proposal. The current method supports that growth by establishing a defensible roadway scaffold first.
 
-Methods should not silently broaden from a bounded question to a more general one.
+Proposal-facing outputs should remain descriptive or exploratory until the workflow defines the downstream band family, analysis unit, denominator availability, unresolved-case handling, evidence provenance, and validation checks.
 
-### 2. Rank candidate methods by sufficiency, not inheritance
+Crash findings can inform downstream guidance, but they should not be treated as the sole basis for functional-area distance.
 
-When comparing methods, the preferred ordering criteria are:
+## Current Next Step
 
-- truthfulness
-- scope fit
-- simplicity
-- explainability
-- validation burden
-- implementation burden
-- coverage
+The next technical step is divided-pairing recovery using roadway role classification. That means recovering additional divided carriageway pairs from current crash-ready segment rows by focusing first on mainline divided carriageway records, preserving unresolved/review-only cases, and avoiding broad graph repair or modeling claims.
 
-Legacy similarity is not a primary criterion.
+## Documentation Map
 
-### 3. Treat unresolved cases honestly
+Use these documents first:
 
-If a method cannot assign signal-relative orientation confidently for some rows, corridors, or intersections, those cases should remain unresolved rather than being forced into a weak or misleading label.
+- `current_methodology_index.md`
+- `roadway_graph_methodology.md`
+- `proposal_alignment_growth_plan.md`
+- `../workflow/current_workflow_index.md`
+- `../workflow/roadway_graph_workflow.md`
+- `../workflow/active_workflow.md`
 
-### 4. Preserve analytical meaning, not legacy machinery
-
-Outputs should preserve the meaning needed by the analysis, but intermediate logic may be redesigned aggressively.
-
-## Evidence Standards
-
-All analytical claims should identify the kind of evidence they rely on.
-
-Useful evidence categories include:
-
-- direct observed attribute evidence
-- geometric support evidence
-- roadway-context evidence
-- empirically inferred evidence from repeated observations
-- externally linked network evidence
-- hybrid evidence from multiple sources
-
-The methodology must distinguish between strong evidence and support-only evidence. A support field should not be presented as final truth unless it has been validated for that purpose.
-
-## Validation Philosophy
-
-Validation should be built around the redesigned method actually being used, not around preserving inherited effort.
-
-Validation may include:
-
-- row and feature counts
-- field completeness
-- geometry usability checks
-- agreement rates among filtered empirical crash evidence and support-only context fields
-- spot checks on mapped corridors
-- comparison of candidate methods on the same bounded subset
-- explicit unresolved-rate reporting
-- behavioral comparisons against earlier outputs where useful
-
-Legacy parity is useful when it helps interpret redesign choices, but parity is not the project goal by itself.
-
-## Repository Treatment Principle
-
-The current repository should be treated as a source of artifacts, experiments, partial methods, and reusable components.
-
-It should not be treated as a trusted system.
-
-Existing code and documents may contain:
-
-- useful logic
-- useful data contracts
-- useful field mappings
-- useful QC patterns
-- useful outputs for comparison
-- legacy assumptions that should be removed
-- overbuilt structures caused by earlier methodological commitments
-
-The redesign process must therefore scrutinize all existing components aggressively. Retain only what is helpful to the simplified and truthful workflow. Move preserved but non-active material into clearly marked legacy areas so that active development does not remain entangled with obsolete logic.
-
-## Documentation Role
-
-This document defines project goals and methodological posture. It intentionally does not lock the project into one inherited execution path.
-
-A separate operating contract should govern how the repository is evaluated, simplified, reorganized, and rebuilt under this methodology.
-
-That operating contract should instruct the coding agent to:
-
-- treat current code as untrusted until examined
-- prefer aggressive simplification where justified
-- keep only components that clearly serve the current methodology
-- isolate legacy material from active code paths
-- compare multiple candidate methods when the current one appears overcomplicated
-- treat excessive implementation effort as a signal to re-examine assumptions
-- prioritize concise, testable vertical slices over deep inherited complexity
-
-## Practical Redesign Sequence
-
-The intended sequence from this document is:
-
-1. Establish the new high-level methodology and project goals.
-2. Use that methodology to define a new operating contract for repository redesign.
-3. Evaluate the existing repository as an artifact collection rather than as a trusted baseline.
-4. Preserve potentially useful materials in legacy storage where appropriate.
-5. Build the new active workflow around the simplest methods that truthfully support the project goals.
-6. Expand only after a bounded, validated approach is working.
-
-## Summary
-
-This project is not a migration exercise for its own sake.
-
-It is a redesign effort whose purpose is to produce the simplest trustworthy workflow for downstream functional area analysis in Virginia.
-
-Existing code is evidence, not authority.
-Existing methodology is a candidate, not a command.
-The project should be framed around signals and bounded near-signal evidence, not around roadway rows as an end in themselves.
-Signal-relative flow orientation is required as a supporting inference, but the method for assigning it remains open.
-Cardinal labels are useful only insofar as they support upstream/downstream or approaching/leaving interpretation near signals.
-The repository should be simplified aggressively until the active workflow matches the real analytical problem instead of inherited implementation momentum.
+Raw generated outputs belong under `work/output/`. Curated readouts belong under `docs/results/` or, for now, under `docs/workflow/` when they are still operational roadway_graph readouts. Polished/shareable reports belong under `docs/reports/`.

@@ -1,5 +1,7 @@
 # Access Route-Conflict Promotion Batch 001 Comparison
 
+**Status: SUPPORTING REFERENCE.** This access-route comparison remains in place for later graph-first crash/access migration review.
+
 ## Bounded Change
 
 This batch promoted only these explicit reviewed same-corridor include pairs:

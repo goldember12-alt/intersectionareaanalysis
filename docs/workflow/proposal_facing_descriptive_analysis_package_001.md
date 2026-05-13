@@ -1,5 +1,7 @@
 # Proposal-Facing Descriptive Analysis Package 001
 
+**Status: LEGACY SIGNAL-CENTERED PACKAGE.** This prior package remains in place as historical descriptive evidence. It is not the current roadway_graph method.
+
 ## Bounded Purpose
 
 This package summarizes what the current divided-road, signal-centered workflow can already say using validated current outputs.
@@ -288,4 +290,3 @@ Recommended next package after this one:
 1. Define expanded distance-band families tied to proposal concepts.
 2. Refine the comparison-ready table contracts after those band families exist.
 3. Decide on a roadway-level geographic-context source before using rural/suburban/urban as a policy or modeling variable.
-

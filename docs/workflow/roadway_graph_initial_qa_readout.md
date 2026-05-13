@@ -1,5 +1,7 @@
 # Roadway Graph Initial QA Readout
 
+**Status: CURRENT ACTIVE.** This is a current roadway_graph result/readout summary retained under workflow for this pass.
+
 ## Scope
 
 This readout reviews the current full-roadway graph prototype under `work/output/roadway_graph/`.
@@ -281,4 +283,3 @@ Review first:
 5. high adjacent-edge count and grade-separation clusters
 
 High edge counts should be interpreted carefully. They are not failures by default. The review question is whether each high-count signal is correctly connected, under-connected, or over-connected.
-

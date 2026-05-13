@@ -1,5 +1,7 @@
 # Context Enrichment Implementation Memo
 
+**Status: SUPPORTING REFERENCE.** This memo supports the older signal-centered context-enrichment path and remains in place for later graph-first crash/access migration review.
+
 ## Exact inputs used
 
 - `work/output/upstream_downstream_prototype/review/geojson/current/approach_rows.geojson`

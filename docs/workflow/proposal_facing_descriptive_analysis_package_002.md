@@ -1,5 +1,7 @@
 # Proposal-Facing Descriptive Analysis Package 002
 
+**Status: LEGACY SIGNAL-CENTERED PACKAGE.** This prior package remains in place as historical descriptive evidence. It is not the current roadway_graph method.
+
 ## Bounded Purpose
 
 Package 002 expands downstream distance-band summaries from the frozen Package 001 descriptive baseline.
@@ -155,4 +157,3 @@ Package 002 does not support:
 Use Package 002 to review whether coarse fixed and speed-time bands are useful for descriptive summaries.
 
 The next bounded methodology task should define future limiting/desirable/policy band families from documented proposal, literature, or VDOT policy sources before generating those rows.
-

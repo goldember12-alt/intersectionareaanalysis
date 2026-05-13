@@ -1,5 +1,7 @@
 # Outline for the Early Data Processing Decision Diagram
 
+**Status: SUPPORTING REFERENCE.** This staging/data-processing diagram outline remains as support context, not current graph-first methodology.
+
 ## Diagram Title
 
 Early Data Processing for Later Directionality and Upstream/Downstream Work

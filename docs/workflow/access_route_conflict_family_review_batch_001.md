@@ -1,5 +1,7 @@
 # Access Route-Conflict Family Review Batch 001
 
+**Status: SUPPORTING REFERENCE.** This access-route review remains in place for later graph-first crash/access migration review.
+
 ## Bounded Question
 
 Which repeated route-conflict access families from the current divided-road, approach-shaped context-enrichment run should be reviewed first for possible explicit same-corridor promotion?

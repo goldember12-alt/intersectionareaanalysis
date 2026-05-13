@@ -1,5 +1,7 @@
 # Proposal Alignment and Growth Plan: Downstream Functional Area Guidance
 
+**Status: CURRENT SUPPORT.** This remains the proposal-alignment growth plan. Read it as the controlled expansion path after the current roadway_graph scaffold is validated.
+
 ## Purpose
 
 This document translates the VTRC final proposal, *Developing Guidance for Calculating the Downstream Functional Area of an Intersection*, into repository-facing methodology and growth guidance.

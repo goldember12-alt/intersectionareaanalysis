@@ -1,5 +1,7 @@
 # Context Enrichment Access Review
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment result remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 This memo reviews the bounded access-enrichment behavior in `src/active/context_enrichment.py` for the latest rerun of `python -m src.active.context_enrichment`.

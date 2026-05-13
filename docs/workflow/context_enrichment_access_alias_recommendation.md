@@ -1,5 +1,7 @@
 # Context Enrichment Access Alias Recommendation
 
+**Status: SUPPORTING REFERENCE.** This context-enrichment planning note remains in place for later graph-first crash/access migration review.
+
 ## Scope
 
 This memo evaluates whether any bounded, auditable route-alias logic is justified for access matching in the current `approach_shaped` context-enrichment slice.

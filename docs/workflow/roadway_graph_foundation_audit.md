@@ -1,5 +1,7 @@
 # Roadway Graph Foundation Audit
 
+**Status: CURRENT ACTIVE.** This is a current roadway_graph result/readout summary retained under workflow for this pass.
+
 ## Bounded question
 
 This audit answers whether the current roadway inputs can support a full signal/intersection roadway graph that keeps both divided and undivided roadways before crash assignment, true vehicle-direction inference, or analysis-ready gating.
