@@ -25,31 +25,31 @@ It does not read crash data, assign crashes, infer true vehicle direction, modif
 
 | Check | Count |
 | --- | ---: |
-| TRUE input signals represented | 1,185 |
+| TRUE input signals represented | 1,214 |
 | FALSE/CONDITIONAL signal rows present | 0 |
-| Oriented segment rows | 4,366 |
-| 50-foot bin rows | 155,045 |
-| Requires manual review | 1,093 |
-| Does not require manual review | 3,273 |
-| Usable for later crash assignment field = true | 3,273 |
-| Usable for later crash assignment field = false | 1,093 |
-| Endpoint or review-only rows | 1,842 |
+| Oriented segment rows | 4,474 |
+| 50-foot bin rows | 160,300 |
+| Requires manual review | 1,103 |
+| Does not require manual review | 3,371 |
+| Usable for later crash assignment field = true | 3,371 |
+| Usable for later crash assignment field = false | 1,103 |
+| Endpoint or review-only rows | 1,878 |
 
 By roadway directionality:
 
 | Type | Segments |
 | --- | ---: |
-| divided | 2,304 |
-| undivided | 2,058 |
+| divided | 2,340 |
+| undivided | 2,130 |
 | unknown | 4 |
 
 By orientation record type:
 
 | Type | Segments |
 | --- | ---: |
-| undivided logical centerline | 2,058 |
-| review only | 944 |
-| endpoint oriented candidate | 898 |
+| undivided logical centerline | 2,130 |
+| review only | 950 |
+| endpoint oriented candidate | 928 |
 | divided oriented candidate | 233 |
 | reciprocal orientation candidate | 233 |
 
@@ -57,14 +57,14 @@ The prototype is structurally sound as a TRUE-only geometry scaffold: all TRUE i
 
 ## Divided Pairing Diagnostics
 
-The prototype has 233 divided segment families with paired reciprocal records and 1,838 divided families missing reciprocal records.
+The prototype has 233 divided segment families with paired reciprocal records and 1,874 divided families missing reciprocal records.
 
-Those 1,838 missing reciprocal rows should not be interpreted as one single failure mode:
+Those 1,874 missing reciprocal rows should not be interpreted as one single failure mode:
 
 | Interpretation | Segments |
 | --- | ---: |
-| Reciprocal signal not in TRUE input or not grouped under same family | 936 |
-| Endpoint or one-sided graph edge | 898 |
+| Reciprocal signal not in TRUE input or not grouped under same family | 942 |
+| Endpoint or one-sided graph edge | 928 |
 | Review-only unpaired divided record | 4 |
 
 By orientation record type:
@@ -176,7 +176,7 @@ Before crash assignment:
 2. Gate out short segments under 50 feet unless manually reviewed.
 3. Keep `review_only` and unknown-directionality rows excluded from crash assignment.
 4. Treat divided families missing reciprocal records as review-before-crash-assignment, not automatic failures.
-5. Add a better divided pairing key before trying to repair all 1,838 missing reciprocal families; many appear to be endpoint/one-sided graph cases or TRUE-signal-scope artifacts, not necessarily missing opposite carriageways.
+5. Add a better divided pairing key before trying to repair all 1,874 missing reciprocal families; many appear to be endpoint/one-sided graph cases or TRUE-signal-scope artifacts, not necessarily missing opposite carriageways.
 6. Do a small QGIS spot check only, focused on:
    - 10 missing reciprocal divided examples from `step5_missing_reciprocal_divided_examples.geojson`
    - 10 short segment examples from `step5_short_segment_examples.geojson`

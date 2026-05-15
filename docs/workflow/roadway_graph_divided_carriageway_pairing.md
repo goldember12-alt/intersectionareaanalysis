@@ -67,15 +67,15 @@ The method does not pair unrelated nearby roads, ramps, or cross streets when th
 
 Current no-crash readout:
 
-- divided rows: 2,257
+- divided rows: 2,293
 - paired divided rows: 810
-- unpaired divided rows: 1,447
+- unpaired divided rows: 1,483
 - accepted divided pair candidates: 405
 - high-confidence pairs: 335
 - medium-confidence pairs: 70
 - low-confidence pairs: 0
 - pairs with both `A_to_B` and `B_to_A` candidates: 405
-- divided rows still unresolved: 1,447
+- divided rows still unresolved: 1,483
 - `true_vehicle_direction_inferred != false`: 0
 - crash data read: `False`
 
@@ -87,9 +87,9 @@ This diagnostic improves the prior geometric direction model by looking beyond e
 
 The paired rows are stronger candidates for a future revised crash assignment prototype because they have explicit right/left physical carriageway relationships and candidate A to B / B to A movement orientation fields. The pairing still does not infer actual vehicle direction from crash records.
 
-The 1,447 unpaired rows remain unresolved. They may represent one-sided source geometry, incomplete Travelway legs, endpoint-only legs, route-stem mismatches, geometry too close to the reference line, or cases needing a broader network-pairing rule.
+The 1,483 unpaired rows remain unresolved. They may represent one-sided source geometry, incomplete Travelway legs, endpoint-only legs, route-stem mismatches, geometry too close to the reference line, or cases needing a broader network-pairing rule.
 
-A follow-up no-crash diagnosis of the 1,447 unresolved divided rows is documented in:
+A follow-up no-crash diagnosis of the 1,483 unresolved divided rows is documented in:
 
 - `docs/workflow/roadway_graph_divided_pairing_unresolved_diagnosis.md`
 

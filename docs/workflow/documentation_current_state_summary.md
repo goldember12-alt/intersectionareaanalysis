@@ -28,6 +28,8 @@ Current roadway_graph outputs are under `work/output/roadway_graph/`, especially
 - `tables/current/signal_oriented_segment_bins_geometric_direction.csv`
 - `tables/current/divided_carriageway_pair_candidates.csv`
 - `tables/current/signal_oriented_roadway_segments_divided_pairing_enriched.csv`
+- `tables/current/divided_carriageway_pair_candidates_recovery.csv`
+- `tables/current/signal_oriented_roadway_segments_divided_pairing_recovery_enriched.csv`
 - `tables/current/roadway_role_classification.csv`
 - `tables/current/signal_oriented_roadway_segments_role_enriched.csv`
 
@@ -41,6 +43,6 @@ Current roadway_graph outputs are under `work/output/roadway_graph/`, especially
 
 ## Next Technical Task
 
-Implement divided-pairing recovery using roadway role classification.
+Review the divided-pairing recovery prototype in QGIS.
 
-Start with unpaired `mainline_divided_carriageway` rows. Preserve accepted high/medium-confidence pairs. Keep unresolved/review-only cases visible. Treat one-way pair candidates through a separate reviewed one-way method. Do not perform broad graph repair or modeling in this next step.
+Inspect `divided_pairing_recovery_review.geojson` and `divided_pairing_still_unresolved_review.geojson`. Preserve accepted high/medium-confidence pairs. Keep unresolved/review-only cases visible. Treat one-way pair candidates through a separate reviewed one-way method. Do not perform broad graph repair or modeling in this next step.

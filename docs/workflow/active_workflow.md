@@ -84,6 +84,11 @@ These modules still exist, but their methodological status differs. Use roadway_
   - direct-entry only
   - uses roadway graph geometry and Step 5 geometry outputs
   - does not read crash data, assign crashes, or infer direction from crash distributions
+- `python -m src.active.roadway_graph.divided_pairing_recovery`
+  - no-crash divided-pairing recovery prototype using roadway role classification
+  - direct-entry only
+  - review-only and candidate-only
+  - preserves existing accepted divided pairs and does not promote recovered candidates into the default geometric direction model
 - `python -m src.active.roadway_graph.roadway_role_classification`
   - no-crash roadway-role classification prototype for crash-ready Step 5 rows and referenced graph edges
   - direct-entry only
@@ -94,6 +99,55 @@ These modules still exist, but their methodological status differs. Use roadway_
   - direct-entry only
   - assigns crashes to nearest crash-ready segment/bin within tolerance
   - does not finalize event direction or upstream/downstream interpretation
+- `python -m src.active.roadway_graph.reference_signal_directional_scaffold`
+  - read-only reference-signal-centered directional scaffold candidate/audit
+  - direct-entry only
+  - creates downstream-of-reference and upstream-of-reference records for TRUE reference signals to defensible far anchors, including non-TRUE signals, non-signal intersections, endpoints, and valid one-sided boundaries
+  - creates two pseudo-directional records for undivided centerlines, uses accepted physical divided carriageway pairs where available, and preserves unpaired divided rows as blocked/review candidates
+  - does not read crash data, read crash assignment outputs, use crash direction fields, infer direction from crash distributions, or modify crash assignment logic
+- `python -m src.active.roadway_graph.reference_signal_directional_scaffold_qa`
+  - read-only QA and conservative prototype usable surface for the reference-signal-centered directional scaffold
+  - direct-entry only
+  - keeps non-review/non-blocked records, includes accepted divided physical records and undivided pseudo-direction records, and excludes blocked divided, low-confidence recovery, and unknown-role rows
+  - does not read crash data, read crash assignment outputs, repair geometry, force divided pairs, promote review-only recovery rows, or modify crash assignment logic
+- `python -m src.active.roadway_graph.reference_signal_directional_bin_catchments`
+  - read-only roadway-only directional catchment polygon surface for prototype usable directional bins
+  - direct-entry only
+  - buffers accepted divided physical bin geometry and creates side-specific undivided pseudo-direction polygons from local bin vectors, with bins still indexed from the TRUE reference signal
+  - exports catchment GeoJSON in the repository working projected CRS, `EPSG:3968`, with `directional_bin_catchment_crs_metadata.json` as the authoritative CRS sidecar for downstream consumers
+  - does not read crash data, read crash assignment outputs, use crash direction fields, recover excluded records, force divided pairs, or perform crash analysis
+- `python -m src.active.roadway_graph.crash_directional_catchment_assignment_prototype`
+  - crash-point-to-directional-catchment assignment prototype for the usable roadway-only catchment surface
+  - direct-entry only
+  - uses only `catchment_status = usable` catchment polygons and normalized crash point geometry
+  - assigns crashes only when a point is contained by exactly one usable catchment; preserves multiple matches as ambiguous and no matches as unresolved
+  - uses the shared catchment CRS metadata convention rather than assignment-local CRS overrides
+  - does not read crash direction fields, use crash distributions, infer upstream/downstream from crashes, modify scaffold/catchment construction, include unstable or blocked catchments, force divided pairs, or perform crash analysis
+- `python -m src.active.roadway_graph.crash_directional_catchment_assignment_qa`
+  - read-only QA summaries for the crash-point-to-directional-catchment assignment prototype
+  - direct-entry only
+  - summarizes unique assignments, downstream/upstream balance, undivided and divided assignment patterns, ambiguity burden, unresolved reasons, and catchment CRS sanity
+  - does not read crash direction fields, use crash distributions, infer upstream/downstream from crashes, modify scaffold/catchment/assignment logic, recover unresolved rows, or perform final crash analysis
+- `python -m src.active.roadway_graph.crash_directional_assignment_analysis_readiness`
+  - read-only analysis-readiness filter for uniquely assigned directional catchment crashes
+  - direct-entry only
+  - classifies assignments into conservative distance windows and separates long-distance review, ambiguous, and unresolved records
+  - does not read crash direction fields, use crash distributions, modify scaffold/catchment/assignment logic, recover blocked or unresolved records, or perform policy-ready crash analysis
+- `python -m src.active.roadway_graph.crash_directional_assignment_descriptive_summary`
+  - read-only descriptive summary for readiness-gated roadway-derived directional crash assignments
+  - direct-entry only
+  - summarizes core 0-500 ft, standard 0-1,000 ft, extended 0-2,500 ft sensitivity, signal-level balance, roadway representation, long-distance review, and ambiguous/unresolved context
+  - does not read crash direction fields, use crash distributions, modify scaffold/catchment/assignment/readiness logic, include ambiguous or unresolved crashes in unique-assignment summaries, or make policy-ready claims
+- `python -m src.active.roadway_graph.undivided_catchment_assignment_failure_diagnostic`
+  - read-only QA/debugging module for the undivided pseudo-direction catchment assignment surface
+  - direct-entry only
+  - compares divided and undivided usable catchment geometry, assignment-surface inclusion, CRS/coordinate sanity, synthetic point containment, and crash-to-undivided proximity samples
+  - does not read crash direction fields, use crash distributions to change scaffold logic, modify scaffold/catchment/assignment construction, recover excluded records, force divided pairs, or perform crash analysis
+- `python -m src.active.roadway_graph.crash_assignment_analysis_eligibility`
+  - read-only gatekeeping layer over current crash assignment QA, interpretation-readiness, and mapless review outputs
+  - direct-entry only
+  - classifies assigned crashes and unresolved near-scaffold cases for spatial descriptive eligibility, caveated review, directional exclusion, manual/GIS review priority, possible assignment-logic issues, and unresolved assignment gaps
+  - does not construct scaffold rows, assign crashes, repair geometry, use crash direction fields, or make any row ready for upstream/downstream interpretation
 
 ## Bootstrap entry story
 
@@ -226,6 +280,14 @@ The divided-carriageway pairing diagnostic is also separate:
 ```
 
 It writes `divided_carriageway_pair_candidates.csv`, `signal_oriented_roadway_segments_divided_pairing_enriched.csv`, and review summaries/GeoJSON under `work/output/roadway_graph/`. It is documented in `docs/workflow/roadway_graph_divided_carriageway_pairing.md`.
+
+The divided-pairing recovery prototype is review-only:
+
+```powershell
+<bootstrap-reported-python> -m src.active.roadway_graph.divided_pairing_recovery
+```
+
+It writes `divided_carriageway_pair_candidates_recovery.csv`, `signal_oriented_roadway_segments_divided_pairing_recovery_enriched.csv`, and recovery review summaries/GeoJSON under `work/output/roadway_graph/`. It is documented in `docs/workflow/roadway_graph_divided_pairing_recovery.md`.
 
 The roadway-role classification prototype is a separate pre-recovery review step:
 
@@ -485,13 +547,13 @@ Active code and commands are currently:
 - `src/active/config.py`
 - `src/active/study_slice.py` for the standard CLI slice
 - `src/active/roadway_graph/` as the full-roadway graph foundation prototype
-- `src/active/roadway_graph/crash_assignment.py`, `src/active/roadway_graph/geometric_direction.py`, `src/active/roadway_graph/divided_carriageway_pairing.py`, and `src/active/roadway_graph/roadway_role_classification.py` as current roadway_graph direct-entry modules
+- `src/active/roadway_graph/crash_assignment.py`, `src/active/roadway_graph/geometric_direction.py`, `src/active/roadway_graph/divided_carriageway_pairing.py`, `src/active/roadway_graph/divided_pairing_recovery.py`, and `src/active/roadway_graph/roadway_role_classification.py` as current roadway_graph direct-entry modules
 - `src/active/directionality_experiment.py`, `src/active/upstream_downstream_prototype.py`, `src/active/high_confidence_upstream_downstream_analysis.py`, and `src/active/directed_segments/` as historical or supporting direct-entry modules, not the current methodology
 - `src/transitional/bridge_key_audit.py` and `src/transitional/bridge_key_geojson_audit.py` as transitional diagnostics
 
 ## Next Recommended Implementation Step
 
-The next technical task is divided-pairing recovery using roadway role classification. Start with `mainline_divided_carriageway` rows that remain unpaired, preserve accepted high/medium-confidence pairs, keep unresolved/review-only cases visible, and avoid broad graph repair or modeling claims.
+The divided-pairing recovery prototype now exists as review-only evidence. The next technical task is QGIS review of `divided_pairing_recovery_review.geojson` and `divided_pairing_still_unresolved_review.geojson`, followed by a narrower recovery rule only if mapped review supports promotion.
 
 
 

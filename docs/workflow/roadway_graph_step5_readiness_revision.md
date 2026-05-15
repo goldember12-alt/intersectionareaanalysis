@@ -35,9 +35,9 @@ The revised readiness fields therefore distinguish:
 
 | Revised status | Segments |
 | --- | ---: |
-| ready_for_crash_assignment_revised | 4,204 |
-| exclude_from_crash_assignment | 154 |
-| review_before_crash_assignment | 8 |
+| ready_for_crash_assignment_revised | 4,305 |
+| exclude_from_crash_assignment | 163 |
+| review_before_crash_assignment | 6 |
 
 Reference-signal safeguards:
 
@@ -45,25 +45,25 @@ Reference-signal safeguards:
 | --- | ---: |
 | Reference signal not TRUE | 0 |
 | `true_vehicle_direction_inferred != false` | 0 |
-| Opposite anchor valid as segment boundary | 4,366 |
-| A-centered use allowed | 4,204 |
-| B-centered use allowed | 466 |
+| Opposite anchor valid as segment boundary | 4,474 |
+| A-centered use allowed | 4,305 |
+| B-centered use allowed | 448 |
 
 This preserves the rule that no FALSE or CONDITIONAL signal is used as the reference signal. Non-TRUE signal endpoints may be used only as opposite boundary anchors.
 
 ## Missing Reciprocal Reinterpretation
 
-The 1,838 divided records previously called missing reciprocal families split as follows:
+The 1,874 divided records previously called missing reciprocal families split as follows:
 
 | Missing reciprocal reason | Total | A-centered ready | Review/exclude |
 | --- | ---: | ---: | ---: |
-| Opposite signal not TRUE but valid boundary | 936 | 931 | 5 |
-| Non-signal or endpoint boundary | 898 | 878 | 20 |
+| Opposite signal not TRUE but valid boundary | 942 | 937 | 5 |
+| Non-signal or endpoint boundary | 928 | 908 | 20 |
 | Review-only unpaired divided record | 4 | 0 | 4 |
 
-The 936 signal-boundary records are no longer treated as failures solely because the opposite signal is outside the TRUE reference universe. The 5 that remain excluded are short segments under 50 ft.
+The 942 signal-boundary records are no longer treated as failures solely because the opposite signal is outside the TRUE reference universe. The 5 that remain excluded are short segments under 50 ft.
 
-The 898 endpoint or one-sided graph edges are valid for A-centered analysis when geometry is not short. The 20 excluded rows are short segments under 50 ft.
+The 928 endpoint or one-sided graph edges are valid for A-centered analysis when geometry is not short. The 20 excluded rows are short segments under 50 ft.
 
 The 4 review-only unpaired divided rows remain review/exclude.
 
@@ -71,12 +71,11 @@ The 4 review-only unpaired divided rows remain review/exclude.
 
 | Reason | Segments |
 | --- | ---: |
-| Short undivided segment under 50 ft | 111 |
-| Short divided/other segment under 50 ft | 38 |
-| Short opposite-signal-boundary segment under 50 ft | 5 |
-| Review-only or unknown directionality | 4 |
-| Short review-only reciprocal-required row | 2 |
+| Short undivided segment under 50 ft | 118 |
+| Short divided/other segment under 50 ft | 43 |
+| Unknown directionality | 4 |
 | Review-only reciprocal-required row | 2 |
+| Short review-only reciprocal-required row | 2 |
 
 Short segments under 50 ft remain excluded unless explicitly justified. Unknown directionality and unresolved review-only rows remain review/exclude.
 
@@ -105,4 +104,4 @@ Before crash assignment:
 - keep the reference signal universe limited to TRUE signals
 - document that non-TRUE opposite signals are valid boundaries, not analysis-reference signals
 
-This revision makes the TRUE-only Step 5 prototype more structurally sound for A-centered analysis, but it still does not authorize crash assignment.
+This revision now feeds the official crash-ready subset and conservative crash assignment prototype. It still does not authorize upstream/downstream event interpretation or modeling claims.

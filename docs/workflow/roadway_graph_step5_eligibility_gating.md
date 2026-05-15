@@ -93,8 +93,8 @@ The current run produced:
 
 | Gate result | Signals |
 | --- | ---: |
-| `TRUE` | 1,185 |
-| `CONDITIONAL` | 2,660 |
+| `TRUE` | 1,214 |
+| `CONDITIONAL` | 2,631 |
 | `FALSE` | 88 |
 
 Main signal exclusion or review reasons:
@@ -102,13 +102,14 @@ Main signal exclusion or review reasons:
 | Reason | Signals |
 | --- | ---: |
 | `high_adjacent_edge_count_review_required` | 2,280 |
-| blank / eligible | 1,185 |
+| blank / eligible | 1,214 |
 | `two_edge_suspect_review_required` | 347 |
 | `adjacent_leg_count_zero` | 63 |
-| `graph_gap_review_required` | 29 |
 | `source_roadway_incomplete` | 24 |
 | `edge_termination_rule_unresolved` | 4 |
 | `signal_location_questionable` | 1 |
+
+The current gate includes a limited signal-offset association relaxation for 29 low-risk signals whose only graph-gap issue was `snapped_distance_exceeds_50ft`.
 
 Edge gate counts:
 

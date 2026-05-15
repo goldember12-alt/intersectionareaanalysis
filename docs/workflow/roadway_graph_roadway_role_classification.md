@@ -80,18 +80,18 @@ Existing `divided_pair_id`, `paired_opposite_segment_id`, and `divided_pairing_s
 
 Current run:
 
-- 4,204 crash-ready Step 5 segment rows classified
-- 3,980 referenced graph edge rows classified
-- 2,257 segment rows classified as `mainline_divided_carriageway`
-- 1,849 segment rows classified as `undivided_centerline`
-- 60 segment rows classified as `ramp_or_connector`
+- 4,305 crash-ready Step 5 segment rows classified
+- 4,081 referenced graph edge rows classified
+- 2,293 segment rows classified as `mainline_divided_carriageway`
+- 1,911 segment rows classified as `undivided_centerline`
+- 63 segment rows classified as `ramp_or_connector`
 - 10 segment rows classified as `frontage_or_service_road`
 - 2 segment rows classified as `turn_lane_or_auxiliary`
 - 23 segment rows classified as `one_way_pair_candidate`
 - 3 segment rows classified as `unknown_review`
 - 810 paired divided rows remain `mainline_divided_carriageway`
-- 1,447 unpaired divided rows remain `mainline_divided_carriageway`
-- among unpaired divided rows, 649 Secondary Route rows and 109 Street Route rows classify as `mainline_divided_carriageway`
+- 1,483 unpaired divided rows remain `mainline_divided_carriageway`
+- among unpaired divided rows, 657 Secondary Route rows and 109 Street Route rows classify as `mainline_divided_carriageway`
 - 0 accepted divided-pair fields were overwritten
 - 0 rows infer true vehicle direction
 - crash data read: `False`

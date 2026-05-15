@@ -27,6 +27,7 @@ Current workflow readouts:
 - `../workflow/roadway_graph_step5_readiness_revision.md`
 - `../workflow/roadway_graph_step5_crash_ready_summary_qa.md`
 - `../workflow/roadway_graph_divided_pairing_unresolved_diagnosis.md`
+- `../workflow/roadway_graph_divided_pairing_recovery.md`
 - `../workflow/roadway_graph_divided_undivided_directional_framework_audit.md`
 - `../workflow/roadway_graph_roadway_role_classification.md`
 - `../workflow/roadway_graph_crash_assignment_prototype.md`

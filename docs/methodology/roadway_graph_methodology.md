@@ -91,6 +91,15 @@ Line order in geometries is only source geometry order or signal-to-adjacent-anc
 
 The field `true_vehicle_direction_inferred` remains `False`.
 
+## Bounded Scaffold Relaxations
+
+The active scaffold allows two bounded recovery paths after graph QA:
+
+- A TRUE reference signal may use a defensible segment ending at a non-TRUE signal, non-signalized roadway intersection, or road endpoint as an opposite boundary. The far anchor is not promoted into the TRUE reference-signal universe.
+- A slightly offset signal point may remain eligible only when the sole graph-gap issue is `snapped_distance_exceeds_50ft`, the signal has a normal 3-4 adjacent-edge shape, and the nearest roadway branch is within the limited signal-offset tolerance.
+
+These relaxations do not snap road endpoints, split crossing geometries, repair fragmented linework broadly, force divided-carriageway pairs, overwrite accepted pairs, read crash data, or infer direction from crash fields.
+
 ## Crash Boundary
 
 The graph foundation does not read crash data and does not assign crashes.

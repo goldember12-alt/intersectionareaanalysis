@@ -47,7 +47,7 @@ GeoJSON:
 
 ## Method
 
-The prototype starts from the 1,185 clean TRUE signals in `step5_first_prototype_input_signals.csv`.
+The prototype starts from the 1,214 clean TRUE signals in `step5_first_prototype_input_signals.csv`.
 
 Undivided roads:
 
@@ -78,33 +78,33 @@ Every segment has:
 
 | Metric | Count |
 | --- | ---: |
-| TRUE input signals | 1,185 |
-| TRUE input signals represented | 1,185 |
-| Oriented segment rows | 4,366 |
-| 50-foot bin rows | 155,045 |
+| TRUE input signals | 1,214 |
+| TRUE input signals represented | 1,214 |
+| Oriented segment rows | 4,474 |
+| 50-foot bin rows | 160,300 |
 | FALSE/CONDITIONAL signals entering prototype | 0 |
 | Zero-length segments | 0 |
-| Suspicious short segments under 50 ft | 156 |
+| Suspicious short segments under 50 ft | 163 |
 | Rows with true vehicle direction inferred | 0 |
 | Undivided rows marked as physical directional carriageway | 0 |
 | Undivided rows not marked as requiring crash direction | 0 |
-| Endpoint or review-only segments | 1,842 |
+| Endpoint or review-only segments | 1,878 |
 
 Segments by roadway directionality type:
 
 | Type | Segments |
 | --- | ---: |
-| divided | 2,304 |
-| undivided | 2,058 |
+| divided | 2,340 |
+| undivided | 2,130 |
 | unknown | 4 |
 
 Segments by orientation record type:
 
 | Type | Segments |
 | --- | ---: |
-| undivided logical centerline | 2,058 |
-| review only | 944 |
-| endpoint oriented candidate | 898 |
+| undivided logical centerline | 2,130 |
+| review only | 950 |
+| endpoint oriented candidate | 928 |
 | divided oriented candidate | 233 |
 | reciprocal orientation candidate | 233 |
 
@@ -113,7 +113,7 @@ Pairing summary:
 | Check | Count |
 | --- | ---: |
 | Divided segment families with paired reciprocal records | 233 |
-| Divided segment families missing reciprocal records | 1,838 |
+| Divided segment families missing reciprocal records | 1,874 |
 | Undivided segment families incorrectly duplicated | 0 |
 
 Rows requiring manual review:
@@ -149,5 +149,5 @@ It is not ready for crash assignment. Before crash assignment, review:
 
 - the 1,093 rows requiring manual review
 - the 156 short segments under 50 feet
-- the 1,838 divided families missing reciprocal records
+- the 1,874 divided families missing reciprocal records
 - whether endpoint-oriented candidates are acceptable for the first downstream context summary

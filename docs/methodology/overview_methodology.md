@@ -101,7 +101,7 @@ Crash findings can inform downstream guidance, but they should not be treated as
 
 ## Current Next Step
 
-The next technical step is divided-pairing recovery using roadway role classification. That means recovering additional divided carriageway pairs from current crash-ready segment rows by focusing first on mainline divided carriageway records, preserving unresolved/review-only cases, and avoiding broad graph repair or modeling claims.
+The divided-pairing recovery prototype now exists as review-only evidence. The next technical step is QGIS review of its low-confidence candidates and still-unresolved rows. A narrower recovery rule should be promoted only if mapped review supports it, and broad graph repair or modeling claims should still wait.
 
 ## Documentation Map
 

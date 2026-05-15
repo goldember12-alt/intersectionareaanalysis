@@ -20,10 +20,10 @@ It does not read crash data, assign crashes, infer true vehicle direction, or mo
 
 | Check | Count |
 | --- | ---: |
-| Crash-ready segments | 4,204 |
-| Crash-ready bins | 154,330 |
-| Original TRUE input signals | 1,185 |
-| TRUE reference signals represented | 1,181 |
+| Crash-ready segments | 4,305 |
+| Crash-ready bins | 159,578 |
+| Original TRUE input signals | 1,214 |
+| TRUE reference signals represented | 1,210 |
 | Missing TRUE reference signals | 4 |
 | Non-TRUE reference signal rows | 0 |
 | Rows with true vehicle direction inferred | 0 |
@@ -60,24 +60,24 @@ By roadway directionality:
 
 | Type | Segments |
 | --- | ---: |
-| divided | 2,257 |
-| undivided | 1,947 |
+| divided | 2,293 |
+| undivided | 2,012 |
 
 By opposite anchor type:
 
 | Anchor type | Segments |
 | --- | ---: |
-| non-signalized roadway intersection | 1,958 |
-| signalized intersection | 1,859 |
-| road endpoint / dead end | 387 |
+| non-signalized roadway intersection | 2,029 |
+| signalized intersection | 1,870 |
+| road endpoint / dead end | 406 |
 
 By orientation record type:
 
 | Type | Segments |
 | --- | ---: |
-| undivided logical centerline | 1,947 |
-| review-only reinterpreted for A-centered boundary use | 931 |
-| endpoint oriented candidate | 878 |
+| undivided logical centerline | 2,012 |
+| review-only reinterpreted for A-centered boundary use | 937 |
+| endpoint oriented candidate | 908 |
 | divided oriented candidate | 224 |
 | reciprocal orientation candidate | 224 |
 
@@ -85,10 +85,10 @@ Length profile:
 
 | Length band | Segments |
 | --- | ---: |
-| 50-250 ft | 410 |
-| 250-500 ft | 603 |
-| 500-1000 ft | 1,231 |
-| 1000+ ft | 1,960 |
+| 50-250 ft | 441 |
+| 250-500 ft | 611 |
+| 500-1000 ft | 1,242 |
+| 1000+ ft | 2,011 |
 
 Minimum segment length is 50.165 ft. No crash-ready segment is shorter than 50 ft.
 
@@ -98,20 +98,20 @@ By roadway directionality:
 
 | Type | Bins |
 | --- | ---: |
-| undivided | 93,587 |
-| divided | 60,743 |
+| undivided | 95,134 |
+| divided | 64,444 |
 
 By orientation record type:
 
 | Type | Bins |
 | --- | ---: |
-| undivided logical centerline | 93,587 |
-| review-only reinterpreted for A-centered boundary use | 26,049 |
-| endpoint oriented candidate | 24,522 |
+| undivided logical centerline | 95,134 |
+| review-only reinterpreted for A-centered boundary use | 26,111 |
+| endpoint oriented candidate | 28,261 |
 | divided oriented candidate | 5,086 |
 | reciprocal orientation candidate | 5,086 |
 
-There are 150,126 full 50-foot bins and 4,204 final partial bins. No bin has zero or negative length.
+There are 155,273 full 50-foot bins and 4,305 final partial bins. No bin has zero or negative length.
 
 ## Directionality Boundary
 
@@ -129,9 +129,9 @@ For divided rows:
 
 ## Recommendation
 
-Proceed to a small summary QA and then a future crash-assignment prototype using only:
+Proceed with the conservative crash-assignment prototype using only:
 
 - `tables/current/signal_oriented_roadway_segments_crash_ready.csv`
 - `tables/current/signal_oriented_segment_bins_50ft_crash_ready.csv`
 
-Do not broaden the reference signal universe or reintroduce short/review rows before crash assignment. The four missing TRUE reference signals are acceptable for the first prototype because they were excluded by documented structural gates rather than by silent data loss.
+Do not broaden the reference signal universe or reintroduce short/review rows before crash assignment. The four missing TRUE reference signals are acceptable for the current prototype because they were excluded by documented structural gates rather than by silent data loss.

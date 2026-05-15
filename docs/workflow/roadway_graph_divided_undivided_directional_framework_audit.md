@@ -93,12 +93,12 @@ The corrected divided-pairing audit uses only rows where `divided_pairing_status
 
 | Metric | Count |
 | --- | ---: |
-| Divided rows analyzed | 2,257 |
+| Divided rows analyzed | 2,293 |
 | Paired rows | 810 |
 | Accepted pair candidate records | 405 |
-| Unpaired rows | 1,447 |
+| Unpaired rows | 1,483 |
 
-All 2,257 rows have `facility_text = 4-Two-Way Divided`. The unpaired issue is therefore not explained by mixed facility values within the current pairing scope.
+All 2,293 rows have `facility_text = 4-Two-Way Divided`. The unpaired issue is therefore not explained by mixed facility values within the current pairing scope.
 
 Median distribution is broad rather than isolated to a single median class:
 
@@ -244,9 +244,9 @@ Checked:
 
 - normalized Travelway road count: 140,654 rows;
 - current roadway graph edge count: 17,374 rows;
-- no-crash Step 5 roadway segment count: 4,204 rows;
-- divided pairing scope: 2,257 paired/unpaired rows;
-- current paired/unpaired counts: 810 paired, 1,447 unpaired;
+- no-crash Step 5 roadway segment count: 4,305 rows;
+- divided pairing scope: 2,293 paired/unpaired rows;
+- current paired/unpaired counts: 810 paired, 1,483 unpaired;
 - distinct values and counts for requested key fields;
 - paired/unpaired crosstabs by facility, median, route type/category, access class, route identity, and anchor/problem fields.
 

@@ -94,11 +94,11 @@ The refinement is review-only and does not promote or demote signal-level Step 5
 
 | Status | Before | After | Delta |
 | --- | ---: | ---: | ---: |
-| TRUE | 1,185 | 1,185 | 0 |
+| TRUE | 1,214 | 1,214 | 0 |
 | CONDITIONAL | 2,660 | 2,660 | 0 |
 | FALSE | 88 | 88 | 0 |
 
-The 1,185 first-prototype TRUE input signals retained their signal-level eligibility status.
+The 1,214 first-prototype TRUE input signals retained their signal-level eligibility status.
 
 Refined edge eligibility rows are one row per signal-adjacent refined edge, so their counts are not directly comparable to the base unique graph-edge eligibility table.
 

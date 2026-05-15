@@ -59,21 +59,16 @@ Excluded:
 
 | Check | Count |
 | --- | ---: |
-| Crash-ready segment rows | 4,204 |
-| Crash-ready 50-foot bin rows | 154,330 |
-| TRUE reference signals represented | 1,181 |
+| Crash-ready segment rows | 4,305 |
+| Crash-ready 50-foot bin rows | 159,578 |
+| TRUE reference signals represented | 1,210 |
 | Reference signal not TRUE | 0 |
 | Rows with true vehicle direction inferred | 0 |
-| Undivided rows marked physical directional carriageway | 0 |
-| Undivided rows missing crash-direction requirement | 0 |
 | Review/exclude rows entering subset | 0 |
-| A-centered use allowed rows | 4,204 |
+| A-centered use allowed rows | 4,305 |
 | B-centered use allowed rows | 448 |
-| Ready bins without a ready segment | 0 |
-| Ready bins not mapping to exactly one ready segment | 0 |
-| Ready segments without bins | 0 |
 
-The subset covers 1,181 of the 1,185 TRUE reference signals. The remaining TRUE signals are not forced in because their segment rows remain short, review-only, or excluded under the readiness rules.
+The subset covers 1,210 of the 1,214 TRUE reference signals. The remaining TRUE signals are not forced in because their segment rows remain short, review-only, or excluded under the readiness rules.
 
 ## Anchor And Orientation Profile
 
@@ -81,24 +76,24 @@ Opposite anchor type:
 
 | Anchor | Segments |
 | --- | ---: |
-| Non-signalized roadway intersection | 1,958 |
-| Signalized intersection | 1,859 |
-| Road endpoint / dead end | 387 |
+| Non-signalized roadway intersection | 2,029 |
+| Signalized intersection | 1,870 |
+| Road endpoint / dead end | 406 |
 
 Roadway directionality:
 
 | Type | Segments |
 | --- | ---: |
-| divided | 2,257 |
-| undivided | 1,947 |
+| divided | 2,293 |
+| undivided | 2,012 |
 
 Orientation record type:
 
 | Type | Segments |
 | --- | ---: |
-| undivided logical centerline | 1,947 |
-| review-only reinterpreted for A-centered boundary use | 931 |
-| endpoint oriented candidate | 878 |
+| undivided logical centerline | 2,012 |
+| review-only reinterpreted for A-centered boundary use | 937 |
+| endpoint oriented candidate | 908 |
 | divided oriented candidate | 224 |
 | reciprocal orientation candidate | 224 |
 
@@ -106,11 +101,11 @@ A-centered and B-centered interpretation:
 
 | Field | Value | Segments |
 | --- | --- | ---: |
-| A-centered use allowed | true | 4,204 |
+| A-centered use allowed | true | 4,305 |
 | B-centered use allowed | true | 448 |
-| B-centered use allowed | false | 3,756 |
-| Both endpoint signals TRUE | true | 591 |
-| Both endpoint signals TRUE | false | 3,613 |
+| B-centered use allowed | false | 3,857 |
+| Both endpoint signals TRUE | true | 595 |
+| Both endpoint signals TRUE | false | 3,710 |
 
 The subset is reference-signal-centered. A TRUE signal may use a segment ending at a non-TRUE signal, non-signalized intersection, or road endpoint. The opposite anchor does not need to be a TRUE analysis signal.
 
@@ -118,14 +113,13 @@ The subset is reference-signal-centered. A TRUE signal may use a segment ending 
 
 | Reason | Rows |
 | --- | ---: |
-| Short undivided segment under 50 ft | 111 |
-| Short divided/other segment under 50 ft | 38 |
-| Short opposite-signal-boundary segment under 50 ft | 5 |
-| Review-only or unknown directionality | 4 |
+| Short undivided segment under 50 ft | 118 |
+| Short divided/other segment under 50 ft | 43 |
+| Unknown directionality | 4 |
 | Review-only reciprocal-required row | 2 |
 | Short review-only reciprocal-required row | 2 |
 
-These 162 rows remain outside the crash-ready subset.
+These 169 rows remain outside the crash-ready subset.
 
 ## Methodological Notes
 
@@ -139,7 +133,7 @@ Non-TRUE signal endpoints are allowed only as opposite anchors. They are not pro
 
 ## Recommendation
 
-This crash-ready subset is ready for a small summary QA and then a future crash-assignment prototype.
+This crash-ready subset is the current input to the conservative crash-assignment prototype.
 
 Before crash assignment, perform a small verification pass on:
 

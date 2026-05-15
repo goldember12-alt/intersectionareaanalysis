@@ -26,6 +26,7 @@ FEET_PER_METER = 3.280839895
 BIN_LENGTH_FT = 50.0
 SIGNAL_ROAD_MATCH_TOLERANCE_FT = 75.0
 SNAP_DISTANCE_REVIEW_FT = 50.0
+LIMITED_SIGNAL_OFFSET_TOLERANCE_FT = 75.0
 SUSPICIOUS_HIGH_ADJACENT_EDGE_COUNT = 8
 MIN_SPLIT_SEPARATION_FT = 5.0
 
@@ -769,6 +770,8 @@ def _build_signal_step5_eligibility(
     adjacent: gpd.GeoDataFrame,
     gap_review: gpd.GeoDataFrame,
     manual: pd.DataFrame,
+    *,
+    limited_signal_offset_tolerance_ft: float,
 ) -> gpd.GeoDataFrame:
     adjacent_counts = adjacent.groupby("signal_id").size().rename("observed_adjacent_edge_count") if not adjacent.empty else pd.Series(dtype="int64")
     if adjacent.empty:
@@ -819,6 +822,8 @@ def _build_signal_step5_eligibility(
         exclusion_reason = ""
         manual_promotion_allowed = "FALSE"
         requires_manual_review = "FALSE"
+        offset_relaxation_applied = "FALSE"
+        offset_relaxation_reason = ""
         notes: list[str] = []
 
         if count == 0:
@@ -852,7 +857,21 @@ def _build_signal_step5_eligibility(
 
         if gap:
             issue_flags = str(gap.get("issue_flags", "") or "")
-            if usable == "TRUE":
+            min_match_distance = pd.to_numeric(pd.Series([gap.get("min_match_distance_ft", "")]), errors="coerce").iloc[0]
+            low_risk_offset = (
+                issue_flags == "snapped_distance_exceeds_50ft"
+                and count in {3, 4}
+                and pd.notna(min_match_distance)
+                and SNAP_DISTANCE_REVIEW_FT < float(min_match_distance) <= limited_signal_offset_tolerance_ft
+            )
+            if low_risk_offset and usable == "TRUE":
+                offset_relaxation_applied = "TRUE"
+                offset_relaxation_reason = (
+                    "single snapped-distance flag with 3-4 adjacent edges and nearest roadway branch within "
+                    f"{limited_signal_offset_tolerance_ft:.0f} ft"
+                )
+                notes.append(f"Limited signal-offset association accepted: {offset_relaxation_reason}.")
+            elif usable == "TRUE":
                 source_complete = "UNKNOWN"
                 usable = "CONDITIONAL"
                 exclusion_reason = "graph_gap_review_required"
@@ -906,6 +925,8 @@ def _build_signal_step5_eligibility(
                 "manual_diagnosis_class": manual_class,
                 "manual_promotion_allowed": manual_promotion_allowed,
                 "requires_manual_review": requires_manual_review,
+                "signal_offset_relaxation_applied": offset_relaxation_applied,
+                "signal_offset_relaxation_reason": offset_relaxation_reason,
                 "notes": " ".join(notes),
             }
         )
@@ -1737,11 +1758,204 @@ def _step5_oriented_segment_reviews(
     return pd.DataFrame(rows), problem_rows, pairing_summary, coverage
 
 
+def _status_lookup(signal_eligibility: gpd.GeoDataFrame) -> dict[str, str]:
+    if signal_eligibility.empty:
+        return {}
+    return {
+        str(row.signal_id): str(row.usable_for_step5)
+        for row in signal_eligibility[["signal_id", "usable_for_step5"]].itertuples(index=False)
+    }
+
+
+def _build_step5_readiness_revision(
+    segments: gpd.GeoDataFrame,
+    bins: gpd.GeoDataFrame,
+    signal_eligibility: gpd.GeoDataFrame,
+    pairing_summary: pd.DataFrame,
+) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoDataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    if segments.empty:
+        empty_geo = gpd.GeoDataFrame(columns=["geometry"], geometry="geometry", crs=segments.crs)
+        empty = pd.DataFrame()
+        return empty_geo, empty_geo.copy(), empty_geo.copy(), empty, empty, empty, empty
+
+    signal_status = _status_lookup(signal_eligibility)
+    paired_families: set[str] = set()
+    if not pairing_summary.empty and "divided_family_has_paired_reciprocal_records" in pairing_summary.columns:
+        paired_families = set(
+            pairing_summary.loc[
+                pairing_summary["divided_family_has_paired_reciprocal_records"].astype(str).str.upper().eq("TRUE"),
+                "segment_family_id",
+            ].astype(str)
+        )
+
+    out = segments.copy()
+    out["length_ft_num"] = pd.to_numeric(out["length_ft"], errors="coerce")
+    out["reference_signal_id"] = out["from_signal_id"].astype(str)
+    out["reference_signal_step5_status"] = out["reference_signal_id"].map(signal_status).fillna("UNKNOWN")
+    out["opposite_anchor_type"] = out["to_anchor_type"].astype(str)
+    out["opposite_anchor_id"] = out["to_anchor_id"].astype(str)
+    out["opposite_anchor_signal_id"] = out["to_anchor_id"].map(_extract_signal_id_from_node_id)
+    out.loc[out["opposite_anchor_signal_id"].eq(""), "opposite_anchor_signal_id"] = out.get("to_signal_id", "").astype(str)
+    out["opposite_anchor_step5_status"] = out["opposite_anchor_signal_id"].map(signal_status).fillna("")
+    out["opposite_anchor_valid_for_segment_boundary"] = out["opposite_anchor_type"].isin(
+        ["signalized_intersection", "non_signalized_roadway_intersection", "road_endpoint_dead_end"]
+    )
+    out["both_endpoint_signals_true"] = (
+        out["reference_signal_step5_status"].eq("TRUE")
+        & out["opposite_anchor_type"].eq("signalized_intersection")
+        & out["opposite_anchor_step5_status"].eq("TRUE")
+    )
+    out["reciprocal_pair_present"] = out["segment_family_id"].astype(str).isin(paired_families)
+    out["reciprocal_pair_required_for_readiness"] = (
+        out["roadway_directionality_type"].eq("divided")
+        & out["orientation_record_type"].isin(["divided_oriented_candidate", "reciprocal_orientation_candidate"])
+    )
+
+    missing_reason = pd.Series("", index=out.index, dtype=object)
+    divided_missing = out["roadway_directionality_type"].eq("divided") & ~out["reciprocal_pair_present"]
+    non_true_signal_boundary = (
+        divided_missing
+        & out["opposite_anchor_type"].eq("signalized_intersection")
+        & ~out["opposite_anchor_step5_status"].eq("TRUE")
+    )
+    non_signal_boundary = divided_missing & out["opposite_anchor_type"].isin(
+        ["non_signalized_roadway_intersection", "road_endpoint_dead_end"]
+    )
+    review_only_unpaired = divided_missing & out["orientation_record_type"].eq("review_only") & ~non_true_signal_boundary
+    missing_reason.loc[non_true_signal_boundary] = "opposite_signal_not_true_reference_but_valid_boundary"
+    missing_reason.loc[non_signal_boundary] = "opposite_anchor_is_non_signal_or_endpoint_boundary"
+    missing_reason.loc[review_only_unpaired] = "review_only_unpaired_divided_record"
+    out["missing_reciprocal_reason"] = missing_reason
+
+    short = out["length_ft_num"].fillna(0).lt(50.0)
+    reference_true = out["reference_signal_step5_status"].eq("TRUE")
+    opposite_valid = out["opposite_anchor_valid_for_segment_boundary"]
+    review_only_blocked = out["missing_reciprocal_reason"].eq("review_only_unpaired_divided_record") | out[
+        "roadway_directionality_type"
+    ].eq("unknown")
+    out["a_centered_use_allowed"] = reference_true & opposite_valid & ~short & ~review_only_blocked
+    out["b_centered_use_allowed"] = out["both_endpoint_signals_true"] & out["reciprocal_pair_present"] & ~short
+
+    reasons: list[str] = []
+    statuses: list[str] = []
+    for row in out.itertuples(index=False):
+        row_reasons: list[str] = []
+        if row.reference_signal_step5_status != "TRUE":
+            row_reasons.append("reference_signal_not_true")
+        if not bool(row.opposite_anchor_valid_for_segment_boundary):
+            row_reasons.append("opposite_anchor_not_valid_boundary")
+        if float(row.length_ft_num or 0.0) < 50.0:
+            row_reasons.append("short_segment_under_50ft")
+        if row.roadway_directionality_type == "unknown":
+            row_reasons.append("unknown_directionality")
+        if row.missing_reciprocal_reason == "review_only_unpaired_divided_record":
+            row_reasons.append("review_only_or_unknown_directionality")
+        if row.roadway_directionality_type == "undivided":
+            row_reasons.append("undivided_requires_crash_direction_for_final_upstream_downstream")
+        if row.missing_reciprocal_reason == "opposite_signal_not_true_reference_but_valid_boundary" and "short_segment_under_50ft" not in row_reasons:
+            row_reasons.append("prior_review_only_due_to_opposite_signal_outside_true_scope_reinterpreted")
+        if bool(row.a_centered_use_allowed):
+            statuses.append("ready_for_crash_assignment_revised")
+        elif "short_segment_under_50ft" in row_reasons:
+            statuses.append("exclude_from_crash_assignment")
+        else:
+            statuses.append("review_before_crash_assignment")
+        reasons.append(";".join(row_reasons) if row_reasons else "reference_true_and_opposite_anchor_valid")
+
+    out["ready_for_crash_assignment_revised"] = statuses
+    out["readiness_revision_reason"] = reasons
+
+    ready = out.loc[out["ready_for_crash_assignment_revised"].eq("ready_for_crash_assignment_revised")].copy()
+    ready_ids = set(ready["oriented_segment_id"].astype(str))
+    ready_bins = bins.loc[bins["oriented_segment_id"].astype(str).isin(ready_ids)].copy() if not bins.empty else bins.copy()
+    review_or_exclude = out.loc[~out["ready_for_crash_assignment_revised"].eq("ready_for_crash_assignment_revised")].copy()
+    missing_reinterpreted = out.loc[out["missing_reciprocal_reason"].ne("")].copy()
+
+    def count_rows(frame: pd.DataFrame, group: str, column: str) -> pd.DataFrame:
+        if frame.empty or column not in frame.columns:
+            return pd.DataFrame(columns=["summary_group", "summary_value", "segment_count"])
+        return (
+            frame[column]
+            .fillna("")
+            .astype(str)
+            .replace("", "blank")
+            .value_counts()
+            .rename_axis("summary_value")
+            .reset_index(name="segment_count")
+            .assign(summary_group=group)[["summary_group", "summary_value", "segment_count"]]
+        )
+
+    missing_summary = pd.concat(
+        [
+            count_rows(missing_reinterpreted, "missing_reciprocal_reason", "missing_reciprocal_reason"),
+            count_rows(missing_reinterpreted, "ready_for_crash_assignment_revised", "ready_for_crash_assignment_revised"),
+            count_rows(missing_reinterpreted, "opposite_anchor_type", "opposite_anchor_type"),
+            count_rows(missing_reinterpreted, "opposite_anchor_step5_status", "opposite_anchor_step5_status"),
+            count_rows(missing_reinterpreted, "a_centered_use_allowed", "a_centered_use_allowed"),
+            count_rows(missing_reinterpreted, "b_centered_use_allowed", "b_centered_use_allowed"),
+            count_rows(missing_reinterpreted, "readiness_revision_reason", "readiness_revision_reason"),
+        ],
+        ignore_index=True,
+    )
+
+    review_reasons = count_rows(review_or_exclude, "readiness_revision_reason", "readiness_revision_reason")
+
+    summary_rows = [
+        {"metric": "total_oriented_segments", "value": len(out), "notes": ""},
+        *[
+            {"metric": f"revised_status_{status}", "value": int(count), "notes": ""}
+            for status, count in out["ready_for_crash_assignment_revised"].value_counts().items()
+        ],
+        {
+            "metric": "reference_signal_not_true_rows",
+            "value": int(out["reference_signal_step5_status"].ne("TRUE").sum()),
+            "notes": "Expected 0.",
+        },
+        {
+            "metric": "true_vehicle_direction_inferred_not_false_rows",
+            "value": int(out["true_vehicle_direction_inferred"].astype(str).str.upper().ne("FALSE").sum()),
+            "notes": "Expected 0.",
+        },
+        {"metric": "a_centered_use_allowed_rows", "value": int(out["a_centered_use_allowed"].sum()), "notes": ""},
+        {"metric": "b_centered_use_allowed_rows", "value": int(out["b_centered_use_allowed"].sum()), "notes": ""},
+        {"metric": "opposite_anchor_valid_rows", "value": int(out["opposite_anchor_valid_for_segment_boundary"].sum()), "notes": ""},
+        {"metric": "short_segment_under_50ft_rows", "value": int(short.sum()), "notes": ""},
+        {
+            "metric": "missing_reciprocal_divided_rows_reinterpreted",
+            "value": int(out["missing_reciprocal_reason"].ne("").sum()),
+            "notes": "Non-TRUE signals and non-signal/endpoints are valid opposite boundaries, not reference signals.",
+        },
+    ]
+    readiness_summary = pd.DataFrame(summary_rows)
+
+    crash_summary_rows = [
+        {"metric": "crash_ready_segment_rows", "value": len(ready), "notes": ""},
+        {"metric": "crash_ready_bin_rows", "value": len(ready_bins), "notes": ""},
+        {"metric": "represented_true_reference_signals", "value": ready["reference_signal_id"].nunique(), "notes": ""},
+        {"metric": "reference_signal_not_TRUE_rows", "value": int(ready["reference_signal_step5_status"].ne("TRUE").sum()), "notes": "Expected 0."},
+        {
+            "metric": "true_vehicle_direction_inferred_not_false_rows",
+            "value": int(ready["true_vehicle_direction_inferred"].astype(str).str.upper().ne("FALSE").sum()) if not ready.empty else 0,
+            "notes": "Expected 0.",
+        },
+        {
+            "metric": "review_or_exclude_rows_entered_subset",
+            "value": int(ready["ready_for_crash_assignment_revised"].ne("ready_for_crash_assignment_revised").sum()) if not ready.empty else 0,
+            "notes": "Expected 0.",
+        },
+        {"metric": "a_centered_use_allowed_rows", "value": int(ready["a_centered_use_allowed"].sum()) if not ready.empty else 0, "notes": ""},
+        {"metric": "b_centered_use_allowed_rows", "value": int(ready["b_centered_use_allowed"].sum()) if not ready.empty else 0, "notes": ""},
+    ]
+    crash_ready_summary = pd.DataFrame(crash_summary_rows)
+    return out, ready, ready_bins, readiness_summary, missing_summary, review_reasons, crash_ready_summary
+
+
 def build_roadway_graph(
     *,
     normalized_root: Path,
     output_root: Path,
     signal_road_tolerance_ft: float = SIGNAL_ROAD_MATCH_TOLERANCE_FT,
+    limited_signal_offset_tolerance_ft: float = LIMITED_SIGNAL_OFFSET_TOLERANCE_FT,
 ) -> dict[str, str]:
     layout = _build_layout(output_root)
     roads = gpd.read_parquet(normalized_root / "roads.parquet")
@@ -1756,14 +1970,17 @@ def build_roadway_graph(
     bins = _build_bins(adjacent)
     gap_review = _graph_gap_review(signal_points, signal_graph, adjacent)
     manual_diagnosis = _read_manual_signal_diagnosis(layout.review_current)
-    signal_step5_eligibility = _build_signal_step5_eligibility(signal_points, adjacent, gap_review, manual_diagnosis)
+    signal_step5_eligibility = _build_signal_step5_eligibility(
+        signal_points,
+        adjacent,
+        gap_review,
+        manual_diagnosis,
+        limited_signal_offset_tolerance_ft=limited_signal_offset_tolerance_ft,
+    )
     roadway_graph_edges_eligible = _build_edges_eligible(edges, nodes, adjacent, signal_step5_eligibility)
-    first_prototype_path = layout.review_current / "step5_first_prototype_input_signals.csv"
-    first_prototype_signals = pd.read_csv(first_prototype_path, dtype=str, keep_default_na=False) if first_prototype_path.exists() else pd.DataFrame()
-    if first_prototype_signals.empty:
-        first_prototype_signals = pd.DataFrame(
-            _to_csv_frame(signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].eq("TRUE")])
-        )
+    first_prototype_signals = pd.DataFrame(
+        _to_csv_frame(signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].eq("TRUE")])
+    )
     oriented_segments = _build_step5_oriented_segments(first_prototype_signals, adjacent)
     oriented_segment_bins = _build_oriented_segment_bins(oriented_segments)
     (
@@ -1777,6 +1994,90 @@ def build_roadway_graph(
         oriented_segments,
         oriented_segment_bins,
     )
+    (
+        readiness_revised,
+        crash_ready_segments,
+        crash_ready_bins,
+        readiness_revision_summary,
+        missing_reciprocal_summary,
+        still_review_or_exclude_reasons,
+        crash_ready_subset_summary,
+    ) = _build_step5_readiness_revision(
+        oriented_segments,
+        oriented_segment_bins,
+        signal_step5_eligibility,
+        oriented_segment_pairing_summary,
+    )
+    crash_ready_anchor_type_summary = pd.concat(
+        [
+            crash_ready_segments[column]
+            .fillna("")
+            .astype(str)
+            .replace("", "blank")
+            .value_counts()
+            .rename_axis("summary_value")
+            .reset_index(name="segment_count")
+            .assign(summary_group=column)[["summary_group", "summary_value", "segment_count"]]
+            for column in ["opposite_anchor_type", "opposite_anchor_step5_status"]
+            if column in crash_ready_segments.columns
+        ],
+        ignore_index=True,
+    )
+    crash_ready_directionality_summary = pd.concat(
+        [
+            crash_ready_segments[column]
+            .fillna("")
+            .astype(str)
+            .replace("", "blank")
+            .value_counts()
+            .rename_axis("summary_value")
+            .reset_index(name="segment_count")
+            .assign(summary_group=column)[["summary_group", "summary_value", "segment_count"]]
+            for column in [
+                "roadway_directionality_type",
+                "opposite_anchor_type",
+                "orientation_record_type",
+                "undivided_event_direction_requires_crash_direction",
+                "physical_directional_carriageway",
+            ]
+            if column in crash_ready_segments.columns
+        ],
+        ignore_index=True,
+    )
+    crash_ready_a_centered_b_centered_summary = pd.concat(
+        [
+            crash_ready_segments[column]
+            .fillna("")
+            .astype(str)
+            .replace("", "blank")
+            .value_counts()
+            .rename_axis("summary_value")
+            .reset_index(name="segment_count")
+            .assign(summary_group=column)[["summary_group", "summary_value", "segment_count"]]
+            for column in [
+                "a_centered_use_allowed",
+                "b_centered_use_allowed",
+                "both_endpoint_signals_true",
+                "missing_reciprocal_reason",
+            ]
+            if column in crash_ready_segments.columns
+        ],
+        ignore_index=True,
+    )
+    true_signal_ids = set(signal_step5_eligibility.loc[signal_step5_eligibility["usable_for_step5"].eq("TRUE"), "signal_id"].astype(str))
+    ready_ref_ids = set(crash_ready_segments["reference_signal_id"].astype(str)) if not crash_ready_segments.empty else set()
+    crash_ready_signal_coverage = pd.DataFrame(
+        [
+            {
+                "signal_id": signal_id,
+                "represented_as_crash_ready_reference_signal": signal_id in ready_ref_ids,
+            }
+            for signal_id in sorted(true_signal_ids)
+        ]
+    )
+    crash_ready_missing_true_signals = crash_ready_signal_coverage.loc[
+        ~crash_ready_signal_coverage["represented_as_crash_ready_reference_signal"]
+    ].copy()
     refined_edges, refined_adjacent, termination_examples = _refine_signal_adjacent_edge_termination(
         adjacent,
         nodes,
@@ -1872,6 +2173,14 @@ def build_roadway_graph(
             oriented_segment_bins,
             layout.tables_current / "signal_oriented_segment_bins_50ft.csv",
         ),
+        "signal_oriented_roadway_segments_crash_ready_csv": (
+            crash_ready_segments,
+            layout.tables_current / "signal_oriented_roadway_segments_crash_ready.csv",
+        ),
+        "signal_oriented_segment_bins_50ft_crash_ready_csv": (
+            crash_ready_bins,
+            layout.tables_current / "signal_oriented_segment_bins_50ft_crash_ready.csv",
+        ),
     }
     for key, (frame, path) in table_outputs.items():
         outputs[key] = str(_write_csv_frame(_to_csv_frame(frame), path))
@@ -1915,6 +2224,58 @@ def build_roadway_graph(
             oriented_segment_signal_coverage,
             layout.review_current / "step5_oriented_segment_signal_coverage.csv",
         ),
+        "step5_first_prototype_input_signals_csv": (
+            first_prototype_signals,
+            layout.review_current / "step5_first_prototype_input_signals.csv",
+        ),
+        "step5_readiness_revision_summary_csv": (
+            readiness_revision_summary,
+            layout.review_current / "step5_readiness_revision_summary.csv",
+        ),
+        "step5_oriented_segment_readiness_revised_csv": (
+            readiness_revised,
+            layout.review_current / "step5_oriented_segment_readiness_revised.csv",
+        ),
+        "step5_ready_revised_candidates_csv": (
+            crash_ready_segments,
+            layout.review_current / "step5_ready_revised_candidates.csv",
+        ),
+        "step5_missing_reciprocal_reinterpreted_summary_csv": (
+            missing_reciprocal_summary,
+            layout.review_current / "step5_missing_reciprocal_reinterpreted_summary.csv",
+        ),
+        "step5_still_review_or_exclude_reasons_csv": (
+            still_review_or_exclude_reasons,
+            layout.review_current / "step5_still_review_or_exclude_reasons.csv",
+        ),
+        "step5_crash_ready_subset_summary_csv": (
+            crash_ready_subset_summary,
+            layout.review_current / "step5_crash_ready_subset_summary.csv",
+        ),
+        "step5_crash_ready_exclusion_summary_csv": (
+            still_review_or_exclude_reasons,
+            layout.review_current / "step5_crash_ready_exclusion_summary.csv",
+        ),
+        "step5_crash_ready_signal_coverage_csv": (
+            crash_ready_signal_coverage,
+            layout.review_current / "step5_crash_ready_signal_coverage.csv",
+        ),
+        "step5_crash_ready_missing_true_signals_csv": (
+            crash_ready_missing_true_signals,
+            layout.review_current / "step5_crash_ready_missing_true_signals.csv",
+        ),
+        "step5_crash_ready_anchor_type_summary_csv": (
+            crash_ready_anchor_type_summary,
+            layout.review_current / "step5_crash_ready_anchor_type_summary.csv",
+        ),
+        "step5_crash_ready_directionality_summary_csv": (
+            crash_ready_directionality_summary,
+            layout.review_current / "step5_crash_ready_directionality_summary.csv",
+        ),
+        "step5_crash_ready_a_centered_b_centered_summary_csv": (
+            crash_ready_a_centered_b_centered_summary,
+            layout.review_current / "step5_crash_ready_a_centered_b_centered_summary.csv",
+        ),
     }
     for key, (frame, path) in review_outputs.items():
         outputs[key] = str(_write_csv_frame(_to_csv_frame(frame), path))
@@ -1950,6 +2311,14 @@ def build_roadway_graph(
             oriented_segment_bins,
             layout.review_geojson_current / "signal_oriented_segment_bins_50ft.geojson",
         ),
+        "signal_oriented_roadway_segments_crash_ready_geojson": (
+            crash_ready_segments,
+            layout.review_geojson_current / "signal_oriented_roadway_segments_crash_ready.geojson",
+        ),
+        "signal_oriented_segment_bins_50ft_crash_ready_geojson": (
+            crash_ready_bins,
+            layout.review_geojson_current / "signal_oriented_segment_bins_50ft_crash_ready.geojson",
+        ),
     }
     for key, (frame, path) in geojson_outputs.items():
         outputs[key] = str(_write_geojson_frame(frame, path))
@@ -1970,6 +2339,7 @@ def build_roadway_graph(
         },
         "parameters": {
             "signal_road_match_tolerance_ft": signal_road_tolerance_ft,
+            "limited_signal_offset_tolerance_ft": limited_signal_offset_tolerance_ft,
             "bin_length_ft": BIN_LENGTH_FT,
             "snap_distance_review_ft": SNAP_DISTANCE_REVIEW_FT,
         },
@@ -1985,12 +2355,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--normalized-root", type=Path, default=Path("artifacts/normalized"))
     parser.add_argument("--output-root", type=Path, default=Path("work/output") / OUTPUT_FOLDER_NAME)
     parser.add_argument("--signal-road-tolerance-ft", type=float, default=SIGNAL_ROAD_MATCH_TOLERANCE_FT)
+    parser.add_argument("--limited-signal-offset-tolerance-ft", type=float, default=LIMITED_SIGNAL_OFFSET_TOLERANCE_FT)
     args = parser.parse_args(argv)
 
     outputs = build_roadway_graph(
         normalized_root=args.normalized_root,
         output_root=args.output_root,
         signal_road_tolerance_ft=args.signal_road_tolerance_ft,
+        limited_signal_offset_tolerance_ft=args.limited_signal_offset_tolerance_ft,
     )
     for key, path in outputs.items():
         print(f"{key}: {path}")

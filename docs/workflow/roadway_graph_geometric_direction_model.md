@@ -82,26 +82,26 @@ No crash event direction is assigned in this pass.
 
 The current crash-ready subset contains:
 
-- 4,204 geometric-direction segment rows
-- 154,330 geometric-direction bin rows
-- 2,257 divided rows
-- 1,947 undivided rows
+- 4,305 geometric-direction segment rows
+- 159,578 geometric-direction bin rows
+- 2,293 divided rows
+- 2,012 undivided rows
 
 Divided movement orientation:
 
 - `A_to_B`: 0
 - `B_to_A`: 0
-- `unresolved`: 2,257
+- `unresolved`: 2,293
 
 The divided rows remain unresolved because the current crash-ready subset does not contain geometry families with both left and right candidate carriageways bracketing the reference vector. Problem reasons:
 
-- 1,809 `single_carriageway_no_side_reference`
+- 1,845 `single_carriageway_no_side_reference`
 - 272 `geometry_too_close_to_reference_line`
 - 176 `candidate_geometries_do_not_bracket_reference`
 
 Undivided centerline preparation:
 
-- 1,947 rows prepared for centerline-side interpretation
+- 2,012 rows prepared for centerline-side interpretation
 - 0 undivided rows marked as physical directional carriageways
 - 0 rows with `true_vehicle_direction_inferred != false`
 

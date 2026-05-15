@@ -33,7 +33,7 @@ Signal gate counts:
 
 | `usable_for_step5` | Signals | Interpretation |
 | --- | ---: | --- |
-| `TRUE` | 1,185 | Clean first-prototype candidates under current graph evidence. |
+| `TRUE` | 1,214 | Clean first-prototype candidates under current graph evidence. |
 | `CONDITIONAL` | 2,660 | Visible but review-only or rule-dependent. |
 | `FALSE` | 88 | Excluded from Step 5 by default. |
 
@@ -81,13 +81,13 @@ Adjacent edge count among TRUE signals:
 
 | Adjacent edge band | Signals |
 | --- | ---: |
-| 3-4 | 1,185 |
+| 3-4 | 1,214 |
 | 5-8 | 0 |
 | more than 8 | 0 |
 
 TRUE signals with candidate manual edge-termination issues: 0.
 
-The TRUE set is large enough for a first Step 5 prototype. It provides 1,185 source-sufficient, clean-gated signals before any conditional promotion.
+The TRUE set is large enough for a first Step 5 prototype. It provides 1,214 source-sufficient, clean-gated signals before any conditional promotion.
 
 ## CONDITIONAL Candidate Profile
 
@@ -162,7 +162,7 @@ The current graph output does not yet derive first-valid-anchor crossing checks.
 
 ## Concentration Check
 
-The TRUE set does not show an obvious route-sample concentration problem in this audit. The most common exact `route_common_sample` combination contains 17 of 1,185 TRUE signals, about 1.4 percent. Coordinate extents also span the broad working graph area rather than a single small cluster.
+The TRUE set does not show an obvious route-sample concentration problem in this audit. The most common exact `route_common_sample` combination contains 17 of 1,214 TRUE signals, about 1.4 percent. Coordinate extents also span the broad working graph area rather than a single small cluster.
 
 This is a coarse check only. A stronger geographic concentration audit would need a locality, district, or other roadway-area source. The current gate should not use crash `AREA_TYPE` for roadway geography.
 

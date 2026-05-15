@@ -24,8 +24,11 @@ Use these first for the graph-first workflow:
 - `roadway_graph_crash_assignment_prototype.md`
 - `roadway_graph_geometric_direction_model.md`
 - `roadway_graph_divided_carriageway_pairing.md`
+- `roadway_graph_divided_pairing_recovery.md`
 - `roadway_graph_roadway_role_classification.md`
+- `roadway_graph_directional_assignment_milestone.md`
 - `roadway_graph_qgis_review_layers.md`
+- `active_workflow.md` entry for `crash_directional_catchment_assignment_prototype`, the current assignment-only prototype that maps crash points to usable directional catchment polygons.
 
 ## Current Support Workflow
 
@@ -34,9 +37,13 @@ Use these first for the graph-first workflow:
 - `windows_file_lock_manual_cleanup_guide.md`: current operational cleanup guide.
 - `github_publishing_guide.md`: current repository publishing guide.
 
+## Current Directional Assignment Milestone
+
+`roadway_graph_directional_assignment_milestone.md` is the current freeze document for the roadway-derived directional assignment prototype. It records the stable universe, CRS convention, key counts, methodological boundaries, reproducibility commands, and manual git staging/commit instructions.
+
 ## Next Technical Step
 
-The next implementation task is divided-pairing recovery using roadway role classification. Start with unpaired `mainline_divided_carriageway` rows, preserve accepted high/medium-confidence pairs, avoid broad graph repair, and do not use crash direction as an upstream/downstream source.
+The next implementation task is to review proposal/design docs and define the context enrichment architecture for the stable directional signal/crash universe. Add access point and speed context first, bounded to the 0-1,000 ft high-priority descriptive subset plus 1,000-2,500 ft sensitivity. Do not broaden into policy-ready claims, crash-derived scaffold changes, or blocked-record recovery.
 
 ## Current Audit Outputs
 

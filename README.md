@@ -51,6 +51,7 @@ The current active workflow has two layers:
    - `python -m src.active.roadway_graph.crash_assignment`
    - `python -m src.active.roadway_graph.geometric_direction`
    - `python -m src.active.roadway_graph.divided_carriageway_pairing`
+   - `python -m src.active.roadway_graph.divided_pairing_recovery`
    - `python -m src.active.roadway_graph.roadway_role_classification`
 
 The older signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype docs are preserved as historical or supporting reference, not the current methodology.

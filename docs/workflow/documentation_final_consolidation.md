@@ -76,4 +76,4 @@ Consolidate graph-first documentation navigation
 
 ## Next Work
 
-The next technical task is divided-pairing recovery using roadway role classification, focused first on unpaired `mainline_divided_carriageway` rows. Do not jump to broad graph repair, statewide modeling, or policy guidance before that recovery step is validated.
+The next technical task is QGIS review of the divided-pairing recovery prototype, focused on low-confidence candidates and still-unresolved `mainline_divided_carriageway` rows. Do not jump to broad graph repair, statewide modeling, or policy guidance before that review is complete.

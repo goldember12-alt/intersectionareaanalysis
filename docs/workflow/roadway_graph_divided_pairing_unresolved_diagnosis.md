@@ -4,7 +4,7 @@
 
 ## Bounded Question
 
-This diagnosis asks why 1,447 of 2,257 divided Step 5 crash-ready roadway-segment rows remain unpaired in the no-crash divided carriageway pairing module.
+This diagnosis asks why 1,483 of 2,293 divided Step 5 crash-ready roadway-segment rows remain unpaired in the no-crash divided carriageway pairing module.
 
 It does not read crash records, assign crashes, use crash direction fields, infer direction from crash distributions, revise crash assignment, or force additional pairings.
 
@@ -35,12 +35,12 @@ Crash data read: `False`.
 
 The pairing module result is internally consistent:
 
-- divided rows reviewed: 2,257
+- divided rows reviewed: 2,293
 - paired divided rows: 810
 - accepted divided carriageway pairs: 405
 - high-confidence pairs: 335
 - medium-confidence pairs: 70
-- unpaired divided rows: 1,447
+- unpaired divided rows: 1,483
 - pairs with both `A_to_B` and `B_to_A` candidates: 405
 - `true_vehicle_direction_inferred != false`: 0
 
@@ -189,4 +189,4 @@ The next step should be manual/source-data review before expanding paired divide
 - centerline/reference-axis support for ambiguous side-score cases
 - source Travelway repair or exclusion notes for missing-opposite-geometry cases
 
-Until then, all 1,447 rows remain unresolved for upstream/downstream interpretation.
+Until then, all 1,483 rows remain unresolved for upstream/downstream interpretation.
