@@ -156,3 +156,7 @@ artifacts/pycompile_verify/
 
 # Reviewed small configuration/evidence tables may be versioned explicitly.
 !docs/workflow/context_enrichment_access_same_corridor_seed_families.csv
+
+# Large generated roadway graph QA outputs
+work/output/roadway_graph/review/current/reference_signal_directional_bin_catchments/catchment_local_vector_qa.csv
+work/output/roadway_graph/review/current/reference_signal_directional_bin_catchments/undivided_polygon_construction_qa.csv
