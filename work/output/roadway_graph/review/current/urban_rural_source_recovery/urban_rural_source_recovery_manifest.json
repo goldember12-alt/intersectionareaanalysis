@@ -1,0 +1,65 @@
+{
+  "best_candidate": [
+    {
+      "candidate_source_type": "jurisdiction/planning proxy",
+      "defensibility_notes": "proxy context only; needs documented urban-area or policy definition",
+      "defensibility_score": 55,
+      "defensible_for_candidate_join": false,
+      "field_name": "FROM_PHY_JURISDICTION_NM",
+      "join_field_candidates": "RTE_NM | FROM_MEASURE | TO_MEASURE | FROM_PHY_JURISDICTION_NM | MASTER_RTE_NM",
+      "layer_or_table": "aadt",
+      "notes": "schema/sample inventory only; no final urban/rural join performed",
+      "rank": 1,
+      "recommended_join_method": "route/measure or route identity review",
+      "sample_values": "City of Chesapeake | Giles County | Arlington County | Grayson County | Town of Stuart | Town of Blacksburg | Town of Richlands | Town of Fincastle",
+      "source_family": "artifact",
+      "source_path": "artifacts\\normalized\\aadt.parquet"
+    }
+  ],
+  "bounded_question": "diagnostic-only urban/rural source recovery for stable directional-bin context",
+  "candidate_bin_context_file_created": false,
+  "completed_at_utc": "2026-05-18T22:00:11.310893+00:00",
+  "created_at_utc": "2026-05-18T21:54:35.683948+00:00",
+  "outputs": {
+    "artifact_schema_hits_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_artifact_schema_hits.csv",
+    "candidate_coverage_estimate_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_coverage_estimate.csv",
+    "candidate_field_inventory_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_field_inventory.csv",
+    "candidate_join_key_audit_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_join_key_audit.csv",
+    "candidate_source_ranking_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_source_ranking.csv",
+    "code_doc_search_hits_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_code_doc_search_hits.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_findings.md",
+    "gdb_layer_inventory_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_gdb_layer_inventory.csv",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_manifest.json",
+    "progress_log": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_progress.log",
+    "rejected_candidates_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_rejected_candidates.csv",
+    "summary_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_summary.csv",
+    "urban_rural_candidate_bin_coverage_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_bin_coverage.csv",
+    "urban_rural_candidate_join_preview_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_join_preview.csv",
+    "urban_rural_candidate_signal_coverage_csv": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_candidate_signal_coverage.csv"
+  },
+  "qa": {
+    "access_speed_aadt_context_logic_changed": false,
+    "catchment_logic_changed": false,
+    "combined_context_table_overwritten": false,
+    "crash_area_type_treated_as_roadway_truth": false,
+    "crash_assignment_logic_changed": false,
+    "crash_direction_fields_read_or_used": false,
+    "scaffold_logic_changed": false
+  },
+  "search_roots": {
+    "artifacts": [
+      "artifacts\\normalized",
+      "artifacts\\staging",
+      "artifacts\\staged",
+      "work\\output"
+    ],
+    "geodatabases": "Intersection Crash Analysis Layers",
+    "text": [
+      "src",
+      "docs",
+      "legacy",
+      "artifacts",
+      "work\\output"
+    ]
+  }
+}

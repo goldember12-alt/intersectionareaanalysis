@@ -1,0 +1,15 @@
+metric,value
+bounded_question,urban/rural source recovery for stable directional-bin universe
+text_search_roots,src | docs | legacy | artifacts | work\output
+artifact_search_roots,artifacts\normalized | artifacts\staging | artifacts\staged | work\output
+gdb_search_root,Intersection Crash Analysis Layers
+text_search_hits,46656
+artifact_candidate_field_hits,587
+gdb_layers_inspected,9
+candidate_sources_ranked,603
+defensible_candidate_sources,0
+best_candidate_source,artifacts\normalized\aadt.parquet:aadt.FROM_PHY_JURISDICTION_NM
+best_candidate_type,jurisdiction/planning proxy
+best_candidate_defensible,False
+combined_context_table_overwritten,False
+crash_direction_fields_read_or_used,False

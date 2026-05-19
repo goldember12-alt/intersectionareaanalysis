@@ -1,0 +1,3 @@
+metric,value,notes
+missing_true_reference_signals_from_prototype_usable_surface,238,"TRUE signals with no non-review, non-blocked directional segment in the prototype usable surface."
+missing_by_adjacent_edge_count_band_3-4,238,

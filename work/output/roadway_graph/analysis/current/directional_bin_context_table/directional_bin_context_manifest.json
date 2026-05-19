@@ -1,0 +1,191 @@
+{
+  "bounded_question": "read-only assembly of stable 0-2500ft directional-bin context universe",
+  "completed_at_utc": "2026-05-19T14:01:52.158724+00:00",
+  "context_fields_used_for_upstream_downstream": false,
+  "crash_area_type_used_as_roadway_truth": false,
+  "crash_area_type_used_for_upstream_downstream": false,
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-19T14:01:33.462926+00:00",
+  "inputs": {
+    "aadt_v3_bin_context": "work\\output\\roadway_graph\\review\\current\\aadt_context_join_v3_identity_route_measure\\directional_bin_aadt_context_v3.csv",
+    "access_bin_context": "work\\output\\roadway_graph\\review\\current\\access_context_join\\directional_bin_access_context.csv",
+    "crash_assignments_metadata_not_joined": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv",
+    "crash_readiness": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+    "identity_bins_for_bin_extent_fields": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation\\directional_bins_identity_enriched.csv",
+    "normalized_crashes_area_type_only": "artifacts\\normalized\\crashes.parquet",
+    "speed_v4_bin_context": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\directional_bin_speed_context_v4.csv",
+    "urban_rural_recommendation": "work\\output\\roadway_graph\\review\\current\\urban_rural_context_inventory\\urban_rural_context_recommendation.csv",
+    "urban_rural_source_recovery_findings": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_findings.md",
+    "urban_rural_source_recovery_summary": "work\\output\\roadway_graph\\review\\current\\urban_rural_source_recovery\\urban_rural_source_recovery_summary.csv"
+  },
+  "outputs": {
+    "combined_context_join_qa_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\combined_context_join_qa.csv",
+    "context_completeness_by_bin_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\context_completeness_by_bin.csv",
+    "context_completeness_by_distance_window_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\context_completeness_by_distance_window.csv",
+    "context_completeness_by_reference_signal_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\context_completeness_by_reference_signal.csv",
+    "context_completeness_by_signal_relative_direction_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\context_completeness_by_signal_relative_direction.csv",
+    "crash_area_type_by_distance_window_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\crash_area_type_by_distance_window.csv",
+    "crash_area_type_by_roadway_representation_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\crash_area_type_by_roadway_representation.csv",
+    "crash_area_type_by_signal_relative_direction_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\crash_area_type_by_signal_relative_direction.csv",
+    "crash_area_type_context_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\crash_area_type_context_summary.csv",
+    "directional_bin_context_0_1000_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context_0_1000ft.csv",
+    "directional_bin_context_1000_2500_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context_1000_2500ft.csv",
+    "directional_bin_context_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context.csv",
+    "directional_crash_context_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_crash_context.csv",
+    "findings_md": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context_findings.md",
+    "manifest_json": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context_manifest.json",
+    "reference_signal_context_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\reference_signal_context_summary.csv"
+  },
+  "qa": [
+    {
+      "check_name": "one_row_per_0_2500ft_directional_bin",
+      "expected": 110710,
+      "observed": 110710,
+      "passed": true
+    },
+    {
+      "check_name": "distance_window_splits_sum",
+      "expected": 110710,
+      "observed": 110710,
+      "passed": true
+    },
+    {
+      "check_name": "no_over_2500ft_bins_in_main",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    },
+    {
+      "check_name": "crash_counts_match_readiness_0_2500ft",
+      "expected": 13216,
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "total_assigned_crashes_remains_13216",
+      "expected": 13216,
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "all_matching_crash_area_type_rows_represented",
+      "expected": 13216,
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "bin_level_area_type_counts_sum_to_assigned_crashes",
+      "expected": 13216,
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "signal_level_area_type_counts_sum_to_assigned_crashes",
+      "expected": 13216,
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "no_crash_bins_not_assigned_crash_area_type_context",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    },
+    {
+      "check_name": "access_counts_match_access_summary",
+      "expected": 3262,
+      "observed": 3262,
+      "passed": true
+    },
+    {
+      "check_name": "speed_counts_match_speed_v4",
+      "expected": 84857,
+      "observed": 84857,
+      "passed": true
+    },
+    {
+      "check_name": "aadt_counts_match_aadt_v3",
+      "expected": 106210,
+      "observed": 106210,
+      "passed": true
+    },
+    {
+      "check_name": "urban_rural_source_not_found_documented",
+      "expected": "source_not_found",
+      "observed": "source_not_found",
+      "passed": true
+    },
+    {
+      "check_name": "roadway_urban_rural_remains_source_not_found",
+      "expected": "source_not_found",
+      "observed": "source_not_found",
+      "passed": true
+    },
+    {
+      "check_name": "ambiguous_unresolved_crashes_excluded",
+      "expected": "no ambiguous/unresolved assignment rows",
+      "observed": "readiness unique assigned rows only",
+      "passed": true
+    },
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "crash_area_type_used_only_as_crash_level_context",
+      "expected": "not roadway truth and not upstream/downstream input",
+      "observed": "crash context fields and assigned-crash summary counts only",
+      "passed": true
+    },
+    {
+      "check_name": "context_fields_do_not_redefine_upstream_downstream",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    }
+  ],
+  "source_context_joins_modified": false,
+  "summary_counts": {
+    "assigned_crashes_rural": 1301,
+    "assigned_crashes_unknown_area_type": 0,
+    "assigned_crashes_urban": 11915,
+    "assigned_crashes_with_area_type": 13216,
+    "bins_with_urban_or_rural_crash_summary": 8552,
+    "complete_core_context_bins": 0,
+    "crashes_represented": 13216,
+    "reference_signals_represented": 971,
+    "roadway_urban_rural_bins": 0,
+    "signals_with_urban_or_rural_crash_summary": 859,
+    "stable_aadt_bins": 106210,
+    "stable_speed_bins": 84857,
+    "total_bins": 110710
+  },
+  "urban_rural_decision": {
+    "best_source_field": "",
+    "best_source_table": "",
+    "field_already_present_in_enriched_bins": "False",
+    "notes": "No roadway-level urban/rural class found. Crash AREA_TYPE and AADT/speed jurisdiction/MPO fields are contextual but not roadway-level urban/rural truth.",
+    "recommendation": "source_not_found",
+    "recommended_method": "include null urban/rural fields and urban_rural_context_status=source_not_found in combined table; add Census urban area, VDOT classification, or another documented roadway/area source later",
+    "separate_join_needed": "False",
+    "source_recovery": {
+      "artifact_candidate_field_hits": "587",
+      "artifact_search_roots": "artifacts\\normalized | artifacts\\staging | artifacts\\staged | work\\output",
+      "best_candidate_defensible": "False",
+      "best_candidate_source": "artifacts\\normalized\\aadt.parquet:aadt.FROM_PHY_JURISDICTION_NM",
+      "best_candidate_type": "jurisdiction/planning proxy",
+      "bounded_question": "urban/rural source recovery for stable directional-bin universe",
+      "candidate_sources_ranked": "603",
+      "combined_context_table_overwritten": "False",
+      "crash_direction_fields_read_or_used": "False",
+      "defensible_candidate_sources": "0",
+      "gdb_layers_inspected": "9",
+      "gdb_search_root": "Intersection Crash Analysis Layers",
+      "text_search_hits": "46656",
+      "text_search_roots": "src | docs | legacy | artifacts | work\\output"
+    },
+    "use_in_combined_table_now": "False"
+  }
+}

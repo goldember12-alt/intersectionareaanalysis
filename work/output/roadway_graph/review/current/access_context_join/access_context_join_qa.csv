@@ -1,0 +1,15 @@
+check_name,passed,observed,expected
+crash_direction_fields_read_or_used,True,,none
+access_direction_used_for_upstream_downstream,True,not_used,not_used
+scaffold_catchment_assignment_readiness_logic_changed,True,read_only_context_join,no_changes
+main_context_bins_lte_2500ft,True,0,0
+review_over_2500ft_bins_excluded_from_main,True,90342,reported_only
+access_crs_matches_working_crs,True,EPSG:3968,EPSG:3968
+access_features_considered,True,70595,reported
+access_features_matched_to_at_least_one_stable_bin,True,3040,reported
+ambiguous_access_to_bin_matches,True,251,reported
+unmatched_access_points,True,67555,reported
+bins_with_access_within_catchment,True,3262,reported
+bins_with_access_within_100ft,True,4578,reported
+bins_with_access_within_250ft,True,4771,reported
+crashes_inheriting_access_context,True,13216,reported

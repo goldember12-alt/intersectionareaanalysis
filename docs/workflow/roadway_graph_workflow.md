@@ -170,7 +170,7 @@ The high number of more-than-four cases is expected in a broad first graph proto
 
 ## Relationship To Directed Segments
 
-The prior `work/output/directed_segments/` family remains untouched. It is now superseded for graph foundation purposes because it uses only `Study_Roads_Divided.parquet` and attaches each signal to a nearest divided route/carriageway.
+The prior directed-segments output family is archived under `work/archive/20260519_cleanup/directed_segments/`. It is superseded for graph foundation purposes because it uses only `Study_Roads_Divided.parquet` and attaches each signal to a nearest divided route/carriageway.
 
 The new `roadway_graph` family is the active prototype for a full-roadway graph foundation. The older directed segment outputs remain useful historical/prototype evidence for the divided-road vertical slice.
 
@@ -192,7 +192,7 @@ Do not use these outputs for crash assignment until graph QA is complete and an 
 
 The first 30-row manual QGIS review is summarized in:
 
-- `docs/workflow/roadway_graph_manual_review_diagnosis.md`
+- `docs/archive/20260519_cleanup/roadway_graph_manual_review_diagnosis.md`
 
 Main interpretation:
 
@@ -207,7 +207,7 @@ The manual diagnosis remains pre-crash and pre-directional. It does not implemen
 
 The current graph run now writes explicit Step 5 input gates documented in:
 
-- `docs/workflow/roadway_graph_step5_eligibility_gating.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_eligibility_gating.md`
 
 Gate status values:
 
@@ -231,7 +231,7 @@ The current build includes a bounded signal-offset association relaxation. A sig
 
 Candidate edge-termination refinement outputs are documented in:
 
-- `docs/workflow/roadway_graph_edge_termination_refinement.md`
+- `docs/archive/20260519_cleanup/roadway_graph_edge_termination_refinement.md`
 
 The refinement is review-only. It shortens signal-adjacent edges only when an existing graph-supported `road_intersection` node lies between the signal and the current endpoint. It does not use access points as primary termini and does not treat simple geometric crossings as true intersections.
 
@@ -249,7 +249,7 @@ Recommendation: keep the refined termination outputs as review-only and revise t
 
 The first no-crash Step 5 oriented segment prototype is documented in:
 
-- `docs/workflow/roadway_graph_step5_oriented_segment_prototype.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_oriented_segment_prototype.md`
 
 It uses only the 1,214 clean TRUE signals from `step5_first_prototype_input_signals.csv` and uses base graph geometry, not the review-only termination-refined geometry.
 
@@ -271,7 +271,7 @@ The prototype is ready for summary QA only. It is not ready for crash assignment
 
 The TRUE-only Step 5 oriented segment QA readout is documented in:
 
-- `docs/workflow/roadway_graph_step5_oriented_segment_qa.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_oriented_segment_qa.md`
 
 Current QA interpretation:
 
@@ -288,7 +288,7 @@ Crash assignment should wait until a formal crash-assignment-ready subset is imp
 
 The revised no-crash readiness classification is documented in:
 
-- `docs/workflow/roadway_graph_step5_readiness_revision.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_readiness_revision.md`
 
 Revision principle:
 
@@ -310,7 +310,7 @@ The revision reinterprets 937 of the 942 opposite-signal-not-TRUE divided record
 
 The official no-crash Step 5 crash-assignment-ready subset is documented in:
 
-- `docs/workflow/roadway_graph_step5_crash_ready_subset.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_crash_ready_subset.md`
 
 Current subset outputs:
 
@@ -340,7 +340,7 @@ This subset is the only approved Step 5 segment/bin input for a future crash-ass
 
 The final no-crash summary QA for the crash-ready subset is documented in:
 
-- `docs/workflow/roadway_graph_step5_crash_ready_summary_qa.md`
+- `docs/archive/20260519_cleanup/roadway_graph_step5_crash_ready_summary_qa.md`
 
 Current QA outputs:
 
@@ -356,7 +356,7 @@ All hard consistency checks passed: no non-TRUE reference signals, no true vehic
 
 The conservative crash assignment prototype is documented in:
 
-- `docs/workflow/roadway_graph_crash_assignment_prototype.md`
+- `docs/archive/20260519_cleanup/roadway_graph_crash_assignment_prototype.md`
 
 Run:
 
@@ -384,7 +384,7 @@ This is a spatial crash-assignment prototype ready for summary QA, not modeling.
 
 The current crash-assignment QA module is documented in:
 
-- `docs/workflow/roadway_graph_crash_assignment_prototype.md`
+- `docs/archive/20260519_cleanup/roadway_graph_crash_assignment_prototype.md`
 
 Run:
 
@@ -416,7 +416,7 @@ The QA is read-only over current assignment/scaffold outputs. It does not change
 
 The bounded interpretation-readiness QA module is documented in:
 
-- `docs/workflow/roadway_graph_crash_assignment_prototype.md`
+- `docs/archive/20260519_cleanup/roadway_graph_crash_assignment_prototype.md`
 
 Run:
 
@@ -444,7 +444,7 @@ This module is classification-only. It does not change assignment results, alter
 
 The mapless review packet module is documented in:
 
-- `docs/workflow/roadway_graph_crash_assignment_prototype.md`
+- `docs/archive/20260519_cleanup/roadway_graph_crash_assignment_prototype.md`
 
 Run:
 
@@ -686,7 +686,7 @@ The output is roadway-only. It does not read crash data, read crash assignment o
 
 The roadway-geometry-derived direction model is documented in:
 
-- `docs/workflow/roadway_graph_geometric_direction_model.md`
+- `docs/archive/20260519_cleanup/roadway_graph_geometric_direction_model.md`
 
 Run:
 
@@ -720,7 +720,7 @@ This output is ready for summary QA and small mapped review. It is not yet a fin
 
 The no-crash divided carriageway pairing diagnostic is documented in:
 
-- `docs/workflow/roadway_graph_divided_carriageway_pairing.md`
+- `docs/archive/20260519_cleanup/roadway_graph_divided_carriageway_pairing.md`
 
 Run:
 
@@ -755,7 +755,7 @@ The paired divided rows are ready for small QGIS spot check. They should not be 
 
 The no-crash divided-pairing recovery prototype is documented in:
 
-- `docs/workflow/roadway_graph_divided_pairing_recovery.md`
+- `docs/archive/20260519_cleanup/roadway_graph_divided_pairing_recovery.md`
 
 Run:
 
@@ -784,7 +784,7 @@ The output is candidate-only. Do not promote it into the default geometric direc
 
 The no-crash roadway-role classification prototype is documented in:
 
-- `docs/workflow/roadway_graph_roadway_role_classification.md`
+- `docs/archive/20260519_cleanup/roadway_graph_roadway_role_classification.md`
 
 Run:
 

@@ -1,0 +1,19 @@
+check_name,passed,observed,expected
+one_row_per_0_2500ft_directional_bin,True,110710,110710
+distance_window_splits_sum,True,110710,110710
+no_over_2500ft_bins_in_main,True,0,0
+crash_counts_match_readiness_0_2500ft,True,13216,13216
+total_assigned_crashes_remains_13216,True,13216,13216
+all_matching_crash_area_type_rows_represented,True,13216,13216
+bin_level_area_type_counts_sum_to_assigned_crashes,True,13216,13216
+signal_level_area_type_counts_sum_to_assigned_crashes,True,13216,13216
+no_crash_bins_not_assigned_crash_area_type_context,True,0,0
+access_counts_match_access_summary,True,3262,3262
+speed_counts_match_speed_v4,True,84857,84857
+aadt_counts_match_aadt_v3,True,106210,106210
+urban_rural_source_not_found_documented,True,source_not_found,source_not_found
+roadway_urban_rural_remains_source_not_found,True,source_not_found,source_not_found
+ambiguous_unresolved_crashes_excluded,True,readiness unique assigned rows only,no ambiguous/unresolved assignment rows
+crash_direction_fields_read_or_used,True,False,False
+crash_area_type_used_only_as_crash_level_context,True,crash context fields and assigned-crash summary counts only,not roadway truth and not upstream/downstream input
+context_fields_do_not_redefine_upstream_downstream,True,False,False

@@ -1,0 +1,8 @@
+dataset,field_name,field_roles,row_count,null_count,duplicate_non_null_count,unique_non_null_count
+posted_speed_source,EVENT_SOURCE_ID,likely_id,38723,0,8794,29929
+posted_speed_source,CAR_SPEED_LIMIT,likely_posted_speed_value,38723,6,38704,13
+posted_speed_source,TRUCK_SPEED_LIMIT,likely_posted_speed_value,38723,9,38701,13
+posted_speed_source,RESOLUTION_ID,likely_id,38723,16719,19818,2186
+posted_speed_source,EVENT_LOCATION_ID,likely_id,38723,0,6,38717
+posted_speed_source,EVENT_COMPONENT_ID,likely_id,38723,0,38720,3
+posted_speed_source,geometry,likely_geometry,38723,102,68,38553

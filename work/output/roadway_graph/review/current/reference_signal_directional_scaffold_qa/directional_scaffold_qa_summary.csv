@@ -1,0 +1,23 @@
+metric,value,notes
+candidate_directional_segments,7800,
+candidate_directional_bins,304552,
+prototype_usable_directional_segments,4828,
+prototype_usable_directional_bins,208340,
+excluded_directional_segments,2972,
+excluded_directional_bins,96212,
+prototype_usable_true_reference_signals,976,
+prototype_usable_downstream_records,2414,
+prototype_usable_upstream_records,2414,
+prototype_usable_divided_physical_records,810,
+prototype_usable_undivided_pseudo_direction_records,4018,
+prototype_usable_method_allowed_non_true_endpoint_anchor_records,4285,Usable records whose far anchor is not a TRUE signal.
+id_uniqueness_fail_rows,0,
+prototype_usable_pair_symmetry_fail_rows,0,
+prototype_usable_bin_ordering_fail_rows,0,
+blocked_segments_leaked_into_usable,0,Expected 0.
+review_segments_leaked_into_usable,0,Expected 0.
+low_confidence_divided_recovery_rows_leaked_into_usable,0,Expected 0.
+unknown_roadway_role_rows_leaked_into_usable,0,Expected 0.
+crash_data_read,False,
+crash_assignment_outputs_read,False,
+crash_direction_fields_used,False,

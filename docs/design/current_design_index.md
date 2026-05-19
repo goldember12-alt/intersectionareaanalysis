@@ -1,37 +1,27 @@
 # Current Design Index
 
-## Six-Folder Contract
+**Status: CURRENT ACTIVE.** The active design surface is limited to the roadway-derived directional context product and its controlled next phase.
 
-- `docs/design/` = proposed schemas, planning, future designs
-- `docs/methodology/` = stable methodological explanations
-- `docs/diagrams/` = figure/source diagram assets
-- `docs/reports/` = polished/shareable reports
-- `docs/results/` = curated result/readout summaries, not raw CSVs
-- `docs/workflow/` = active commands, output contracts, and operational notes
+## Active Design Docs
 
-## Design Folder Contract
+- `roadway_graph_context_enrichment_plan.md`: design record for attaching access, speed, AADT, and urban/rural context to the stable roadway-derived directional assignment universe without changing scaffold, catchment, assignment, or upstream/downstream logic.
 
-`docs/design/` is for design notes, proposed schemas, planning sketches, architecture proposals, candidate workflows, and future implementation plans. It may contain provisional or speculative material. It should not contain current run commands, stable methodology, polished reports, or result summaries.
+## Product Milestone
 
-## Current Design And Planning References
+The current implementation milestone is documented in:
 
-Existing design docs are mostly historical diagram planning notes:
+`../workflow/roadway_graph_directional_context_milestone.md`
 
-- `early_data_processing_decision_diagram_outline.md`: supporting reference for early data processing/staging.
-- `../../legacy/docs/design/flow_decision_diagram_outline.md`: historical directionality prototype outline.
-- `../../legacy/docs/design/upstream_downstream_decision_flow.md`: historical signal-centered upstream/downstream prototype flow.
-- `../../legacy/docs/design/upstream_downstream_diagram_outline.md`: historical signal-centered upstream/downstream figure outline.
+That milestone supersedes earlier one-off access, speed, AADT, network-analysis, and recovery design notes for active workflow purposes.
 
-## Design Candidates Currently In Workflow
+## Archived Design Notes
 
-These `docs/workflow/` files are better design candidates if relocation is approved:
+Superseded design and planning notes were moved to:
 
-- `../workflow/proposal_facing_descriptive_table_contracts_001.md`
-- `../workflow/proposal_facing_distance_band_family_design_002.md`
-- `../workflow/context_enrichment_aadt_policy_recommendation.md`
-- `../workflow/context_enrichment_access_alias_recommendation.md`
-- `../workflow/context_enrichment_access_same_corridor_recommendation.md`
+`../archive/20260519_cleanup/`
 
-## Design Gap
+Use archived notes only as historical context or comparison evidence. Do not treat them as active design authority unless a later task explicitly promotes a specific item.
 
-There is no current graph-first design memo for future recovery steps after roadway role classification, divided pairing review, and crash assignment QA. Add future design docs here before broadening the graph-first method.
+## Next Design Work
+
+The next design phase should decide which descriptive products, stakeholder-facing summaries, and production-hardening steps should be built from the current prototype context universe. Regression-ready or policy-ready products still need explicit analysis units, denominator handling, uncertainty treatment, and validation criteria.

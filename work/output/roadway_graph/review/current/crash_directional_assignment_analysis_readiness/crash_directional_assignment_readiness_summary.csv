@@ -1,0 +1,17 @@
+metric,value,notes
+crash_direction_fields_read_or_used,False,No raw crash fields are read.
+assignment_scaffold_or_catchment_logic_changed,False,Read-only classification layer.
+unique_assignments_classified,17634,
+ambiguous_rows_kept_separate,1055,
+unresolved_rows_kept_separate,360583,
+downstream_assignments,8791,
+upstream_assignments,8843,
+divided_assignments,4967,
+undivided_assignments,12667,
+core_0_500ft_cumulative,5767,Safest first descriptive window.
+standard_0_1000ft_cumulative,9170,
+extended_0_2500ft_cumulative,13216,
+long_distance_over_5000ft_review,2513,"Assignment valid, functional relevance uncertain."
+unique_assignment_crash_id_duplicates,0,Expected 0.
+ambiguous_in_readiness_rows,0,Expected 0.
+unresolved_in_readiness_rows,0,Expected 0.

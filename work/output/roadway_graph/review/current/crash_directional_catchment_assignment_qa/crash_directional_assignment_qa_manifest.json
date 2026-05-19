@@ -1,0 +1,61 @@
+{
+  "assignment_only_not_final_crash_analysis": true,
+  "bounded_question": "read-only QA for crash directional catchment assignment outputs",
+  "created_at_utc": "2026-05-15T14:59:54.699815+00:00",
+  "inputs": {
+    "ambiguous": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_ambiguous.csv",
+    "assignment_summary": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignment_summary.csv",
+    "assignments": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv",
+    "catchment_crs_metadata": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_crs_metadata.json",
+    "catchment_geojson_for_crs_qa": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_polygons.geojson",
+    "catchment_index": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_index.csv",
+    "unresolved": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_unresolved.csv",
+    "usable_bins": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_bins_50ft.csv",
+    "usable_segments": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_segments.csv"
+  },
+  "method": {
+    "crash_direction_fields_read_or_used": false,
+    "crash_distributions_used": false,
+    "scaffold_catchment_or_assignment_logic_changed": false
+  },
+  "outputs": {
+    "ambiguous_qa_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\ambiguous_assignment_qa.csv",
+    "ambiguous_top_cases_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\ambiguous_assignment_top_cases.csv",
+    "balance_by_bin_distance_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_downstream_upstream_balance_by_bin_index_distance_band.csv",
+    "balance_by_representation_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_downstream_upstream_balance_by_roadway_representation_type.csv",
+    "balance_by_signal_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_downstream_upstream_balance_by_signal.csv",
+    "by_bin_index_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_bin_index.csv",
+    "by_catchment_method_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_catchment_method.csv",
+    "by_distance_band_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_distance_band_from_reference.csv",
+    "by_far_anchor_type_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_far_anchor_type.csv",
+    "by_reference_signal_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_reference_signal.csv",
+    "by_roadway_representation_type_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_roadway_representation_type.csv",
+    "by_signal_relative_direction_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignments_by_signal_relative_direction.csv",
+    "crs_sanity_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\assignment_crs_sanity_qa.csv",
+    "divided_qa_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\divided_assignment_qa.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\crash_directional_assignment_qa_findings.md",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\crash_directional_assignment_qa_manifest.json",
+    "summary_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\crash_directional_assignment_qa_summary.csv",
+    "undivided_qa_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\undivided_assignment_qa.csv",
+    "unresolved_summary_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa\\unresolved_assignment_summary.csv"
+  },
+  "qa": {
+    "ambiguous_crashes": 1055,
+    "ambiguous_crashes_in_unique_assignments": 0,
+    "assigned_divided_physical": 4967,
+    "assigned_divided_plus_undivided_equals_unique": true,
+    "assigned_downstream": 8791,
+    "assigned_downstream_plus_upstream_equals_unique": true,
+    "assigned_rows_not_inherited_from_catchment": 0,
+    "assigned_rows_with_nonusable_catchment_status": 0,
+    "assigned_rows_with_unexpected_assignment_status": 0,
+    "assigned_undivided_pseudo_direction": 12667,
+    "assigned_upstream": 8843,
+    "crash_direction_fields_read_or_used": false,
+    "duplicate_unique_assignment_crash_ids": 0,
+    "scaffold_catchment_or_assignment_logic_changed": false,
+    "total_unique_assignments": 17634,
+    "unresolved_crashes": 360583,
+    "unresolved_crashes_in_unique_assignments": 0
+  }
+}

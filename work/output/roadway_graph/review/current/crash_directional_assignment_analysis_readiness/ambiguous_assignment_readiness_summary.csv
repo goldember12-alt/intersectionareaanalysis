@@ -1,0 +1,8 @@
+ambiguity_reason,ambiguous_crash_count,summary_type,candidate_signal_relative_directions,candidate_catchment_count
+ambiguous_multiple_usable_directional_catchments,1055,reason,,
+,833,candidate_signal_relative_directions,downstream_of_reference_signal|upstream_of_reference_signal,
+,120,candidate_signal_relative_directions,downstream_of_reference_signal,
+,102,candidate_signal_relative_directions,upstream_of_reference_signal,
+,1040,candidate_catchment_count,,2
+,13,candidate_catchment_count,,4
+,2,candidate_catchment_count,,3

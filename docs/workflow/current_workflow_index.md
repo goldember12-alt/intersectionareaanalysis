@@ -1,67 +1,70 @@
 # Current Workflow Index
 
-## Six-Folder Contract
+**Status: CURRENT ACTIVE.** This is the short navigation page for the roadway-derived directional context product.
 
-- `docs/design/` = proposed schemas, planning, future designs
-- `docs/methodology/` = stable methodological explanations
-- `docs/diagrams/` = figure/source diagram assets
-- `docs/reports/` = polished/shareable reports
-- `docs/results/` = curated result/readout summaries, not raw CSVs
-- `docs/workflow/` = active commands, output contracts, and operational notes
+## Start Here
 
-## Workflow Folder Contract
+- `active_workflow.md`: current command surface and output contract.
+- `roadway_graph_workflow.md`: roadway graph foundation workflow and graph-first methodological guardrails.
+- `roadway_graph_directional_context_milestone.md`: current milestone for the full 0-2,500 ft directional-bin context universe.
+- `../design/roadway_graph_context_enrichment_plan.md`: design record for access, speed, AADT, and context enrichment.
+- `../methodology/roadway_graph_methodology.md`: core graph-first methodology.
+- `../methodology/overview_methodology.md`: repository-level methodology posture.
+- `../methodology/proposal_alignment_growth_plan.md`: controlled proposal-alignment growth path.
 
-`docs/workflow/` is for active working documentation: commands, output contracts, QA procedures, current module status, and implementation notes. It should not hold polished reports, stable methodology, or legacy method docs except temporarily with clear status notes.
+## Current Product
 
-## Current Active Roadway Graph Workflow
+The current product is the stable roadway-derived 0-2,500 ft directional-bin context universe:
 
-Use these first for the graph-first workflow:
+- 0-1,000 ft: high-priority descriptive subset.
+- 1,000-2,500 ft: sensitivity subset.
+- greater than 2,500 ft: review-only, excluded from the combined table.
 
-- `roadway_graph_workflow.md`
-- `roadway_graph_step5_eligibility_gating.md`
-- `roadway_graph_step5_oriented_segment_prototype.md`
-- `roadway_graph_step5_crash_ready_subset.md`
-- `roadway_graph_crash_assignment_prototype.md`
-- `roadway_graph_geometric_direction_model.md`
-- `roadway_graph_divided_carriageway_pairing.md`
-- `roadway_graph_divided_pairing_recovery.md`
-- `roadway_graph_roadway_role_classification.md`
-- `roadway_graph_directional_assignment_milestone.md`
-- `roadway_graph_qgis_review_layers.md`
-- `active_workflow.md` entry for `crash_directional_catchment_assignment_prototype`, the current assignment-only prototype that maps crash points to usable directional catchment polygons.
+Final product outputs live under:
 
-## Current Support Workflow
+`work/output/roadway_graph/analysis/current/directional_bin_context_table/`
 
-- `active_workflow.md`: operational map for the current graph-first workflow plus historical/supporting direct-entry modules.
-- `staging_and_normalization_contract.md`: current staging/normalization support contract.
-- `windows_file_lock_manual_cleanup_guide.md`: current operational cleanup guide.
-- `github_publishing_guide.md`: current repository publishing guide.
+The combined table joins accepted context layers onto one row per usable directional bin. It includes crash assignment/readiness counts, assigned-crash `AREA_TYPE` context, access context, speed v4 context, AADT v3 context, and explicit roadway urban/rural `source_not_found` fields.
 
-## Current Directional Assignment Milestone
+## Active Output Folders
 
-`roadway_graph_directional_assignment_milestone.md` is the current freeze document for the roadway-derived directional assignment prototype. It records the stable universe, CRS convention, key counts, methodological boundaries, reproducibility commands, and manual git staging/commit instructions.
+Keep these `current` output folders as the active product and reproducibility/audit surface:
 
-## Next Technical Step
+- `work/output/roadway_graph/analysis/current/directional_bin_context_table/`
+- `work/output/roadway_graph/analysis/current/crash_directional_assignment_descriptive_summary/`
+- `work/output/roadway_graph/review/current/reference_signal_directional_scaffold/`
+- `work/output/roadway_graph/review/current/reference_signal_directional_scaffold_qa/`
+- `work/output/roadway_graph/review/current/reference_signal_directional_bin_catchments/`
+- `work/output/roadway_graph/review/current/crash_directional_catchment_assignment_prototype/`
+- `work/output/roadway_graph/review/current/crash_directional_catchment_assignment_qa/`
+- `work/output/roadway_graph/review/current/crash_directional_assignment_analysis_readiness/`
+- `work/output/roadway_graph/review/current/access_context_join/`
+- `work/output/roadway_graph/review/current/roadway_identity_metadata_propagation/`
+- `work/output/roadway_graph/review/current/speed_context_join_v4_identity_enriched/`
+- `work/output/roadway_graph/review/current/aadt_context_join_v3_identity_route_measure/`
+- `work/output/roadway_graph/review/current/urban_rural_source_recovery/`
 
-The next implementation task is to review proposal/design docs and define the context enrichment architecture for the stable directional signal/crash universe. Add access point and speed context first, bounded to the 0-1,000 ft high-priority descriptive subset plus 1,000-2,500 ft sensitivity. Do not broaden into policy-ready claims, crash-derived scaffold changes, or blocked-record recovery.
+Supporting source/staging inventories that remain useful for provenance:
 
-## Current Audit Outputs
+- `work/output/roadway_graph/review/current/context_source_inventory/`
+- `work/output/roadway_graph/review/current/posted_speed_source_staging/`
+- `work/output/roadway_graph/review/current/aadt_source_staging/`
 
-- `documentation_reorganization_audit.md`
-- `documentation_file_classification.csv`
-- `documentation_relocation_plan.csv`
-- `documentation_link_update_plan.csv`
-- `documentation_reorganization_stage_a_b_completed.md`
-- `documentation_reorganization_move_log.csv`
-- `documentation_reorganization_link_check.csv`
-- `documentation_final_consolidation.md`
-- `documentation_final_link_check.csv`
-- `documentation_current_state_summary.md`
+## Archived Material
 
-## Supporting Or Historical Workflow Docs
+Superseded docs and one-off audits from the cleanup pass were moved to:
 
-- Directed segment workflow docs moved to `../../legacy/docs/workflow/` or `../../legacy/docs/results/`.
-- Directionality and upstream/downstream prototype docs moved to `../../legacy/docs/` where the relocation plan marked them clearly superseded.
-- Context enrichment docs are supporting references unless a later graph-first crash/access migration promotes them.
-- Proposal descriptive Package 001/002/003 docs remain in `docs/workflow/` with legacy signal-centered package banners for now.
-- `package_003_signal_outlier_map_review_batch_A_guide.md` moved to `../../legacy/docs/workflow/package_003_signal_outlier_map_review_batch_A_guide.md`.
+- `docs/archive/20260519_cleanup/`
+- `work/archive/20260519_cleanup/`
+- `work/output/roadway_graph/review/history/repo_cleanup_20260519/`
+
+Treat archived material as history or comparison evidence only. Do not use archived docs or outputs as current methodology unless a later task explicitly promotes a specific item back into the active workflow.
+
+## Methodological Boundaries
+
+- Crash direction fields are not used.
+- Context fields do not redefine upstream/downstream.
+- Crash `AREA_TYPE` is crash-level context only.
+- Roadway-level urban/rural remains unavailable with `roadway_urban_rural_context_status = source_not_found`.
+- Ambiguous and unresolved crashes remain outside the assigned-crash summary universe.
+- The table is a prototype descriptive analysis universe, not policy-ready or modeling-ready.

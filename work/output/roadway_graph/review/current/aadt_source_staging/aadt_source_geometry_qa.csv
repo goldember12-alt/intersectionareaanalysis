@@ -1,0 +1,2 @@
+dataset,geometry_column,row_count,geometry_null_count,geometry_empty_count,geometry_valid_count,geometry_invalid_count,crs,geometry_type,geometry_type_count
+aadt_source,geometry,677597,0,0,677597,0,EPSG:3857,MultiLineString,677597

@@ -1,0 +1,168 @@
+{
+  "ambiguous_and_unresolved_excluded_from_unique_summaries": true,
+  "assignment_scaffold_catchment_readiness_logic_changed": false,
+  "bounded_question": "read-only descriptive summary of readiness-gated roadway-derived directional crash assignments",
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-15T15:01:06.891852+00:00",
+  "descriptive_prototype_not_policy_ready": true,
+  "flag_rules": {
+    "extreme_imbalance_signal_flag": "core_0_500ft_total_assigned >= 10 and downstream share <= 0.2 or >= 0.8",
+    "low_count_signal_flag": "core_0_500ft_total_assigned < 5"
+  },
+  "inputs": {
+    "ambiguous_assignment_readiness_summary": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\ambiguous_assignment_readiness_summary.csv",
+    "assignments_by_functional_distance_window": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\assignments_by_functional_distance_window.csv",
+    "readiness_by_crash": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+    "readiness_summary": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_summary.csv",
+    "unresolved_assignment_readiness_summary": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\unresolved_assignment_readiness_summary.csv"
+  },
+  "outputs": {
+    "ambiguity_and_unresolved_context_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\ambiguity_and_unresolved_context_summary.csv",
+    "by_bin_distance_band_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_by_bin_distance_band.csv",
+    "by_reference_signal_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_by_reference_signal.csv",
+    "by_roadway_representation_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_by_roadway_representation.csv",
+    "by_signal_and_window_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_by_signal_and_window.csv",
+    "core_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_core_0_500ft.csv",
+    "extended_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_extended_0_2500ft.csv",
+    "findings_md": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\crash_directional_assignment_descriptive_summary_findings.md",
+    "long_distance_review_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\long_distance_review_summary.csv",
+    "manifest_json": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\crash_directional_assignment_descriptive_summary_manifest.json",
+    "standard_summary_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_standard_0_1000ft.csv",
+    "top_reference_signals_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_top_reference_signals.csv",
+    "upstream_downstream_ratio_csv": "work\\output\\roadway_graph\\analysis\\current\\crash_directional_assignment_descriptive_summary\\directional_summary_upstream_downstream_ratio.csv"
+  },
+  "qa_checks": [
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": "no crash direction fields in read inputs",
+      "notes": "signal_relative_direction is a roadway-derived readiness label, not a raw crash direction field.",
+      "observed": "",
+      "passed": true
+    },
+    {
+      "check_name": "scaffold_catchment_assignment_readiness_logic_changed",
+      "expected": "no changes",
+      "notes": "This module reads readiness outputs and writes analysis summaries only.",
+      "observed": "read_only_summary_module",
+      "passed": true
+    },
+    {
+      "check_name": "ambiguous_and_unresolved_excluded_from_unique_summaries",
+      "expected": "ambiguous/unresolved summary inputs used only for context",
+      "notes": "",
+      "observed": "unique summaries use crash_directional_assignment_readiness_by_crash.csv only",
+      "passed": true
+    },
+    {
+      "check_name": "core_0_500ft_cumulative_count_matches_readiness_outputs",
+      "expected": 5767,
+      "notes": "",
+      "observed": 5767,
+      "passed": true
+    },
+    {
+      "check_name": "core_0_500ft_downstream_plus_upstream_equals_total",
+      "expected": 5767,
+      "notes": "",
+      "observed": 5767,
+      "passed": true
+    },
+    {
+      "check_name": "core_0_500ft_divided_plus_undivided_equals_total",
+      "expected": 5767,
+      "notes": "",
+      "observed": 5767,
+      "passed": true
+    },
+    {
+      "check_name": "standard_0_1000ft_cumulative_count_matches_readiness_outputs",
+      "expected": 9170,
+      "notes": "",
+      "observed": 9170,
+      "passed": true
+    },
+    {
+      "check_name": "standard_0_1000ft_downstream_plus_upstream_equals_total",
+      "expected": 9170,
+      "notes": "",
+      "observed": 9170,
+      "passed": true
+    },
+    {
+      "check_name": "standard_0_1000ft_divided_plus_undivided_equals_total",
+      "expected": 9170,
+      "notes": "",
+      "observed": 9170,
+      "passed": true
+    },
+    {
+      "check_name": "extended_0_2500ft_cumulative_count_matches_readiness_outputs",
+      "expected": 13216,
+      "notes": "",
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "extended_0_2500ft_downstream_plus_upstream_equals_total",
+      "expected": 13216,
+      "notes": "",
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "extended_0_2500ft_divided_plus_undivided_equals_total",
+      "expected": 13216,
+      "notes": "",
+      "observed": 13216,
+      "passed": true
+    },
+    {
+      "check_name": "unique_assigned_crashes_match_readiness_summary",
+      "expected": 17634,
+      "notes": "",
+      "observed": 17634,
+      "passed": true
+    }
+  ],
+  "window_summaries": [
+    {
+      "divided_count": 2234,
+      "downstream_count": 2884,
+      "downstream_share": 0.500087,
+      "interpretation_status": "safest_first_descriptive_subset",
+      "max_distance_ft": 500,
+      "reference_signals_represented": 783,
+      "total_assigned": 5767,
+      "undivided_count": 3533,
+      "upstream_count": 2883,
+      "upstream_share": 0.499913,
+      "window_name": "core_0_500ft"
+    },
+    {
+      "divided_count": 3619,
+      "downstream_count": 4641,
+      "downstream_share": 0.506107,
+      "interpretation_status": "next_conservative_descriptive_summary",
+      "max_distance_ft": 1000,
+      "reference_signals_represented": 829,
+      "total_assigned": 9170,
+      "undivided_count": 5551,
+      "upstream_count": 4529,
+      "upstream_share": 0.493893,
+      "window_name": "standard_0_1000ft"
+    },
+    {
+      "divided_count": 4840,
+      "downstream_count": 6673,
+      "downstream_share": 0.504918,
+      "interpretation_status": "sensitivity_only",
+      "max_distance_ft": 2500,
+      "reference_signals_represented": 859,
+      "total_assigned": 13216,
+      "undivided_count": 8376,
+      "upstream_count": 6543,
+      "upstream_share": 0.495082,
+      "window_name": "extended_0_2500ft"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+dataset,geometry_column,row_count,geometry_null_count,geometry_empty_count,geometry_valid_count,geometry_invalid_count,crs,geometry_type,geometry_type_count
+work\output\upstream_downstream_prototype\high_confidence_descriptive_analysis\tables\current\high_confidence_by_assigned_speed.csv,,7,,,,,,no_geometry_detected,7
+work\output\upstream_downstream_prototype\high_confidence_descriptive_analysis\tables\history\high_confidence_by_assigned_speed_20260428_140346.csv,,7,,,,,,no_geometry_detected,7
+work\output\upstream_downstream_prototype\high_confidence_descriptive_analysis\tables\history\high_confidence_by_assigned_speed_20260428_141840.csv,,7,,,,,,no_geometry_detected,7
+work\output\upstream_downstream_prototype\high_confidence_descriptive_analysis\tables\history\high_confidence_by_assigned_speed_20260428_141921.csv,,7,,,,,,no_geometry_detected,7

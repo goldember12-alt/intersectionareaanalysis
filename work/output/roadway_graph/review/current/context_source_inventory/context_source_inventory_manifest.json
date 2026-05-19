@@ -1,0 +1,74 @@
+{
+  "access_or_speed_joins_implemented": false,
+  "bounded_question": "Step 6 Stage A read-only context source inventory and schema audit",
+  "completed_at_utc": "2026-05-15T15:50:21.988948+00:00",
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-15T15:49:41.979223+00:00",
+  "inputs": {
+    "access": "artifacts\\normalized\\access.parquet",
+    "signal_speed_context": "work\\output\\stage1b_study_slice\\Study_Signals_SpeedContext.parquet",
+    "speed": "artifacts\\normalized\\speed.parquet",
+    "stable_universe": [
+      "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+      "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_bins_50ft.csv",
+      "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_index.csv",
+      "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_polygons.geojson",
+      "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv"
+    ]
+  },
+  "outputs": {
+    "access_crs_sanity_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_crs_sanity.csv",
+    "access_duplicate_null_qa_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_duplicate_null_qa.csv",
+    "access_field_roles_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_field_role_candidates.csv",
+    "access_geometry_qa_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_geometry_qa.csv",
+    "access_proximity_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_stable_universe_proximity_diagnostic.csv",
+    "access_schema_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\access_source_schema.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\context_source_inventory_findings.md",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\context_source_inventory_manifest.json",
+    "speed_crs_sanity_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_crs_sanity.csv",
+    "speed_field_roles_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_field_role_candidates.csv",
+    "speed_geometry_qa_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_geometry_qa.csv",
+    "speed_inventory_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_inventory.csv",
+    "speed_missing_or_candidate_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_missing_or_candidate_files.csv",
+    "speed_schema_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\speed_source_schema.csv",
+    "summary_csv": "work\\output\\roadway_graph\\review\\current\\context_source_inventory\\context_source_inventory_summary.csv"
+  },
+  "scaffold_catchment_assignment_readiness_logic_changed": false,
+  "stable_input_status": [
+    {
+      "exists": true,
+      "path": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+      "role": "stable_universe_compatibility_check_only",
+      "row_count": 17634,
+      "source_name": "crash_directional_assignment_readiness_by_crash.csv"
+    },
+    {
+      "exists": true,
+      "path": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_bins_50ft.csv",
+      "role": "stable_universe_compatibility_check_only",
+      "row_count": 208340,
+      "source_name": "directional_scaffold_prototype_usable_bins_50ft.csv"
+    },
+    {
+      "exists": true,
+      "path": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_index.csv",
+      "role": "stable_universe_compatibility_check_only",
+      "row_count": 208340,
+      "source_name": "directional_bin_catchment_index.csv"
+    },
+    {
+      "exists": true,
+      "path": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_polygons.geojson",
+      "role": "stable_universe_compatibility_check_only",
+      "row_count": "",
+      "source_name": "directional_bin_catchment_polygons.geojson"
+    },
+    {
+      "exists": true,
+      "path": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv",
+      "role": "stable_universe_compatibility_check_only",
+      "row_count": 17634,
+      "source_name": "crash_directional_catchment_assignments.csv"
+    }
+  ]
+}

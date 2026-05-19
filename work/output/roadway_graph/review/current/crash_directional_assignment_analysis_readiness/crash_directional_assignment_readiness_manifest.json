@@ -1,0 +1,372 @@
+{
+  "assignment_only_not_final_crash_analysis": true,
+  "bounded_question": "read-only directional assignment analysis-readiness classification",
+  "created_at_utc": "2026-05-15T15:00:35.070728+00:00",
+  "inputs": {
+    "ambiguous": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_ambiguous.csv",
+    "assignment_qa_folder": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_qa",
+    "assignments": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv",
+    "catchment_index": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_index.csv",
+    "unresolved": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_unresolved.csv",
+    "usable_bins": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_bins_50ft.csv",
+    "usable_segments": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_scaffold_qa\\directional_scaffold_prototype_usable_segments.csv"
+  },
+  "long_distance_summaries": {
+    "by_far_anchor_type": [
+      {
+        "far_anchor_type": "non_signal_intersection",
+        "long_distance_crash_count": 1865
+      },
+      {
+        "far_anchor_type": "roadway_endpoint",
+        "long_distance_crash_count": 302
+      },
+      {
+        "far_anchor_type": "non_true_signal",
+        "long_distance_crash_count": 285
+      },
+      {
+        "far_anchor_type": "true_signal",
+        "long_distance_crash_count": 61
+      }
+    ],
+    "by_reference_signal_top20": [
+      {
+        "long_distance_crash_count": 115,
+        "reference_signal_id": "signal_001814"
+      },
+      {
+        "long_distance_crash_count": 95,
+        "reference_signal_id": "signal_001625"
+      },
+      {
+        "long_distance_crash_count": 85,
+        "reference_signal_id": "signal_001840"
+      },
+      {
+        "long_distance_crash_count": 84,
+        "reference_signal_id": "signal_000056"
+      },
+      {
+        "long_distance_crash_count": 68,
+        "reference_signal_id": "signal_001223"
+      },
+      {
+        "long_distance_crash_count": 66,
+        "reference_signal_id": "signal_000409"
+      },
+      {
+        "long_distance_crash_count": 61,
+        "reference_signal_id": "signal_001348"
+      },
+      {
+        "long_distance_crash_count": 58,
+        "reference_signal_id": "signal_001662"
+      },
+      {
+        "long_distance_crash_count": 56,
+        "reference_signal_id": "signal_001216"
+      },
+      {
+        "long_distance_crash_count": 56,
+        "reference_signal_id": "signal_001626"
+      },
+      {
+        "long_distance_crash_count": 53,
+        "reference_signal_id": "signal_000308"
+      },
+      {
+        "long_distance_crash_count": 52,
+        "reference_signal_id": "signal_002453"
+      },
+      {
+        "long_distance_crash_count": 49,
+        "reference_signal_id": "signal_001872"
+      },
+      {
+        "long_distance_crash_count": 47,
+        "reference_signal_id": "signal_001775"
+      },
+      {
+        "long_distance_crash_count": 47,
+        "reference_signal_id": "signal_001358"
+      },
+      {
+        "long_distance_crash_count": 45,
+        "reference_signal_id": "signal_001309"
+      },
+      {
+        "long_distance_crash_count": 43,
+        "reference_signal_id": "signal_001879"
+      },
+      {
+        "long_distance_crash_count": 41,
+        "reference_signal_id": "signal_002551"
+      },
+      {
+        "long_distance_crash_count": 39,
+        "reference_signal_id": "signal_001841"
+      },
+      {
+        "long_distance_crash_count": 37,
+        "reference_signal_id": "signal_002351"
+      }
+    ],
+    "by_roadway_representation_type": [
+      {
+        "long_distance_crash_count": 2485,
+        "roadway_representation_type": "undivided_centerline_pseudo_direction"
+      },
+      {
+        "long_distance_crash_count": 28,
+        "roadway_representation_type": "divided_physical_carriageway"
+      }
+    ],
+    "by_segment_top50": [
+      {
+        "long_distance_crash_count": 52,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0045828_sgn_signal_001814_rc_0045828_rn_84322_94_129561_49_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 51,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0080569_sgn_signal_000056_rc_0080569_rn_109256_64_229756_60_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 48,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0045828_sgn_signal_001814_rc_0045828_rn_84322_94_129561_49_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 41,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0006761_rn_149949_98_363348_33_sgn_signal_001625_rc_0006761_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 37,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0037056_rn_141216_95_198263_76_sgn_signal_001309_rc_0037056_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 37,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0039744_sgn_signal_000409_rc_0039744_rn_132539_06_287392_34_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 35,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0132839_sgn_signal_001223_rc_0132839_rn_33941_07_134308_37_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 34,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0125192_sgn_signal_000308_rc_0125192_rn_178760_77_158245_99_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 33,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0144643_sgn_signal_001662_rc_0144643_rn_162595_79_331199_45_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 33,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0080569_sgn_signal_000056_rc_0080569_rn_109256_64_229756_60_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 31,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0053953_sgn_signal_001216_rc_0053953_rn_106349_61_215557_25_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 31,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0054441_sgn_signal_001348_rc_0054441_rn_187513_55_198966_79_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 30,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0097050_sgn_signal_001626_rc_0097050_rn_170014_34_362235_68_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 30,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137004_sgn_signal_001362_rc_0137004_sgn_signal_001358_rc_0137004_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 30,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0054441_sgn_signal_001348_rc_0054441_rn_187513_55_198966_79_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 29,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0132839_sgn_signal_001223_rc_0132839_rn_33941_07_134308_37_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 29,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0006761_rn_149949_98_363348_33_sgn_signal_001625_rc_0006761_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 25,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0130300_sgn_signal_001879_rc_0130300_rn_200493_12_145020_05_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 25,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0144643_sgn_signal_001662_rc_0144643_rn_162595_79_331199_45_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 24,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137403_sgn_signal_001224_rc_0137403_rn_14918_72_127063_93_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 23,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0053953_sgn_signal_001216_rc_0053953_rn_106349_61_215557_25_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 23,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0096430_sgn_signal_001872_rc_0096430_rn_202102_88_127209_47_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 23,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0070183_rn_187560_72_139268_50_sgn_signal_001874_rc_0070183_signal_001874_01_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 23,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0007005_rn_166166_64_337593_32_sgn_signal_001631_rc_0007005_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 22,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0039744_sgn_signal_000409_rc_0039744_rn_132539_06_287392_34_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 22,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0047572_rn_128902_61_251305_49_sgn_signal_001840_rc_0047572_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 21,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0078050_rn_65166_11_285274_67_sgn_signal_002245_rc_0078050_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 21,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0130209_sgn_signal_001861_rc_0130209_rn_138473_23_177705_95_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 21,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137827_sgn_signal_002551_rc_0137827_sgn_signal_003028_rc_0137827_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 20,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137827_sgn_signal_002551_rc_0137827_sgn_signal_003028_rc_0137827_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 20,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0130719_rn_117222_61_323685_66_sgn_signal_002406_rc_0130719_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 19,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0001006_sgn_signal_001629_rc_0001006_rn_159513_57_349430_89_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 19,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0047572_rn_128902_61_251305_49_sgn_signal_001840_rc_0047572_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 19,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0038714_rn_118305_21_93739_25_sgn_signal_002453_rc_0038714_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 19,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0131557_sgn_signal_001852_rc_0131557_rn_27299_83_104312_24_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 18,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0038714_rn_118305_21_93739_25_sgn_signal_002453_rc_0038714_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 18,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0045400_rn_25631_25_143840_77_sgn_signal_000199_rc_0045400_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 17,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0129913_sgn_signal_002525_rc_0129913_rn_236039_06_88429_44_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 17,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137004_sgn_signal_001362_rc_0137004_sgn_signal_001358_rc_0137004_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 17,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0097192_sgn_signal_001840_rc_0097192_rn_134986_81_259381_31_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 16,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0138111_sgn_signal_002351_rc_0138111_sgn_signal_003016_rc_0138111_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 16,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0047681_sgn_signal_001841_rc_0047681_rn_154574_30_259280_89_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0134914_sgn_signal_002545_rc_0134914_rn_267149_77_136901_26_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0087487_rn_190469_76_172059_18_sgn_signal_001370_rc_0087487_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0138602_rn_113596_01_221129_38_sgn_signal_001775_rc_0138602_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0130865_sgn_signal_002379_rc_0130865_sgn_signal_002380_rc_0130865_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0096039_sgn_signal_000257_rc_0096039_rn_181292_33_154962_12_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 15,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0007973_rn_194396_77_138584_13_sgn_signal_001870_rc_0007973_undivided_centerline_b_to_a"
+      },
+      {
+        "long_distance_crash_count": 14,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0137115_sgn_signal_001609_rc_0137115_sgn_signal_002934_rc_0137115_undivided_centerline_a_to_b"
+      },
+      {
+        "long_distance_crash_count": 14,
+        "reference_directional_segment_id": "rds_oseg_rge_rc_0001006_sgn_signal_001629_rc_0001006_rn_159513_57_349430_89_undivided_centerline_a_to_b"
+      }
+    ]
+  },
+  "method": {
+    "assignment_scaffold_or_catchment_logic_changed": false,
+    "crash_direction_fields_read_or_used": false,
+    "crash_distributions_used": false,
+    "windows_ft": [
+      250,
+      500,
+      1000,
+      1500,
+      2500,
+      5000
+    ]
+  },
+  "outputs": {
+    "ambiguous_summary_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\ambiguous_assignment_readiness_summary.csv",
+    "by_crash_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+    "by_direction_window_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\assignments_by_signal_relative_direction_and_window.csv",
+    "by_representation_window_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\assignments_by_roadway_representation_and_window.csv",
+    "by_signal_window_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\assignments_by_reference_signal_and_window.csv",
+    "by_window_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\assignments_by_functional_distance_window.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_findings.md",
+    "long_distance_review_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\long_distance_assignment_review_queue.csv",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_manifest.json",
+    "summary_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_summary.csv",
+    "unresolved_summary_csv": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\unresolved_assignment_readiness_summary.csv"
+  },
+  "qa": {
+    "ambiguous_in_readiness_rows": 0,
+    "ambiguous_rows_kept_separate": 1055,
+    "assignment_scaffold_or_catchment_logic_changed": false,
+    "core_0_500ft_cumulative": 5767,
+    "crash_direction_fields_read_or_used": false,
+    "divided_assignments": 4967,
+    "downstream_assignments": 8791,
+    "extended_0_2500ft_cumulative": 13216,
+    "long_distance_over_5000ft_review": 2513,
+    "standard_0_1000ft_cumulative": 9170,
+    "undivided_assignments": 12667,
+    "unique_assignment_crash_id_duplicates": 0,
+    "unique_assignments_classified": 17634,
+    "unresolved_in_readiness_rows": 0,
+    "unresolved_rows_kept_separate": 360583,
+    "upstream_assignments": 8843
+  }
+}

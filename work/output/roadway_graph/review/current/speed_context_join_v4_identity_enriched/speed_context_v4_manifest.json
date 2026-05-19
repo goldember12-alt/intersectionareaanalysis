@@ -1,0 +1,271 @@
+{
+  "bounded_question": "read-only speed v4 identity-enriched route and directionality cleanup for existing directional bins",
+  "comparison_to_v3": [
+    {
+      "metric": "stable_single_speed_bins",
+      "v3_count": 75590,
+      "v4_count": 48075,
+      "v4_minus_v3": -27515
+    },
+    {
+      "metric": "stable_weighted_transition_bins",
+      "v3_count": 3996,
+      "v4_count": 36782,
+      "v4_minus_v3": 32786
+    },
+    {
+      "metric": "total_stable_speed_bins",
+      "v3_count": 79586,
+      "v4_count": 84857,
+      "v4_minus_v3": 5271
+    },
+    {
+      "metric": "missing_speed_bins",
+      "v3_count": 31124,
+      "v4_count": 8091,
+      "v4_minus_v3": -23033
+    },
+    {
+      "metric": "review_speed_bins",
+      "v3_count": 0,
+      "v4_count": 17762,
+      "v4_minus_v3": 17762
+    },
+    {
+      "metric": "crashes_inheriting_stable_speed",
+      "v3_count": 9493,
+      "v4_count": 9671,
+      "v4_minus_v3": 178
+    },
+    {
+      "metric": "reference_signals_with_stable_speed",
+      "v3_count": 668,
+      "v4_count": 685,
+      "v4_minus_v3": 17
+    }
+  ],
+  "completed_at_utc": "2026-05-18T20:49:28.138375+00:00",
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-18T20:45:34.813850+00:00",
+  "inputs": {
+    "assignments": "work\\output\\roadway_graph\\review\\current\\crash_directional_catchment_assignment_prototype\\crash_directional_catchment_assignments.csv",
+    "base_bins_identity_enriched": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation\\base_bins_identity_enriched.csv",
+    "catchment_index": "work\\output\\roadway_graph\\review\\current\\reference_signal_directional_bin_catchments\\directional_bin_catchment_index.csv",
+    "directional_bins_identity_enriched": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation\\directional_bins_identity_enriched.csv",
+    "directional_segments_identity_enriched": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation\\directional_segments_identity_enriched.csv",
+    "identity_speed_diagnostic": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation\\speed_identity_enriched_match_diagnostic.csv",
+    "posted_speed_schema": "work\\output\\roadway_graph\\review\\current\\posted_speed_source_staging\\posted_speed_schema.csv",
+    "readiness": "work\\output\\roadway_graph\\review\\current\\crash_directional_assignment_analysis_readiness\\crash_directional_assignment_readiness_by_crash.csv",
+    "speed": "artifacts\\normalized\\speed.parquet",
+    "speed_v3_bin_context": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v3_route_assisted\\directional_bin_speed_context_v3.csv",
+    "speed_v3_readiness_summary": "work\\output\\roadway_graph\\review\\current\\speed_context_v3_readiness_qa\\speed_context_v3_readiness_summary.csv"
+  },
+  "limit_route_groups": null,
+  "main_context_window": "0-2500ft",
+  "minimum_overlap_length": 0.001,
+  "minimum_overlap_ratio": 0.5,
+  "nearest_any_stable_promotions": 0,
+  "outputs": {
+    "base_bin_context_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\base_bin_speed_context_v4.csv",
+    "comparison_to_v3_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_comparison_to_v3.csv",
+    "directional_bin_context_0_1000_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\directional_bin_speed_context_v4_0_1000ft.csv",
+    "directional_bin_context_1000_2500_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\directional_bin_speed_context_v4_1000_2500ft.csv",
+    "directional_bin_context_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\directional_bin_speed_context_v4.csv",
+    "directional_crash_context_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\directional_crash_speed_context_v4.csv",
+    "directionality_match_qa_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_directionality_match_qa_v4.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_findings.md",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_manifest.json",
+    "missing_bins_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_missing_bins_v4.csv",
+    "paired_pseudo_direction_qa_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_paired_pseudo_direction_consistency_qa_v4.csv",
+    "progress_log": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_progress.log",
+    "qa_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_qa.csv",
+    "reference_signal_summary_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\reference_signal_speed_context_summary_v4.csv",
+    "review_bins_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_review_bins_v4.csv",
+    "route_identity_match_qa_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_route_identity_match_qa_v4.csv",
+    "summary_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_context_v4_summary.csv",
+    "weighted_transition_bins_csv": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched\\speed_weighted_transition_bins_v4.csv"
+  },
+  "qa": [
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "speed_not_used_for_upstream_downstream",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "scaffold_catchment_assignment_access_aadt_logic_changed",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "main_context_limited_to_0_2500ft",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    },
+    {
+      "check_name": "one_row_per_directional_bin",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    },
+    {
+      "check_name": "paired_pseudo_direction_inconsistencies",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    },
+    {
+      "check_name": "status_closure_110710_bins",
+      "expected": 110710,
+      "observed": 110710,
+      "passed": true
+    },
+    {
+      "check_name": "known_status_vocabulary_only",
+      "expected": "missing_no_route_compatible_speed|review_directionality_mismatch|review_route_mismatch|review_route_missing|review_unresolved_speed_conflict|stable_single_speed|stable_weighted_speed_transition",
+      "observed": "",
+      "passed": true
+    },
+    {
+      "check_name": "nearest_any_stable_promotion_absent",
+      "expected": 0,
+      "observed": 0,
+      "passed": true
+    }
+  ],
+  "scaffold_catchment_assignment_access_aadt_logic_changed": false,
+  "speed_crs": "EPSG:3968",
+  "speed_crs_matches_working_crs": true,
+  "speed_used_for_upstream_downstream": false,
+  "summary": [
+    {
+      "count": 110710,
+      "metric": "main_0_2500ft_bins",
+      "value": ""
+    },
+    {
+      "count": 84857,
+      "metric": "stable_speed_bins",
+      "value": ""
+    },
+    {
+      "count": 48075,
+      "metric": "stable_single_speed_bins",
+      "value": ""
+    },
+    {
+      "count": 36782,
+      "metric": "stable_weighted_transition_bins",
+      "value": "measure_overlap_weighted_route_transition"
+    },
+    {
+      "count": 8091,
+      "metric": "missing_no_route_compatible_speed_bins",
+      "value": ""
+    },
+    {
+      "count": 17762,
+      "metric": "review_route_mismatch_bins",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "review_route_missing_bins",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "review_directionality_mismatch_bins",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "review_unresolved_speed_conflict_bins",
+      "value": ""
+    },
+    {
+      "count": 9671,
+      "metric": "crashes_inheriting_stable_speed",
+      "value": ""
+    },
+    {
+      "count": 685,
+      "metric": "reference_signals_with_stable_speed",
+      "value": ""
+    },
+    {
+      "count": 64396,
+      "metric": "paired_pseudo_direction_groups",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "paired_pseudo_direction_inconsistent_groups",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "nearest_any_stable_promotions",
+      "value": ""
+    },
+    {
+      "count": "",
+      "metric": "crash_direction_fields_read_or_used",
+      "value": false
+    },
+    {
+      "count": "",
+      "metric": "speed_used_for_upstream_downstream",
+      "value": false
+    },
+    {
+      "count": 66074,
+      "metric": "bins_by_distance_window",
+      "value": "high_priority_0_1000ft"
+    },
+    {
+      "count": 47412,
+      "metric": "stable_speed_bins_by_distance_window",
+      "value": "high_priority_0_1000ft"
+    },
+    {
+      "count": 6222,
+      "metric": "missing_speed_bins_by_distance_window",
+      "value": "high_priority_0_1000ft"
+    },
+    {
+      "count": 12440,
+      "metric": "review_speed_bins_by_distance_window",
+      "value": "high_priority_0_1000ft"
+    },
+    {
+      "count": 44636,
+      "metric": "bins_by_distance_window",
+      "value": "sensitivity_1000_2500ft"
+    },
+    {
+      "count": 37445,
+      "metric": "stable_speed_bins_by_distance_window",
+      "value": "sensitivity_1000_2500ft"
+    },
+    {
+      "count": 1869,
+      "metric": "missing_speed_bins_by_distance_window",
+      "value": "sensitivity_1000_2500ft"
+    },
+    {
+      "count": 5322,
+      "metric": "review_speed_bins_by_distance_window",
+      "value": "sensitivity_1000_2500ft"
+    }
+  ],
+  "v3_stable_context_retained_when_identity_v4_not_stable": true
+}

@@ -1,0 +1,182 @@
+{
+  "aadt_to_bin_join_implemented": false,
+  "bounded_question": "AADT source inventory and normalized source staging only",
+  "candidate_aadt_files_found": [
+    "Intersection Crash Analysis Layers\\HMMS_Traffic_Signals.gdb",
+    "Intersection Crash Analysis Layers\\New_AADT.gdb",
+    "Intersection Crash Analysis Layers\\Traffic_Signals_-_City_of_Norfolk.gdb",
+    "Intersection Crash Analysis Layers\\VDOT_Bidirectional_Traffic_Volume_2024 (1)",
+    "artifacts\\normalized\\aadt.parquet"
+  ],
+  "completed_at_utc": "2026-05-18T15:46:07.351258+00:00",
+  "crash_data_read": false,
+  "created_at_utc": "2026-05-18T15:44:17.549431+00:00",
+  "directional_bin_context_tables_changed": false,
+  "normalized_aadt_artifact": "artifacts\\normalized\\aadt.parquet",
+  "normalized_aadt_artifact_written": true,
+  "outputs": {
+    "crs_sanity_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_crs_sanity.csv",
+    "duplicate_null_qa_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_duplicate_null_qa.csv",
+    "field_roles_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_field_role_candidates.csv",
+    "findings_md": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_staging_findings.md",
+    "geometry_qa_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_geometry_qa.csv",
+    "inventory_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_inventory.csv",
+    "manifest_json": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_staging_manifest.json",
+    "schema_csv": "work\\output\\roadway_graph\\review\\current\\aadt_source_staging\\aadt_source_schema.csv"
+  },
+  "qa": [
+    {
+      "check_name": "candidate_paths_found",
+      "expected": ">0",
+      "observed": 5,
+      "passed": true
+    },
+    {
+      "check_name": "source_filegdb_exists",
+      "expected": true,
+      "observed": true,
+      "passed": true
+    },
+    {
+      "check_name": "layers_found",
+      "expected": ">0",
+      "observed": 3,
+      "passed": true
+    },
+    {
+      "check_name": "selected_aadt_layer",
+      "expected": "New_AADT",
+      "observed": "New_AADT",
+      "passed": true
+    },
+    {
+      "check_name": "selected_layer_row_count",
+      "expected": ">0",
+      "observed": 677597,
+      "passed": true
+    },
+    {
+      "check_name": "geometry_validity",
+      "expected": "0 invalid geometries",
+      "observed": "see aadt_source_geometry_qa.csv",
+      "passed": true
+    },
+    {
+      "check_name": "crs_coordinate_compatibility_with_stable_graph",
+      "expected": "EPSG:3968",
+      "observed": "see aadt_source_crs_sanity.csv",
+      "passed": true
+    },
+    {
+      "check_name": "likely_aadt_value_fields_found",
+      "expected": "AADT",
+      "observed": "AADT",
+      "passed": true
+    },
+    {
+      "check_name": "likely_year_fields_found",
+      "expected": "AADT_YR",
+      "observed": "AADT_YR",
+      "passed": true
+    },
+    {
+      "check_name": "likely_route_road_fields_found",
+      "expected": "RTE_NM and/or MASTER_RTE_NM",
+      "observed": "RTE_NM|MASTER_RTE_NM|EDGE_RTE_KEY",
+      "passed": true
+    },
+    {
+      "check_name": "normalized_artifact_written",
+      "expected": true,
+      "observed": true,
+      "passed": true
+    },
+    {
+      "check_name": "crash_data_read",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "aadt_to_bin_join_implemented",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    }
+  ],
+  "roadway_graph_scaffold_changed": false,
+  "selected_layer": "New_AADT",
+  "source_gdb": "Intersection Crash Analysis Layers\\New_AADT.gdb",
+  "summary": [
+    {
+      "count": 5,
+      "metric": "candidate_paths_found",
+      "value": ""
+    },
+    {
+      "count": "",
+      "metric": "source_filegdb_exists",
+      "value": true
+    },
+    {
+      "count": 3,
+      "metric": "layers_found",
+      "value": ""
+    },
+    {
+      "count": "",
+      "metric": "selected_aadt_layer",
+      "value": "New_AADT"
+    },
+    {
+      "count": 677597,
+      "metric": "selected_layer_row_count",
+      "value": ""
+    },
+    {
+      "count": "",
+      "metric": "selected_layer_crs",
+      "value": "EPSG:3857"
+    },
+    {
+      "count": 1,
+      "metric": "likely_aadt_fields",
+      "value": "AADT"
+    },
+    {
+      "count": 1,
+      "metric": "likely_year_fields",
+      "value": "AADT_YR"
+    },
+    {
+      "count": 3,
+      "metric": "likely_route_road_fields",
+      "value": "RTE_NM|MASTER_RTE_NM|EDGE_RTE_KEY"
+    },
+    {
+      "count": 2,
+      "metric": "likely_directionality_fields",
+      "value": "DIRECTION_FACTOR|DIRECTIONALITY"
+    },
+    {
+      "count": 2,
+      "metric": "likely_id_fields",
+      "value": "LINKID|EDGE_RTE_KEY"
+    },
+    {
+      "count": "",
+      "metric": "normalized_aadt_parquet_created",
+      "value": true
+    },
+    {
+      "count": "",
+      "metric": "crash_data_read",
+      "value": false
+    },
+    {
+      "count": "",
+      "metric": "aadt_to_bin_join_implemented",
+      "value": false
+    }
+  ]
+}

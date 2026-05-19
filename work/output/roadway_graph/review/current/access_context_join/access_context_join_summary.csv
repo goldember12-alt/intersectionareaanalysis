@@ -1,0 +1,15 @@
+metric,value,count
+access_features_considered,,70595
+access_features_matched_to_at_least_one_stable_bin,,3040
+ambiguous_access_matches,,251
+unmatched_access_features,,67555
+primary_context_bins_0_2500ft,,110710
+excluded_review_bins_over_2500ft,,90342
+bins_with_access_within_catchment,,3262
+bins_with_access_within_100ft,,4578
+bins_with_access_within_250ft,,4771
+crashes_inheriting_access_context,,13216
+reference_signals_with_access_context,,971
+crash_direction_fields_read_or_used,False,
+access_direction_used_for_upstream_downstream,False,
+scaffold_catchment_assignment_readiness_logic_changed,False,

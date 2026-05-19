@@ -1,0 +1,11 @@
+﻿{
+    "created_at":  "2026-05-19T10:16:47.0061586-04:00",
+    "moves":  184,
+    "archive_roots":  [
+                          "docs/archive/20260519_cleanup",
+                          "work/archive/20260519_cleanup",
+                          "work/output/roadway_graph/review/history/repo_cleanup_20260519",
+                          "work/output/roadway_graph/runs/history/repo_cleanup_20260519"
+                      ],
+    "failures":  0
+}

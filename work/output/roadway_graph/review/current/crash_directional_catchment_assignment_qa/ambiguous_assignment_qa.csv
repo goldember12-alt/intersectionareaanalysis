@@ -1,0 +1,15 @@
+candidate_catchment_count,ambiguous_crash_count,summary_type,candidate_signal_relative_directions,same_signal_vs_multiple_reference_signals,same_bin_vs_adjacent_bins,candidate_roadway_representation_types
+2,1040,candidate_catchment_count,,,,
+4,13,candidate_catchment_count,,,,
+3,2,candidate_catchment_count,,,,
+,833,signal_relative_direction_set,downstream_of_reference_signal|upstream_of_reference_signal,,,
+,120,signal_relative_direction_set,downstream_of_reference_signal,,,
+,102,signal_relative_direction_set,upstream_of_reference_signal,,,
+,662,reference_signal_scope,,multiple_reference_signals,,
+,393,reference_signal_scope,,same_reference_signal,,
+,474,bin_scope,,,same_bin,
+,359,bin_scope,,,adjacent_bins,
+,222,bin_scope,,,multiple_nonadjacent_bins,
+,754,roadway_representation_type_set,,,,divided_physical_carriageway
+,295,roadway_representation_type_set,,,,undivided_centerline_pseudo_direction
+,6,roadway_representation_type_set,,,,divided_physical_carriageway|undivided_centerline_pseudo_direction

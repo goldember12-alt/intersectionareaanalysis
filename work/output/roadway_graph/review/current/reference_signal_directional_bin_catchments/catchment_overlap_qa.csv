@@ -1,0 +1,4 @@
+overlap_check,base_segment_id,bin_index_from_reference_signal,reference_directional_bin_id,overlap_area_sq_m,qa_status,issue_count
+same_base_bin_undivided_side_overlap,oseg_rge_rc_0095371_sgn_signal_002547_rc_0095371_rn_232193_14_103986_35_undivided_centerline,1,,0.088533,flagged_review,0
+catchment_id_duplicates,,,,,pass,0
+empty_catchment_geometries,,,,,pass,0

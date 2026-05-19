@@ -197,11 +197,12 @@ Preferred entrypoint:
 Practical environment rules:
 
 - Python 3.11 is the expected base.
-- The active interpreter may be external to the repo.
+- The canonical active interpreter for this repo is `.\.venv\Scripts\python.exe`.
+- The repo-local `.venv` should be based on `C:\Users\Jameson.Clements\Documents\_tools\Python311\python.exe`.
 - TEMP/TMP and pip cache may be externalized.
-- Use the interpreter path reported by bootstrap.
-- Do not assume `.\.venv\Scripts\python.exe`.
-- Do not create or recreate a repo-local `.venv` when external venv mode is already in use unless the user explicitly asks.
+- Use `.\.venv\Scripts\python.exe` for Codex Python commands in this repo, including `-m src...`, `py_compile`, and bounded runtime checks.
+- Do not use plain `python`, `py`, or `PYTHONPATH` site-packages workarounds as the repo standard.
+- If `.venv` is missing or stale, preserve the old directory by renaming it to `.venv_broken_YYYYMMDD_HHMMSS`, then recreate it with `C:\Users\Jameson.Clements\Documents\_tools\Python311\python.exe -m venv .venv` and install dependencies from the repo declaration.
 
 ## Directionality and Classification Rules
 

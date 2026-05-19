@@ -1,0 +1,526 @@
+// Render example:
+//   dot -Tsvg docs/diagrams/early_data_processing_decision_diagram.dot -o docs/diagrams/early_data_processing_decision_diagram.svg
+//   dot -Tpng docs/diagrams/early_data_processing_decision_diagram.dot -o docs/diagrams/early_data_processing_decision_diagram.png
+
+digraph early_data_processing_decision_diagram {
+  graph [
+    rankdir=TB,
+    splines=ortho,
+    newrank=true,
+    nodesep=0.09,
+    ranksep=0.20,
+    pad=0.10,
+    bgcolor="white",
+    fontname="Arial",
+    labelloc=t,
+    labeljust=c,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="20"><B>Early Data Processing for Later Directionality and Upstream/Downstream Work</B></FONT></TD></TR>
+        <TR><TD><FONT FACE="Arial" POINT-SIZE="13">How do the earliest roadway, signal, crash, and support layers become the bounded study inputs later consumed by the directionality experiment and the signal-centered upstream/downstream prototype?</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  node [
+    fontname="Arial",
+    fontsize=12,
+    margin="0.17,0.11",
+    shape=box,
+    style="rounded,filled",
+    color="#3B6F8E",
+    fillcolor="#EAF3F9",
+    fontcolor="#1F2A33",
+    penwidth=1.2
+  ];
+
+  edge [
+    fontname="Arial",
+    fontsize=11,
+    color="#4E5B66",
+    arrowsize=0.82,
+    penwidth=1.05
+  ];
+
+  subgraph cluster_starts {
+    label="Inputs / Starts Here";
+    color="#E9D3AF";
+    penwidth=1.0;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=10,
+      margin="0.12,0.08"
+    ];
+
+    input_roads [
+      label="Raw roadway layer\nTravelway.gdb / Travelway\nfull roadway inventory before\nstudy-road filtering",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+
+    input_signals [
+      label="Raw signal sources\nHMMS + Norfolk + Hampton\nlater merged into one active\nsignal surface",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+
+    input_crashes [
+      label="Raw crash geometry layer\ncrashdata.gdb / CrashData_Basic\npoint location, route name,\nmeasure, year, vehicle count",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+
+    input_support [
+      label="Later support layers still kept available\nCrashData_Details for direction-of-travel\nand maneuver fields;\nposted-speed segments for prototype study areas",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="left"
+    ];
+  }
+
+  subgraph cluster_spine {
+    label="Main Processing Spine";
+    color="#D7E2EA";
+    penwidth=1.1;
+    style="rounded";
+    bgcolor="#FFFFFF";
+
+    node [
+      width=2.45,
+      margin="0.15,0.10"
+    ];
+
+    start [
+      label="Start from configured raw layers\nunder the bounded active slice",
+      group="spine"
+    ];
+
+    phase1_hdr [
+      shape=plaintext,
+      label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="11"><B>Phase 1</B></FONT></TD></TR>
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="9">stage and normalize active inputs</FONT></TD></TR>
+        </TABLE>
+      >,
+      group="spine"
+    ];
+
+    stage_inputs [
+      label="Stage raw inputs as GeoParquet\none file per active layer;\nmerge the three signal sources\nand keep source provenance",
+      group="spine"
+    ];
+
+    normalize [
+      label="Normalize staged layers\nreproject to working CRS,\ndrop null geometry,\nand keep crashes only for 2022-2024",
+      group="spine"
+    ];
+
+    phase2_hdr [
+      shape=plaintext,
+      label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="11"><B>Phase 2</B></FONT></TD></TR>
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="9">build the bounded divided-road study slice</FONT></TD></TR>
+        </TABLE>
+      >,
+      group="spine"
+    ];
+
+    roads_filter [
+      label="Filter normalized roads\nkeep divided study roads only",
+      group="spine"
+    ];
+
+    roads_rule [
+      shape=diamond,
+      label="Road row matches\ndivided-road criteria?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.70,
+      group="spine"
+    ];
+
+    study_roads [
+      label="Write Study_Roads_Divided\nbounded road rows used later\nfor signal anchoring and row-level flow work",
+      fillcolor="#CFECCF",
+      color="#4D8B4D",
+      group="spine"
+    ];
+
+    signals_filter [
+      label="Filter normalized signals\nkeep only signals within\n20 feet of the divided study roads",
+      group="spine"
+    ];
+
+    signals_rule [
+      shape=diamond,
+      label="Signal falls inside the\nbounded divided-road slice?",
+      style="filled",
+      fillcolor="#FFF3D9",
+      color="#D39B26",
+      width=2.90,
+      group="spine"
+    ];
+
+    study_signals [
+      label="Write Study_Signals\nonly signal points that stay near\nthe bounded divided-road network",
+      fillcolor="#DDF2D8",
+      color="#5E9B58",
+      group="spine"
+    ];
+
+    nearest [
+      label="Enrich each kept signal\nwith one nearest study-road row,\ndistance, route identity,\nand deterministic tie metadata",
+      group="spine"
+    ];
+
+    study_signals_nearest [
+      label="Write Study_Signals_NearestRoad\nsignal points now carry\nnearest-row context for later prototypes",
+      fillcolor="#CFECCF",
+      color="#4D8B4D",
+      group="spine"
+    ];
+
+    phase3_hdr [
+      shape=plaintext,
+      label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0">
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="11"><B>Phase 3</B></FONT></TD></TR>
+          <TR><TD><FONT FACE="Arial" POINT-SIZE="9">prepare the specific handoffs later modules actually read</FONT></TD></TR>
+        </TABLE>
+      >,
+      group="spine"
+    ];
+
+    crash_prep [
+      label="Prepare experiment-ready crashes\njoin normalized CrashData_Basic\nto raw CrashData_Details on DOCUMENT_NBR,\nthen derive parsed travel direction\nand qualifying crash flags",
+      group="spine"
+    ];
+
+    speed_prep [
+      label="Prepare speed-informed signal context\nprototype later joins posted-speed segments\nto eligible signals and converts speed\nto approach-length / functional-distance fields",
+      group="spine"
+    ];
+
+    start -> phase1_hdr [
+      style=invis,
+      weight=28
+    ];
+    phase1_hdr -> stage_inputs [
+      style=invis,
+      weight=28
+    ];
+    stage_inputs -> normalize;
+    normalize -> phase2_hdr [
+      style=invis,
+      weight=28
+    ];
+    phase2_hdr -> roads_filter [
+      style=invis,
+      weight=28
+    ];
+    roads_filter -> roads_rule;
+    roads_rule -> study_roads [xlabel="Yes"];
+    study_roads -> signals_filter;
+    signals_filter -> signals_rule;
+    signals_rule -> study_signals [xlabel="Yes"];
+    study_signals -> nearest;
+    nearest -> study_signals_nearest;
+    study_signals_nearest -> phase3_hdr [
+      style=invis,
+      weight=28
+    ];
+    phase3_hdr -> crash_prep [
+      style=invis,
+      weight=28
+    ];
+    crash_prep -> speed_prep [
+      style=invis,
+      weight=18
+    ];
+  }
+
+  subgraph cluster_rules {
+    label="Definitions / Processing Rules";
+    color="#E9D3AF";
+    penwidth=0.95;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    node [
+      fontsize=9,
+      margin="0.10,0.07"
+    ];
+
+    rule_stage [
+      label="Stage-inputs contract\ncopy active raw layers into one-file-per-layer GeoParquet;\nsignals are merged from HMMS, Norfolk, and Hampton\nwith Stage1 source provenance retained",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_normalize [
+      label="Normalize-stage contract\nworking CRS = EPSG:3968;\ndrop null geometry;\ncrash rows are trimmed to CRASH_YEAR 2022-2024",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_slice [
+      label="Study-slice rules\nroads keep facility codes 2 or 4\nand exclude median code 1;\nsignals must intersect a 20-foot road buffer",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_nearest [
+      label="Nearest-road rule\nchoose the nearest Study_Roads_Divided row;\nif tied, sort by distance, RTE_ID, RTE_NM,\nFROM/TO measure, EVENT_SOUR, then RowID",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      group="right"
+    ];
+
+    rule_crash [
+      label="Crash evidence prep\nlater directionality reads normalized crashes,\nadds raw CrashData_Details,\nparses one clear cardinal DOT,\nand marks single-vehicle straight-ahead qualifiers",
+      fillcolor="#E8F7F8",
+      color="#4C94A0",
+      group="right"
+    ];
+
+    rule_speed [
+      label="Speed context prep\nlater prototype reads raw posted-speed segments,\nassigns a usable speed,\nand maps that speed to functional distance and approach length",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="right"
+    ];
+  }
+
+  subgraph cluster_outputs {
+    label="Outputs / Handoff";
+    color="#E9D3AF";
+    penwidth=1.1;
+    style="rounded,filled";
+    fillcolor="#FFF9F0";
+
+    out_active [
+      label="Active handoff layers\nStudy_Roads_Divided\nStudy_Signals\nStudy_Signals_NearestRoad\nplus normalized crashes",
+      fillcolor="#EAF3F9",
+      color="#3B6F8E",
+      group="spine"
+    ];
+
+    out_directionality [
+      label="Directionality experiment consumes\nStudy_Roads_Divided\nStudy_Signals_NearestRoad\nnormalized crashes + CrashData_Details",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="bottom"
+    ];
+
+    out_updown [
+      label="Upstream/downstream prototype reuses\nthose same roads, nearest-road signals,\nand prepared crash evidence,\nthen adds speed-informed study-area context",
+      fillcolor="#DDF3F5",
+      color="#4C94A0",
+      group="bottom"
+    ];
+
+    out_qc [
+      label="QC and traceability\nstage1_input_manifest\nstage1_normalized_manifest\nstage1b study-slice and nearest-road QC JSONs\nplus the parity manifest",
+      fillcolor="#FFF4E5",
+      color="#D8A552",
+      fontsize=10,
+      margin="0.11,0.08",
+      group="bottom"
+    ];
+
+    out_active -> out_directionality;
+    out_active -> out_updown;
+    out_directionality -> out_qc [
+      style=invis,
+      weight=22,
+      minlen=2
+    ];
+    out_updown -> out_qc [
+      style=invis,
+      weight=22,
+      minlen=2
+    ];
+  }
+
+  output_anchor [
+    shape=point,
+    label="",
+    width=0,
+    height=0,
+    style=invis,
+    group="spine"
+  ];
+
+  study_signals_nearest -> out_active [weight=20];
+  crash_prep -> out_active [weight=20];
+  speed_prep -> out_active [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="prototype context",
+    constraint=false
+  ];
+
+  study_signals_nearest -> output_anchor [
+    style=invis,
+    weight=20
+  ];
+  crash_prep -> output_anchor [
+    style=invis,
+    weight=18
+  ];
+  speed_prep -> output_anchor [
+    style=invis,
+    weight=18
+  ];
+  output_anchor -> out_active [
+    style=invis,
+    weight=60
+  ];
+
+  input_roads -> start [
+    style=invis,
+    weight=24
+  ];
+  start -> rule_stage [
+    style=invis,
+    weight=18
+  ];
+  input_signals -> stage_inputs [
+    style=invis,
+    weight=18
+  ];
+  normalize -> rule_normalize [
+    style=invis,
+    weight=16
+  ];
+  roads_rule -> rule_slice [
+    style=invis,
+    weight=16
+  ];
+  nearest -> rule_nearest [
+    style=invis,
+    weight=16
+  ];
+
+  input_crashes -> crash_prep [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="normalized geometry",
+    constraint=false
+  ];
+  input_support -> crash_prep [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="raw details join",
+    constraint=false
+  ];
+  input_support -> speed_prep [
+    color="#4C94A0",
+    fontcolor="#4C94A0",
+    style=dashed,
+    xlabel="posted speed join",
+    constraint=false
+  ];
+  crash_prep -> rule_crash [
+    color="#4C94A0",
+    style=dashed,
+    arrowhead=none,
+    constraint=false
+  ];
+  speed_prep -> rule_speed [
+    color="#4C94A0",
+    style=dashed,
+    arrowhead=none,
+    constraint=false
+  ];
+
+  {
+    rank=same;
+    input_roads;
+    start;
+    rule_stage;
+  }
+
+  {
+    rank=same;
+    input_signals;
+    stage_inputs;
+    rule_normalize;
+  }
+
+  {
+    rank=same;
+    input_crashes;
+    normalize;
+  }
+
+  {
+    rank=same;
+    phase1_hdr;
+  }
+
+  {
+    rank=same;
+    phase2_hdr;
+  }
+
+  {
+    rank=same;
+    roads_rule;
+    rule_slice;
+  }
+
+  {
+    rank=same;
+    nearest;
+    rule_nearest;
+  }
+
+  {
+    rank=same;
+    phase3_hdr;
+  }
+
+  {
+    rank=same;
+    crash_prep;
+    rule_crash;
+  }
+
+  {
+    rank=same;
+    input_support;
+    speed_prep;
+    rule_speed;
+  }
+
+  {
+    rank=same;
+    out_active;
+  }
+
+  {
+    rank=same;
+    out_directionality;
+    out_updown;
+  }
+
+  {
+    rank=same;
+    out_qc;
+  }
+}
