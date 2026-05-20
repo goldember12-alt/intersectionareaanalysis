@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="378" viewBox="0 0 1120 378">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#202124">Accepted Roadway-Graph Universe</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#5f6368">Descriptive counts for the accepted 0-2,500 ft roadway-derived context package.</text>
+<rect x="30.00" y="72.00" width="1040.00" height="29.00" fill="#e8eef5" stroke="none"/>
+<text x="36" y="92" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Measure</text>
+<text x="416" y="92" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Value</text>
+<text x="561" y="92" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Notes</text>
+<rect x="30.00" y="101.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="121" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Directional bins</text>
+<text x="416" y="121" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">110,710</text>
+<text x="561" y="121" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Accepted 0-2,500 ft directional bins</text>
+<rect x="30.00" y="130.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="150" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Assigned crashes</text>
+<text x="416" y="150" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">13,216</text>
+<text x="561" y="150" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Accepted assigned crashes</text>
+<rect x="30.00" y="159.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="179" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Reference signals</text>
+<text x="416" y="179" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">971</text>
+<text x="561" y="179" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">TRUE reference signals represented</text>
+<rect x="30.00" y="188.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Signal-direction profile rows</text>
+<text x="416" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,942</text>
+<text x="561" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Reference signal plus signal-relative direction</text>
+<rect x="30.00" y="217.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="237" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Bins with stable speed context</text>
+<text x="416" y="237" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">84,857</text>
+<text x="561" y="237" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Stable speed context attached</text>
+<rect x="30.00" y="246.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="266" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Bins with stable AADT context</text>
+<text x="416" y="266" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">106,210</text>
+<text x="561" y="266" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Stable AADT context attached</text>
+<rect x="30.00" y="275.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="295" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Assigned crashes coded Urban</text>
+<text x="416" y="295" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">11,915</text>
+<text x="561" y="295" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Crash-level AREA_TYPE context only</text>
+<rect x="30.00" y="304.00" width="1040.00" height="29.00" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="36" y="324" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Assigned crashes coded Rural</text>
+<text x="416" y="324" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,301</text>
+<text x="561" y="324" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#3c4043">Crash-level AREA_TYPE context only</text>
+<text x="30" y="354" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#5f6368">Counts are descriptive; crash AREA_TYPE is crash-record context, not roadway-level geography.</text>
+</svg>

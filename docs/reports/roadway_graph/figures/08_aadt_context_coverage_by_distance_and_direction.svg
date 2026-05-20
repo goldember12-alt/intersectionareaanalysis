@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="530" viewBox="0 0 980 530">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#202124">AADT Context Coverage by Distance Band and Signal-Relative Direction</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#5f6368">Each bar is a signal-relative direction within a distance band; missing/review context remains visible.</text>
+<text x="30" y="110" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">0-250 ft</text>
+<text x="170" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Downstream</text>
+<rect x="180.00" y="90.00" width="397.15" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="577.15" y="90.00" width="29.15" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="104" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,315</text>
+<text x="170" y="139" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Upstream</text>
+<rect x="180.00" y="124.00" width="392.89" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="572.89" y="124.00" width="29.20" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="138" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,223</text>
+<text x="30" y="196" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">250-500 ft</text>
+<text x="170" y="191" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Downstream</text>
+<rect x="180.00" y="176.00" width="413.94" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="593.94" y="176.00" width="23.57" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="190" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,560</text>
+<text x="170" y="225" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Upstream</text>
+<rect x="180.00" y="210.00" width="414.49" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="594.49" y="210.00" width="24.03" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="224" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,582</text>
+<text x="30" y="282" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">500-1,000 ft</text>
+<text x="170" y="277" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Downstream</text>
+<rect x="180.00" y="262.00" width="621.35" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="801.35" y="262.00" width="28.10" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="276" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">14,191</text>
+<text x="170" y="311" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Upstream</text>
+<rect x="180.00" y="296.00" width="623.46" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="803.46" y="296.00" width="26.54" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="310" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">14,203</text>
+<text x="30" y="368" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">1,000-1,500 ft</text>
+<text x="170" y="363" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Downstream</text>
+<rect x="180.00" y="348.00" width="427.35" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="607.35" y="348.00" width="12.17" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="362" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,604</text>
+<text x="170" y="397" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Upstream</text>
+<rect x="180.00" y="382.00" width="428.68" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="608.68" y="382.00" width="11.62" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="396" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">9,621</text>
+<text x="30" y="454" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">1,500-2,500 ft</text>
+<text x="170" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Downstream</text>
+<rect x="180.00" y="434.00" width="570.32" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="750.32" y="434.00" width="10.89" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="448" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">12,700</text>
+<text x="170" y="483" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#202124">Upstream</text>
+<rect x="180.00" y="468.00" width="571.06" height="18.00" fill="#4f8a5b" stroke="white"/>
+<rect x="751.06" y="468.00" width="10.66" height="18.00" fill="#c9cdd3" stroke="white"/>
+<text x="840" y="482" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#3c4043">12,711</text>
+<rect x="180.00" y="494.00" width="13.00" height="13.00" fill="#4f8a5b" stroke="none"/>
+<text x="200" y="506" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Stable AADT context</text>
+<rect x="430.00" y="494.00" width="13.00" height="13.00" fill="#c9cdd3" stroke="none"/>
+<text x="450" y="506" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Missing/review AADT context</text>
+<text x="30" y="524" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#5f6368">Coverage counts are directional-bin counts, not rates.</text>
+</svg>

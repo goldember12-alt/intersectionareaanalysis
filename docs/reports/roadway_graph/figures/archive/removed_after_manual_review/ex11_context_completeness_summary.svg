@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="194" viewBox="0 0 1100 194">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="38" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#222">Context Completeness Summary</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#222">QA and review aid</text>
+<rect x="30" y="74" width="1040" height="28" fill="#e8eef4" stroke="#bbbbbb"/>
+<text x="36" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">context_completeness_class</text>
+<text x="166" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">signal_direction_row_count</text>
+<text x="296" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">bin_count</text>
+<text x="426" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">assigned_crash_count</text>
+<text x="556" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">stable_speed_bin_count</text>
+<text x="686" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">speed_missing_or_review_bin_count</text>
+<text x="816" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">stable_aadt_bin_count</text>
+<text x="946" y="93" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="start" fill="#222">aadt_missing_or_review_bin_count</text>
+<rect x="30" y="102" width="1040" height="28" fill="white" stroke="#dddddd"/>
+<text x="36" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">complete_access_speed...</text>
+<text x="166" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">828</text>
+<text x="296" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">51343</text>
+<text x="426" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">5780</text>
+<text x="556" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">51343</text>
+<text x="686" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">0</text>
+<text x="816" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">51343</text>
+<text x="946" y="121" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">0</text>
+<rect x="30" y="130" width="1040" height="28" fill="white" stroke="#dddddd"/>
+<text x="36" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">has_speed_or_aadt_rev...</text>
+<text x="166" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">1114</text>
+<text x="296" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">59367</text>
+<text x="426" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">7436</text>
+<text x="556" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">33514</text>
+<text x="686" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">25853</text>
+<text x="816" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">54867</text>
+<text x="946" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="start" fill="#222">4500</text>
+</svg>

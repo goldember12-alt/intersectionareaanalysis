@@ -72,15 +72,27 @@ The current direct-entry roadway_graph sequence is:
 .\.venv\Scripts\python.exe -m src.active.roadway_graph.aadt_context_join_v3_identity_route_measure
 .\.venv\Scripts\python.exe -m src.active.roadway_graph.urban_rural_source_recovery
 .\.venv\Scripts\python.exe -m src.active.roadway_graph.directional_bin_context_table
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.directional_context_descriptive_summaries
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.signal_context_review_queue
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.directional_context_distance_band_profiles
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.signal_direction_context_profiles
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.stakeholder_context_table_package
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.aadt_direction_factor_audit
 ```
 
-Do not rerun the sequence casually. It is listed so the product lineage is understandable.
+The final six commands are read-only against the accepted combined context table, descriptive summary outputs, and current rate-prototype outputs. They create descriptive summary tables, manual review-prioritization queues, fixed distance-band profiles, signal-direction profiles, compact stakeholder table-package outputs, and an AADT `DIRECTION_FACTOR` denominator audit only. Do not rerun the upstream sequence casually. It is listed so the product lineage is understandable.
 
 ## Active Current Output Folders
 
 Preserve these as current:
 
 - `work/output/roadway_graph/analysis/current/directional_bin_context_table/`
+- `work/output/roadway_graph/analysis/current/directional_context_descriptive_summaries/`
+- `work/output/roadway_graph/analysis/current/signal_context_review_queue/`
+- `work/output/roadway_graph/analysis/current/directional_context_distance_band_profiles/`
+- `work/output/roadway_graph/analysis/current/signal_direction_context_profiles/`
+- `work/output/roadway_graph/analysis/current/stakeholder_context_table_package/`
+- `work/output/roadway_graph/analysis/current/aadt_direction_factor_audit/`
 - `work/output/roadway_graph/analysis/current/crash_directional_assignment_descriptive_summary/`
 - `work/output/roadway_graph/review/current/reference_signal_directional_scaffold/`
 - `work/output/roadway_graph/review/current/reference_signal_directional_scaffold_qa/`
@@ -117,6 +129,7 @@ These preserve older signal-centered outputs, directed-segment outputs, smoke ru
 - Do not modify access, speed, or AADT joins during context-table work.
 - Do not use crash direction fields.
 - Do not use context fields to redefine upstream/downstream.
+- Do not apply `DIRECTION_FACTOR` to current rate denominators until the AADT direction-factor audit is reviewed and a later prototype explicitly changes the denominator policy.
 - Do not use crash `AREA_TYPE` as roadway-level urban/rural truth.
 - Do not populate no-crash bins from crash `AREA_TYPE`.
 - Preserve `>2,500 ft` rows as review-only unless a later bounded task changes the analysis universe.
@@ -139,8 +152,9 @@ This slice is not the final directional-context product pipeline.
 
 Recommended next phase:
 
-- revisit proposal/design documentation
-- decide descriptive analysis products
-- plan stakeholder-facing outputs
+- review the fixed distance-band profiles
+- review the signal-direction profile tables
+- review the compact stakeholder table package
+- review the AADT direction-factor audit before deciding whether prototype v2 should use `DIRECTION_FACTOR`, source directional AADT rows, or continue with bidirectional AADT
 - decide whether to harden the prototype into a production pipeline
 - define modeling-readiness requirements before any regression or policy claim

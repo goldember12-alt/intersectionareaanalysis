@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="510" viewBox="0 0 1320 510">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#202124">Aggregate prototype rates by window and speed</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#5f6368">Descriptive AADT-normalized prototype; aggregate cells only; review notes flag sparse cells and denominator warnings.</text>
+<rect x="30" y="68" width="1250" height="30" fill="#e8eef5"/>
+<text x="36" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Window</text>
+<text x="161" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Speed</text>
+<text x="391" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Assigned crashes</text>
+<text x="521" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Estimated exposure</text>
+<text x="686" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Crashes per million</text>
+<text x="831" y="88" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="start" fill="#202124">Notes</text>
+<rect x="30" y="98" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">&lt;30 mph</text>
+<text x="391" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">390</text>
+<text x="521" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">257,343,955</text>
+<text x="686" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.515</text>
+<text x="831" y="118" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="128" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">30-40 mph</text>
+<text x="391" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">2,202</text>
+<text x="521" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,926,384,409</text>
+<text x="686" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.143</text>
+<text x="831" y="148" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="158" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">40-50 mph</text>
+<text x="391" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">2,822</text>
+<text x="521" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">2,682,843,254</text>
+<text x="686" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.052</text>
+<text x="831" y="178" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="188" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">50-60 mph</text>
+<text x="391" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">426</text>
+<text x="521" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">480,413,494</text>
+<text x="686" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0.887</text>
+<text x="831" y="208" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">mixed AADT years</text>
+<rect x="30" y="218" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">60+ mph</text>
+<text x="391" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">18</text>
+<text x="521" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">26,958,711</text>
+<text x="686" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0.668</text>
+<text x="831" y="238" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">sparse cell; review cell; mixed AADT years</text>
+<rect x="30" y="248" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0-1,000 ft</text>
+<text x="161" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Missing/review speed context</text>
+<text x="391" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">2,654</text>
+<text x="521" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">2,376,167,739</text>
+<text x="686" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.117</text>
+<text x="831" y="268" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="278" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">&lt;30 mph</text>
+<text x="391" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">198</text>
+<text x="521" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">183,008,591</text>
+<text x="686" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.082</text>
+<text x="831" y="298" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="308" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">30-40 mph</text>
+<text x="391" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">791</text>
+<text x="521" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,230,000,204</text>
+<text x="686" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0.643</text>
+<text x="831" y="328" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="338" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">40-50 mph</text>
+<text x="391" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,697</text>
+<text x="521" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,659,588,280</text>
+<text x="686" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.023</text>
+<text x="831" y="358" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<rect x="30" y="368" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">50-60 mph</text>
+<text x="391" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">217</text>
+<text x="521" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">439,698,663</text>
+<text x="686" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">0.494</text>
+<text x="831" y="388" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">mixed AADT years</text>
+<rect x="30" y="398" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">60+ mph</text>
+<text x="391" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">48</text>
+<text x="521" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">6,453,052</text>
+<text x="686" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">7.438</text>
+<text x="831" y="418" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">review cell; mixed AADT years</text>
+<rect x="30" y="428" width="1250" height="30" fill="#fff8e6" stroke="#e0e0e0"/>
+<text x="36" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1,000-2,500 ft</text>
+<text x="161" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Missing/review speed context</text>
+<text x="391" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">951</text>
+<text x="521" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">893,309,324</text>
+<text x="686" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">1.065</text>
+<text x="831" y="448" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">AADT year outside 2022-2024; mixed AADT years</text>
+<text x="30" y="476" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#5f6368">Estimated exposure uses AADT, represented roadway length, and the 2022-2024 crash period; DIRECTION_FACTOR is not applied.</text>
+<text x="30" y="494" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#5f6368">No causal, policy, comparative-performance, or downstream functional area distance interpretation is made.</text>
+</svg>

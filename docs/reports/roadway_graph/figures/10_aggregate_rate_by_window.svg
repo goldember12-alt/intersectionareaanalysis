@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" role="img" aria-labelledby="title desc">
+  <title id="title">AADT-normalized aggregate rate summary by analysis window</title>
+  <desc id="desc">Descriptive aggregate-only crash rates per million VMT-like exposure with exact 95 percent confidence intervals.</desc>
+  <rect width="900" height="430" fill="#ffffff"/>
+  <text x="40" y="44" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#202124">AADT-normalized aggregate rate by analysis window</text>
+  <text x="40" y="70" font-family="Arial, sans-serif" font-size="13" fill="#5f6368">Descriptive AADT-normalized prototype; aggregate only; unit-level rates suppressed.</text>
+
+  <line x1="180" y1="290" x2="690" y2="290" stroke="#9aa0a6" stroke-width="1"/>
+  <line x1="180" y1="286" x2="180" y2="294" stroke="#9aa0a6" stroke-width="1"/>
+  <line x1="326" y1="286" x2="326" y2="294" stroke="#9aa0a6" stroke-width="1"/>
+  <line x1="471" y1="286" x2="471" y2="294" stroke="#9aa0a6" stroke-width="1"/>
+  <line x1="617" y1="286" x2="617" y2="294" stroke="#9aa0a6" stroke-width="1"/>
+  <text x="172" y="314" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.80</text>
+  <text x="318" y="314" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.90</text>
+  <text x="463" y="314" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">1.00</text>
+  <text x="609" y="314" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">1.10</text>
+  <text x="325" y="340" font-family="Arial, sans-serif" font-size="13" fill="#3c4043">Crashes per million VMT-like exposure</text>
+
+  <text x="40" y="132" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">High-priority 0-1,000 ft</text>
+  <line x1="581" y1="128" x2="658" y2="128" stroke="#1f77b4" stroke-width="3"/>
+  <line x1="581" y1="120" x2="581" y2="136" stroke="#1f77b4" stroke-width="2"/>
+  <line x1="658" y1="120" x2="658" y2="136" stroke="#1f77b4" stroke-width="2"/>
+  <circle cx="615" cy="128" r="6" fill="#1f77b4"/>
+  <text x="710" y="124" font-family="Arial, sans-serif" font-size="13" fill="#202124">1.098307</text>
+  <text x="710" y="142" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">95% CI: 1.075097 to 1.121891</text>
+  <text x="40" y="152" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">8,512 assigned crashes; 7,750,111,561.923209 VMT-like exposure</text>
+
+  <text x="40" y="216" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">Sensitivity 1,000-2,500 ft</text>
+  <line x1="263" y1="212" x2="344" y2="212" stroke="#2ca02c" stroke-width="3"/>
+  <line x1="263" y1="204" x2="263" y2="220" stroke="#2ca02c" stroke-width="2"/>
+  <line x1="344" y1="204" x2="344" y2="220" stroke="#2ca02c" stroke-width="2"/>
+  <circle cx="303" cy="212" r="6" fill="#2ca02c"/>
+  <text x="710" y="208" font-family="Arial, sans-serif" font-size="13" fill="#202124">0.884395</text>
+  <text x="710" y="226" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">95% CI: 0.856861 to 0.912588</text>
+  <text x="40" y="236" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">3,902 assigned crashes; 4,412,058,113.183136 VMT-like exposure</text>
+
+  <text x="40" y="378" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">Caveats: provisional bidirectional AADT assumption; DIRECTION_FACTOR not applied; missing/review AADT excluded.</text>
+  <text x="40" y="397" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">Not safety performance, risk, danger, causal, policy guidance, or downstream functional area distance guidance.</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="474" viewBox="0 0 900 474">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#202124">Assigned crashes by speed and access density</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#5f6368">Access points per 1,000 ft, calculated at local signal-direction-distance-band grain.</text>
+<text x="293" y="87" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#202124">0</text>
+<text x="419" y="87" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#202124">&gt;0-1</text>
+<text x="545" y="87" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#202124">1-3</text>
+<text x="671" y="87" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#202124">3-6</text>
+<text x="797" y="87" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#202124">6+</text>
+<text x="30" y="133" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">&lt;30 mph</text>
+<rect x="230" y="105" width="124" height="42" fill="rgb(215,223,245)" stroke="#ffffff"/>
+<text x="293" y="133" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">526.000</text>
+<rect x="356" y="105" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="419" y="133" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">5.000</text>
+<rect x="482" y="105" width="124" height="42" fill="rgb(242,250,245)" stroke="#ffffff"/>
+<text x="545" y="133" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">43.000</text>
+<rect x="608" y="105" width="124" height="42" fill="rgb(243,251,245)" stroke="#ffffff"/>
+<text x="671" y="133" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">24.000</text>
+<rect x="734" y="105" width="124" height="42" fill="rgb(243,251,245)" stroke="#ffffff"/>
+<text x="797" y="133" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">33.000</text>
+<text x="30" y="177" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">30-40 mph</text>
+<rect x="230" y="149" width="124" height="42" fill="rgb(95,103,245)" stroke="#ffffff"/>
+<text x="293" y="177" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">2,631.000</text>
+<rect x="356" y="149" width="124" height="42" fill="rgb(243,251,245)" stroke="#ffffff"/>
+<text x="419" y="177" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">32.000</text>
+<rect x="482" y="149" width="124" height="42" fill="rgb(221,229,245)" stroke="#ffffff"/>
+<text x="545" y="177" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">411.000</text>
+<rect x="608" y="149" width="124" height="42" fill="rgb(232,240,245)" stroke="#ffffff"/>
+<text x="671" y="177" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">221.000</text>
+<rect x="734" y="149" width="124" height="42" fill="rgb(242,250,245)" stroke="#ffffff"/>
+<text x="797" y="177" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">45.000</text>
+<text x="30" y="221" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">40-50 mph</text>
+<rect x="230" y="193" width="124" height="42" fill="rgb(100,108,245)" stroke="#ffffff"/>
+<text x="293" y="221" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">2,543.000</text>
+<rect x="356" y="193" width="124" height="42" fill="rgb(237,245,245)" stroke="#ffffff"/>
+<text x="419" y="221" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">135.000</text>
+<rect x="482" y="193" width="124" height="42" fill="rgb(171,179,245)" stroke="#ffffff"/>
+<text x="545" y="221" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">1,292.000</text>
+<rect x="608" y="193" width="124" height="42" fill="rgb(202,210,245)" stroke="#ffffff"/>
+<text x="671" y="221" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">738.000</text>
+<rect x="734" y="193" width="124" height="42" fill="rgb(228,236,245)" stroke="#ffffff"/>
+<text x="797" y="221" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">284.000</text>
+<text x="30" y="265" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">50-60 mph</text>
+<rect x="230" y="237" width="124" height="42" fill="rgb(220,228,245)" stroke="#ffffff"/>
+<text x="293" y="265" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">437.000</text>
+<rect x="356" y="237" width="124" height="42" fill="rgb(242,250,245)" stroke="#ffffff"/>
+<text x="419" y="265" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">52.000</text>
+<rect x="482" y="237" width="124" height="42" fill="rgb(232,240,245)" stroke="#ffffff"/>
+<text x="545" y="265" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">223.000</text>
+<rect x="608" y="237" width="124" height="42" fill="rgb(240,248,245)" stroke="#ffffff"/>
+<text x="671" y="265" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">87.000</text>
+<rect x="734" y="237" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="797" y="265" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">17.000</text>
+<text x="30" y="309" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">60+ mph</text>
+<rect x="230" y="281" width="124" height="42" fill="rgb(240,248,245)" stroke="#ffffff"/>
+<text x="293" y="309" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">83.000</text>
+<rect x="356" y="281" width="124" height="42" fill="rgb(245,253,245)" stroke="#ffffff"/>
+<text x="419" y="309" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">0.000</text>
+<rect x="482" y="281" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="545" y="309" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">14.000</text>
+<rect x="608" y="281" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="671" y="309" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">6.000</text>
+<rect x="734" y="281" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="797" y="309" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">4.000</text>
+<text x="30" y="353" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#202124">Missing/review speed context</text>
+<rect x="230" y="325" width="124" height="42" fill="rgb(102,110,245)" stroke="#ffffff"/>
+<text x="293" y="353" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">2,502.000</text>
+<rect x="356" y="325" width="124" height="42" fill="rgb(244,252,245)" stroke="#ffffff"/>
+<text x="419" y="353" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">11.000</text>
+<rect x="482" y="325" width="124" height="42" fill="rgb(221,229,245)" stroke="#ffffff"/>
+<text x="545" y="353" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">404.000</text>
+<rect x="608" y="325" width="124" height="42" fill="rgb(226,234,245)" stroke="#ffffff"/>
+<text x="671" y="353" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">327.000</text>
+<rect x="734" y="325" width="124" height="42" fill="rgb(240,248,245)" stroke="#ffffff"/>
+<text x="797" y="353" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#202124">86.000</text>
+<text x="30" y="442" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#5f6368">Counts are descriptive assigned-crash counts; not rates, rankings, causal findings, or policy guidance.</text>
+</svg>
