@@ -1,11 +1,39 @@
-﻿# Roadway-Graph Report QA
+# Roadway-Graph Report QA
 
-**Status: CURRENT DRAFT QA.** This QA covers the generated descriptive report draft and figure package, including the stakeholder-safe aggregate AADT-normalized prototype exhibits.
+**Status: CURRENT ACTIVE V2/V5 REPORT QA.** This QA covers the active v2/v5 report figure refresh and preserves the prior v1/v4 QA below as baseline/history.
+
+## Active V2/V5 QA Summary
+
+- Active report figures refreshed: 18 SVGs in `docs/reports/roadway_graph/figures/active_v2_v5/`.
+- Figure data and comparison tables refreshed under `work/output/roadway_graph/report/current_active/`.
+- Stable speed bins reflected: 105,835.
+- Active estimated exposure reflected: 7,108,955,359.70.
+- Active aggregate descriptive rate per million: 1.746248.
+- No crash direction fields were read or used.
+- No models were fit.
+- Prior v1/v4 report figures were retained and not silently overwritten.
+- Figures and captions are labeled active v2/v5.
+- No causal, policy, risk, safety-performance, or downstream-distance guidance language was introduced.
+
+| check_name | passed | observed | expected |
+| --- | --- | --- | --- |
+| crash_direction_fields_read_or_used | True | False | False |
+| active_speed_v5_counts_reflected | True | 105835 | 105835 |
+| active_aadt_v2_rates_reflected | True | 7108955359.704512 | 7108955359.704501 |
+| models_fit | True | False | False |
+| old_v1_v4_figures_not_silently_overwritten | True | baseline_svg_file_lists_unchanged | unchanged |
+| causal_policy_risk_safety_language_absent | True | guardrail_labels_used | no_claims |
+| all_refreshed_figures_exist | True | 36 | 36 |
+| figure_captions_label_active_v2_v5 | True | Active v2/v5 | Active v2/v5 |
+
+## Baseline V1/V4 QA
+
+The retained QA below describes the prior report package and is no longer the active report figure QA.
 
 - QA checks passed: 59 of 59
 - No new rates were computed for this report update. Existing stakeholder-safe aggregate summaries were copied from the suppression review output.
 - Unit-level rates remain QA-only and are not exposed as stakeholder-facing findings.
-- Figure and report outputs use accepted descriptive tables, copied stakeholder SVGs under `docs/reports/roadway_graph/figures/`, and aggregate rate summaries with denominator, sparse-cell, and review notes.
+- Figure and report outputs use accepted descriptive tables, copied stakeholder SVGs under `docs/reports/roadway_graph/descriptive_figures/`, and aggregate rate summaries with denominator, sparse-cell, and review notes.
 
 | check_name                                     | passed | observed                                             | expected            |
 | ---------------------------------------------- | ------ | ---------------------------------------------------- | ------------------- |

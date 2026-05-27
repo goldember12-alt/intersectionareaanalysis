@@ -1,0 +1,5 @@
+downstream_product,recommendation,status
+report_figures,regenerate speed coverage and rate figures from active v2/v5 outputs,required
+stakeholder_tables,refresh before presenting speed or rate summaries,required
+internal_models,fit only in a separate explicitly scoped modeling task using active matrices,next_separate_task
+legacy_v1_v4_outputs,preserve as baseline/history comparison,preserve

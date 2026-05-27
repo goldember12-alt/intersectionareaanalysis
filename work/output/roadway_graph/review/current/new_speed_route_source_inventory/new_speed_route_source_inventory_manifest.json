@@ -1,0 +1,177 @@
+{
+  "bounded_question": "read-only inventory and feasibility diagnostic for new speed/route sources",
+  "completed_at_utc": "2026-05-26T17:26:02.532042+00:00",
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-26T17:21:05.158685+00:00",
+  "graph_context_rate_model_outputs_modified": false,
+  "inputs": {
+    "directional_bin_context": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context.csv",
+    "identity_dir": "work\\output\\roadway_graph\\review\\current\\roadway_identity_metadata_propagation",
+    "normalized_speed": "artifacts\\normalized\\speed.parquet",
+    "speed_limit_rns": "Intersection Crash Analysis Layers\\Speed_Limit_RNS\\Speed_Limit_RNS.gdb",
+    "speed_v4_dir": "work\\output\\roadway_graph\\review\\current\\speed_context_join_v4_identity_enriched",
+    "vdot_routes": "Intersection Crash Analysis Layers\\VDOT_Routes.geojson"
+  },
+  "normalized_speed_overwritten": false,
+  "outputs": {
+    "comparison": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\speed_source_comparison_current_vs_new.csv",
+    "findings": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_inventory_findings.md",
+    "geometry": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_geometry_qa.csv",
+    "manifest": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_inventory_manifest.json",
+    "nonnull": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_non_null_profile.csv",
+    "qa": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_inventory_qa.csv",
+    "recommendation": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_recommendation.csv",
+    "recovery": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\speed_v4_missing_review_recovery_estimate.csv",
+    "roles": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_field_role_candidates.csv",
+    "route_overlap": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_route_identity_overlap.csv",
+    "schema": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_schema.csv",
+    "speed_fields": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_speed_field_diagnostic.csv",
+    "summary": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_inventory_summary.csv"
+  },
+  "qa": [
+    {
+      "check_name": "existing_normalized_artifacts_overwritten",
+      "expected": "unchanged",
+      "observed": "unchanged",
+      "passed": true
+    },
+    {
+      "check_name": "current_speed_v4_outputs_overwritten",
+      "expected": "no",
+      "observed": "read_only",
+      "passed": true
+    },
+    {
+      "check_name": "graph_context_rate_model_outputs_modified",
+      "expected": "no",
+      "observed": "module writes only new_speed_route_source_inventory review outputs",
+      "passed": true
+    },
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": "none",
+      "observed": "none",
+      "passed": true
+    },
+    {
+      "check_name": "source_coverage_estimates_diagnostic_only",
+      "expected": "yes",
+      "observed": "diagnostic_only_no_join_output",
+      "passed": true
+    },
+    {
+      "check_name": "recommendation_distinguishes_replacement_supplement_identity_bridge",
+      "expected": "yes",
+      "observed": "replacement_vs_supplement column written",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_summary",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_inventory_summary.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_schema",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_schema.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_geometry",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_geometry_qa.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_roles",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_field_role_candidates.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_nonnull",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_non_null_profile.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_route_overlap",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_route_identity_overlap.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_speed_fields",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_speed_field_diagnostic.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_recovery",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\speed_v4_missing_review_recovery_estimate.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_comparison",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\speed_source_comparison_current_vs_new.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_recommendation",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\new_speed_route_source_inventory\\new_speed_route_source_recommendation.csv",
+      "passed": true
+    }
+  ],
+  "read_only": true,
+  "recommendation": [
+    {
+      "evidence": "missing/review route key match share=0.641115; speed fields absent",
+      "recommendation": "Useful for route identity review/bridge diagnostics, not for speed values.",
+      "recommended_next_module_name": "vdot_routes_identity_bridge.py",
+      "recommended_use": "route_identity_supplement_only",
+      "replacement_vs_supplement": "identity_bridge",
+      "source_name": "VDOT_Routes"
+    },
+    {
+      "evidence": "candidate speed fields=CAR_SPEED_LIMIT|FINAL_SPEED_LIMIT_SOURCE|TRUCK_SPEED_LIMIT|SPEEDZONE_TYPE_DSC; possible missing/review bin recovery=24865",
+      "recommendation": "Promising as a supplement for current missing/review speed bins; do not replace v4 until directionality/measure semantics are validated.",
+      "recommended_next_module_name": "speed_context_join_v5_new_source_supplement.py",
+      "recommended_use": "speed_source_supplement",
+      "replacement_vs_supplement": "supplement_not_replacement",
+      "source_name": "Speed_Limit_RNS"
+    }
+  ],
+  "speed_v4_outputs_overwritten": false,
+  "summary": [
+    {
+      "candidate_route_identity_field_count": 43,
+      "candidate_speed_field_count": 0,
+      "exists": true,
+      "field_count": 49,
+      "layer": "",
+      "path": "Intersection Crash Analysis Layers\\VDOT_Routes.geojson",
+      "read_status": "read",
+      "readable_format": "GeoJSON",
+      "row_count": 69778,
+      "source_classification": "route_identity_bridge_candidate",
+      "source_name": "VDOT_Routes"
+    },
+    {
+      "candidate_route_identity_field_count": 10,
+      "candidate_speed_field_count": 4,
+      "exists": true,
+      "field_count": 16,
+      "layer": "Speed_Limit_RNS",
+      "path": "Intersection Crash Analysis Layers\\Speed_Limit_RNS\\Speed_Limit_RNS.gdb",
+      "read_status": "read",
+      "readable_format": "FileGDB/layer",
+      "row_count": 665316,
+      "source_classification": "speed_source_supplement_candidate",
+      "source_name": "Speed_Limit_RNS"
+    }
+  ]
+}

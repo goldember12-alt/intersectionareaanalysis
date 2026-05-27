@@ -1,0 +1,5 @@
+model_family,active_readiness,evidence,limitation
+scaled Poisson GLM,primary_internal_review,S0-S3 active sequence fit; overdispersion handled through scaled Pearson inference,association model only; not stakeholder-facing
+cluster-robust Poisson GLM,primary_internal_review,active S3 cluster-robust inference available by reference signal,"used for coefficient stability review, not final claims"
+estimated-alpha negative binomial,not_primary_not_interpretable_for_full_selected_model,NB4 converged=False; interpretable=False; alpha=1.6289756314397278e-41,NB4 incomplete covariance/non-convergence blocks selected full-speed NB interpretation
+fixed-alpha negative binomial,sensitivity_only,"alpha grid 0.25, 0.5, 1.0, 2.0 fit successfully and supports access-window plus speed additions",alpha is imposed rather than stably estimated

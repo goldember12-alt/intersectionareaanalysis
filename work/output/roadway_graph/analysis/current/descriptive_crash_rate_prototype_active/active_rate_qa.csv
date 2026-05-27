@@ -1,0 +1,7 @@
+check_name,passed,observed,expected
+approved_window_grain_only,True,reference_signal_id+signal_relative_direction+analysis_window,window_grain
+active_aadt_v2_denominator_used,True,v2_direction_factor_with_bidirectional_fallback,v2_direction_factor_with_bidirectional_fallback
+rate_ready_units_match_v2_policy_expected,True,2967,2967
+invalid_direction_factor_units,True,0,0
+models_fit,True,False,False
+crash_direction_fields_read_or_used,True,False,False

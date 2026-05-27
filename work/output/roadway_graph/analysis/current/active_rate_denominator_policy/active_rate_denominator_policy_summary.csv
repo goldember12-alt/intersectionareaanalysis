@@ -1,0 +1,17 @@
+metric,value,count
+active_denominator_policy,v2_direction_factor_with_bidirectional_fallback,
+baseline_denominator_policy,v1_bidirectional_aadt,
+units_evaluated,,2967
+units_with_factor_applied,,2751
+units_using_null_factor_bidirectional_fallback,,594
+units_with_invalid_factor_review,,0
+assigned_crash_count,,12414
+v1_estimated_exposure,12162169675.11,
+v2_adjusted_exposure,7108955359.7,
+exposure_ratio_v2_to_v1,0.584514,
+v1_aggregate_descriptive_rate_per_million,1.020706,
+v2_aggregate_descriptive_rate_per_million,1.746248,
+rate_ratio_v2_to_v1,1.710824,
+source_documentation_caveat,source documentation still needed to fully confirm DIRECTION_FACTOR semantics,
+crash_direction_fields_read_or_used,False,
+rates_or_models_recomputed,False,

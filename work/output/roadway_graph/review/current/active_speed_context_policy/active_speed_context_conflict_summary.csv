@@ -1,0 +1,9 @@
+summary_group,distance_window,status,bin_count,unique_route_count,qa_interpretation
+v4_v5_conflict,high_priority_0_1000ft,v5_conflicts_with_v4_stable,1575,79,"v4 conflicts with improved active v5 source; preserve for QA, not a promotion blocker"
+v4_v5_conflict,sensitivity_1000_2500ft,v5_conflicts_with_v4_stable,1234,63,"v4 conflicts with improved active v5 source; preserve for QA, not a promotion blocker"
+remaining_v5_review_missing,high_priority_0_1000ft,missing_no_route_compatible_speed,94,3,remaining missing/review status preserved
+remaining_v5_review_missing,high_priority_0_1000ft,review_conflicting_speed_values,3154,111,remaining missing/review status preserved
+remaining_v5_review_missing,high_priority_0_1000ft,review_no_measure_overlap,590,15,remaining missing/review status preserved
+remaining_v5_review_missing,high_priority_0_1000ft,review_weak_measure_overlap,21,3,remaining missing/review status preserved
+remaining_v5_review_missing,sensitivity_1000_2500ft,review_conflicting_speed_values,712,38,remaining missing/review status preserved
+remaining_v5_review_missing,sensitivity_1000_2500ft,review_no_measure_overlap,304,9,remaining missing/review status preserved

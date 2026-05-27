@@ -1,0 +1,8 @@
+rule_id,active_policy,rule,implementation_status
+active_context,speed_v5_new_source_supplement,Use speed v5 as the active speed context going forward.,active_for_future_refresh
+baseline_retention,speed_v5_new_source_supplement,Retain speed v4 identity-enriched outputs as baseline and legacy comparison artifacts.,required_boundary
+source_preference,speed_v5_new_source_supplement,Prefer Speed_Limit_RNS route+measure evidence over speed v4 when v5 provides stable speed assignment.,approved
+conflicts,speed_v5_new_source_supplement,Preserve v4/v5 conflicts as QA comparison evidence; do not treat them as blockers to v5 promotion.,approved_qa_evidence
+remaining_review,speed_v5_new_source_supplement,Keep v5 remaining review and missing statuses visible; do not force labels.,required_boundary
+no_imputation,speed_v5_new_source_supplement,Do not impute speed values. Stable v5 assignment requires route+measure evidence from Speed_Limit_RNS.,required_boundary
+downstream_refresh,speed_v5_new_source_supplement,"Refresh downstream context, descriptive, rate, and model outputs before treating them as using active v5 speed.",required_next_step

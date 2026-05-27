@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="650" viewBox="0 0 1080 650">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#222">Rate by Window and Access</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#222">Estimated exposure, active AADT v2</text>
+<text x="30" y="82" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#222">Descriptive prototype rate using estimated exposure; DIRECTION_FACTOR applied where valid and bidirectional fallback where null. Not risk, safety, policy, or distance guidance.</text>
+<text x="250.0" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">0-1,000 ft</text>
+<text x="370.0" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1,000-2,500 ft</text>
+<text x="178" y="150" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#222">0</text>
+<text x="178" y="208" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#222">1-3</text>
+<text x="178" y="266" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#222">3-6</text>
+<text x="178" y="324" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="end" fill="#222">6+</text>
+<rect x="190" y="115" width="120" height="58" fill="rgb(110,116,128)" stroke="#d0d0d0"/>
+<text x="250.0" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.80</text>
+<rect x="190" y="173" width="120" height="58" fill="rgb(101,107,119)" stroke="#d0d0d0"/>
+<text x="250.0" y="207" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.91</text>
+<rect x="190" y="231" width="120" height="58" fill="rgb(65,71,83)" stroke="#d0d0d0"/>
+<text x="250.0" y="265" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">2.40</text>
+<rect x="190" y="289" width="120" height="58" fill="rgb(118,124,136)" stroke="#d0d0d0"/>
+<text x="250.0" y="323" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.68</text>
+<rect x="310" y="115" width="120" height="58" fill="rgb(144,150,162)" stroke="#d0d0d0"/>
+<text x="370.0" y="149" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.34</text>
+<rect x="310" y="173" width="120" height="58" fill="rgb(97,103,115)" stroke="#d0d0d0"/>
+<text x="370.0" y="207" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.97</text>
+<rect x="310" y="231" width="120" height="58" fill="rgb(115,121,133)" stroke="#d0d0d0"/>
+<text x="370.0" y="265" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.73</text>
+<rect x="310" y="289" width="120" height="58" fill="rgb(103,109,121)" stroke="#d0d0d0"/>
+<text x="370.0" y="323" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">1.88</text>
+</svg>

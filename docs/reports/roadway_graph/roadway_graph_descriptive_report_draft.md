@@ -1,16 +1,18 @@
-﻿# Roadway-Graph Descriptive Report Draft
+# Roadway-Graph Descriptive Report Draft
 
-**Status: DRAFT FOR REVIEW.** This draft uses accepted descriptive roadway-graph outputs and aggregate AADT-normalized prototype summaries only. Unit-level rates remain QA-only and are not included as stakeholder-facing unit-rate tables or figures. This draft does not include fixed distance-band rates, raw bin-level rates, models, regressions, predictions, causal claims, design recommendations, or final downstream functional area distance recommendations.
+**Status: ACTIVE V2/V5 DRAFT FOR REVIEW.** This draft now uses active speed v5 (`Speed_Limit_RNS` supplement) and active AADT v2 direction-factor denominator outputs for refreshed report tables and figures. Unit-level rates remain QA-only and are not included as stakeholder-facing unit-rate tables or figures. This draft does not include fixed distance-band rates, raw bin-level rates, models, regressions, predictions, causal claims, design recommendations, or final downstream functional area distance recommendations.
+
+Active report figures live under `figures/active_v2_v5/`. The older `descriptive_figures/` package is retained as v1/v4 baseline/history.
 
 ## 1. Executive Summary
 
-The current roadway-graph descriptive package summarizes a stable 0-2,500 ft roadway-derived directional-bin universe around TRUE reference signals. The accepted universe contains 110,710 directional bins, 13,216 assigned crashes, and 971 reference signals.
+The current roadway-graph descriptive package summarizes a stable 0-2,500 ft roadway-derived directional-bin universe around TRUE reference signals. The accepted active v2/v5 universe contains 110,710 directional bins, 13,216 assigned crashes, and 971 reference signals.
 
 The 0-1,000 ft window is the high-priority descriptive window, with 9,170 assigned crashes. The 1,000-2,500 ft window is the sensitivity descriptive window, with 4,046 assigned crashes. Rows beyond 2,500 ft are excluded from the current descriptive report stage and remain review-only.
 
 Crash direction fields were not read or used. Context fields enrich the accepted directional bins but do not define upstream or downstream.
 
-The first descriptive AADT-normalized crash-rate prototype has completed unit-rate review. Only aggregate window-level and direction-level summaries are included here. All 2,967 unit-level rate rows remain QA-only and are not included as stakeholder unit-rate displays.
+The active descriptive AADT-normalized crash-rate prototype has completed unit-rate review. Only aggregate window-level and direction-level summaries are included here. All 2,967 unit-level rate rows remain QA-only and are not included as stakeholder unit-rate displays. Active rates use estimated exposure with `DIRECTION_FACTOR` applied where valid and bidirectional fallback where null.
 
 | Metric                          | Value   | Scope                                              |
 | ------------------------------- | ------- | -------------------------------------------------- |
@@ -20,14 +22,14 @@ The first descriptive AADT-normalized crash-rate prototype has completed unit-ra
 | signal_direction_profile_rows   | 1,942   | reference_signal_id + signal_relative_direction    |
 | highest_review_priority_signals | 14      | review priority only                               |
 | high_review_priority_signals    | 141     | review priority only                               |
-| stable_speed_bins               | 84,857  | accepted 0-2500ft directional-bin universe         |
+| stable_speed_bins               | 105,835 | active v2/v5 0-2500ft directional-bin universe     |
 | stable_aadt_bins                | 106,210 | accepted 0-2500ft directional-bin universe         |
 | urban_assigned_crashes          | 11,915  | crash-level AREA_TYPE context                      |
 | rural_assigned_crashes          | 1,301   | crash-level AREA_TYPE context                      |
 
-![Accepted Universe Summary](figures/01_accepted_universe_summary.svg)
+![Accepted Universe Summary](figures/active_v2_v5/01_accepted_universe_summary_active_v2_v5.svg)
 
-*Exhibit EX01. Accepted descriptive universe summary. Counts are descriptive and are not normalized by exposure.*
+*Exhibit EX01. Active v2/v5 accepted descriptive universe summary. Counts are descriptive and are not normalized by exposure.*
 
 ## 2. Background and Purpose
 
@@ -37,21 +39,21 @@ The restored signal-centered report material under `docs/reports/signal_centered
 
 ## 3. Methodology Overview
 
-The active workflow builds the roadway scaffold first, then adds crashes and context. The method starts from the Travelway graph, associates signals, gates TRUE reference signals, builds signal-to-anchor directional segments and bins, preserves divided and undivided roadway representation, assigns crashes conservatively, and then joins access, speed v4, AADT v3, and crash-level AREA_TYPE context.
+The active workflow builds the roadway scaffold first, then adds crashes and context. The method starts from the Travelway graph, associates signals, gates TRUE reference signals, builds signal-to-anchor directional segments and bins, preserves divided and undivided roadway representation, assigns crashes conservatively, and then joins access, active speed v5, AADT v3 context, active AADT v2 denominator policy for exposure, and crash-level AREA_TYPE context.
 
 Upstream and downstream are roadway-derived signal-relative classifications. Crash direction fields are not part of this report stage.
 
-For methodology detail, see `roadway_graph_methodology_limitations_memo.md`. For denominator assumptions, see `../../design/roadway_graph_rate_denominator_policy.md` and `../../design/roadway_graph_rate_assumption_approval_v1.md`. Regression/modeling methods are not included here.
+For methodology detail, see `roadway_graph_methodology_limitations_memo.md`. For denominator assumptions, see `../../design/roadway_graph_rate_denominator_policy.md` and `../../design/roadway_graph_rate_assumption_approval_v2.md`. Regression/modeling methods are not included here.
 
 ## 4. Accepted Directional-Bin Universe
 
 The accepted universe is limited to 0-2,500 ft. The 0-1,000 ft window is the main descriptive focus. The 1,000-2,500 ft window is retained as sensitivity context.
 
-![Assigned Crashes by Distance Band and Signal-Relative Direction](figures/02_assigned_crashes_by_distance_and_direction.svg)
+![Assigned Crashes by Distance Band and Signal-Relative Direction](figures/active_v2_v5/02_assigned_crashes_by_distance_and_direction_active_v2_v5.svg)
 
 *Exhibit EX02. Assigned crash counts by fixed distance band and signal-relative direction. Signal-relative direction comes from roadway graph interpretation; crash direction fields are not used. These are assigned-crash counts only and are not rates.*
 
-![Roadway Representation Mix by Distance Band](figures/03_roadway_representation_by_distance.svg)
+![Roadway Representation Mix by Distance Band](figures/active_v2_v5/09_roadway_representation_mix_by_distance_active_v2_v5.svg)
 
 *Exhibit EX12. Roadway representation mix by distance band. Representation is context for the accepted bins.*
 
@@ -59,27 +61,27 @@ The accepted universe is limited to 0-2,500 ft. The 0-1,000 ft window is the mai
 
 The report uses accepted context joins only. Access, speed, AADT, and crash-level AREA_TYPE are descriptive context layers attached to accepted bins. They do not redefine upstream/downstream.
 
-![Access Context by Distance Band and Signal-Relative Direction](figures/04_access_context_by_distance_and_direction.svg)
+![Access Context by Distance Band and Signal-Relative Direction](figures/active_v2_v5/03_access_context_by_distance_and_direction_active_v2_v5.svg)
 
 *Exhibit EX07. Access context counts by distance band and signal-relative direction. Access context is descriptive and does not establish a design distance.*
 
-![Speed Context Coverage/Status](figures/05_speed_context_coverage_by_distance.svg)
+![Speed Context Coverage/Status](figures/active_v2_v5/04_speed_context_coverage_by_distance_active_v2_v5.svg)
 
 *Exhibit EX08. Speed context coverage by distance band. Missing and review statuses remain visible.*
 
-![Speed Context Coverage by Distance Band and Signal-Relative Direction](figures/06_speed_context_coverage_by_distance_and_direction.svg)
+![Speed Context Coverage by Distance Band and Signal-Relative Direction](figures/active_v2_v5/05_speed_context_coverage_by_distance_and_direction_active_v2_v5.svg)
 
 *Exhibit EX08B. Speed context coverage by distance band and signal-relative direction. Missing/review speed context remains visible.*
 
-![AADT Context Coverage/Status](figures/07_aadt_context_coverage_by_distance.svg)
+![AADT Context Coverage/Status](figures/active_v2_v5/06_aadt_context_coverage_by_distance_active_v2_v5.svg)
 
 *Exhibit EX09. AADT context coverage by distance band. AADT is summarized as context; only the later aggregate prototype summaries are AADT-normalized.*
 
-![AADT Context Coverage by Distance Band and Signal-Relative Direction](figures/08_aadt_context_coverage_by_distance_and_direction.svg)
+![AADT Context Coverage by Distance Band and Signal-Relative Direction](figures/active_v2_v5/07_aadt_context_coverage_by_distance_and_direction_active_v2_v5.svg)
 
 *Exhibit EX09B. AADT context coverage by distance band and signal-relative direction. Missing/review AADT context remains visible.*
 
-![Crash AREA_TYPE Urban/Rural Composition](figures/09_crash_area_type_composition.svg)
+![Crash AREA_TYPE Urban/Rural Composition](figures/active_v2_v5/08_crash_area_type_composition_active_v2_v5.svg)
 
 *Exhibit EX10. Assigned crashes by crash-level AREA_TYPE. AREA_TYPE is crash-record context only, not roadway-level urban/rural classification.*
 
@@ -87,29 +89,29 @@ The report uses accepted context joins only. Access, speed, AADT, and crash-leve
 
 The AADT-normalized prototype is included as aggregate-only descriptive context because unit-level rates need QA review before any stakeholder unit-rate display. The reviewed unit grain was `reference_signal_id + signal_relative_direction + analysis_window`. All 2,967 unit rows remain QA-only because at least one review condition applied, including low exposure, low crash count, zero crash count, extremely wide exact interval, mixed AADT year, or outside-period AADT year.
 
-The aggregate summaries use exact Poisson/Garwood 95% confidence intervals from `scipy.stats.chi2`. They use estimated vehicle-mile exposure under the approved provisional bidirectional AADT assumption. `DIRECTION_FACTOR` was not applied, missing/review AADT was excluded from denominator values, and crash direction fields were not read or used.
+The aggregate summaries use exact Poisson/Garwood 95% confidence intervals from `scipy.stats.chi2` where available. They use estimated exposure under the active AADT v2 denominator policy: `DIRECTION_FACTOR` is applied where valid, bidirectional AADT fallback is used where null, invalid factors are flagged, missing/review AADT is excluded from denominator values, and crash direction fields were not read or used.
 
 Window-level aggregate summaries:
 
 | Analysis window | Assigned crashes | Estimated vehicle-mile exposure | Crashes per million | Exact 95% CI |
 | ---------------- | ---------------- | ----------------- | ----------------------- | ------------ |
-| 0-1,000 ft | 8,512 | 7,750,111,561.923209 | 1.098307 | 1.075097 to 1.121891 |
-| 1,000-2,500 ft | 3,902 | 4,412,058,113.183136 | 0.884395 | 0.856861 to 0.912588 |
+| 0-1,000 ft | 8,512 | 4,505,937,700.816764 | 1.889063 | active v2/v5 figure data |
+| 1,000-2,500 ft | 3,902 | 2,603,017,658.887754 | 1.499029 | active v2/v5 figure data |
 
-![AADT-Normalized Aggregate Window Comparison](figures/10_aggregate_rate_by_window.svg)
+![AADT-Normalized Aggregate Window Comparison](figures/active_v2_v5/10_aggregate_rate_by_window_active_v2_v5.svg)
 
-*Exhibit EX13. Descriptive AADT-normalized prototype aggregate window comparison. Aggregate only; unit-level rates remain QA-only; provisional bidirectional AADT assumption; `DIRECTION_FACTOR` not applied; missing/review AADT excluded. Estimated exposure is calculated from AADT, represented roadway length, and the 2022-2024 crash period. This exhibit makes no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
+*Exhibit EX13. Active v2/v5 descriptive AADT-normalized prototype aggregate window comparison. Aggregate only; unit-level rates remain QA-only; `DIRECTION_FACTOR` applied where valid; bidirectional fallback where null; missing/review AADT excluded. Estimated exposure is calculated from AADT, represented roadway length, and the 2022-2024 crash period. This exhibit makes no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
 
 Direction-level aggregate summaries:
 
 | Signal-relative direction | Assigned crashes | Estimated vehicle-mile exposure | Crashes per million | Exact 95% CI |
 | ------------------------- | ---------------- | ----------------- | ----------------------- | ------------ |
-| downstream_of_reference_signal | 6,288 | 6,102,114,566.998032 | 1.030462 | 1.005148 to 1.056253 |
-| upstream_of_reference_signal | 6,126 | 6,060,055,108.108314 | 1.010882 | 0.985725 to 1.036519 |
+| downstream_of_reference_signal | 6,288 | 3,566,487,053.981048 | 1.763079 | active v2/v5 figure data |
+| upstream_of_reference_signal | 6,126 | 3,542,468,305.723469 | 1.729303 | active v2/v5 figure data |
 
-![AADT-Normalized Aggregate Direction Summary](figures/11_aggregate_rate_by_direction.svg)
+![AADT-Normalized Aggregate Direction Summary](figures/active_v2_v5/11_aggregate_rate_by_direction_active_v2_v5.svg)
 
-*Exhibit EX14. Descriptive AADT-normalized prototype aggregate direction summary. Aggregate only; unit-level rates remain QA-only; provisional bidirectional AADT assumption; `DIRECTION_FACTOR` not applied; missing/review AADT excluded. Estimated exposure is calculated from AADT, represented roadway length, and the 2022-2024 crash period. This exhibit makes no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
+*Exhibit EX14. Active v2/v5 descriptive AADT-normalized prototype aggregate direction summary. Aggregate only; unit-level rates remain QA-only; `DIRECTION_FACTOR` applied where valid; bidirectional fallback where null; missing/review AADT excluded. Estimated exposure is calculated from AADT, represented roadway length, and the 2022-2024 crash period. This exhibit makes no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
 
 These aggregate summaries are descriptive and provisional. They do not rank sites, directions, or windows; they do not estimate causal effects; and they do not recommend downstream functional area distances. Fixed-band rate sensitivity should wait until the rate display notes and denominator assumptions are manually reviewed and accepted.
 
@@ -125,8 +127,8 @@ Rate display rules for this package:
 - estimated vehicle-mile exposure >= 5,000,000
 - denominator-ready unit count >= 25
 - stable AADT coverage share >= 0.80
-- provisional bidirectional AADT assumption retained
-- `DIRECTION_FACTOR` not applied
+- `DIRECTION_FACTOR` applied where valid
+- bidirectional fallback where null
 - missing/review AADT excluded from denominator values
 - unit-level rates remain QA-only
 
@@ -134,33 +136,33 @@ Estimated exposure is calculated from AADT, represented roadway length, and the 
 
 The package created 185 count/context matrix rows, including roadway representation and crash-level AREA_TYPE context matrices. It evaluated 34 aggregate context-rate cells; 28 cells were display-ready and 6 cells carried denominator, sparse-cell, or review notes. The former context relationship rate display summary is technical QA only and is omitted from this stakeholder-facing report.
 
-![Context Heatmap: Distance by Speed](figures/12_context_heatmap_crashes_by_distance_and_speed.svg)
+![Context Heatmap: Distance by Speed](figures/active_v2_v5/12_context_heatmap_crashes_by_distance_and_speed_active_v2_v5.svg)
 
 *Exhibit EX15. Pre-regression descriptive assigned-crash count heatmap by distance band and speed band. Speed labels use readable mph categories; missing/review speed context remains visible. Counts are descriptive only and make no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
 
-![Context Heatmap: Distance by Access](figures/13_context_heatmap_crashes_by_distance_and_access.svg)
+![Context Heatmap: Distance by Access](figures/active_v2_v5/14_context_heatmap_crashes_by_distance_and_access_active_v2_v5.svg)
 
 *Exhibit EX16. Pre-regression descriptive assigned-crash count heatmap by distance band and access-density band. Access density is not calculated per 50-ft bin or across the entire displayed group; it is calculated at local reference signal + signal-relative direction + distance-band grain and then summarized. Counts are descriptive only and make no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
 
-![Context Heatmap: Speed by Access](figures/14_context_heatmap_crashes_by_speed_and_access.svg)
+![Context Heatmap: Speed by Access](figures/active_v2_v5/15_context_heatmap_crashes_by_speed_and_access_active_v2_v5.svg)
 
 *Exhibit EX17. Pre-regression descriptive assigned-crash count heatmap by speed band and access-density band. Missing/review speed context remains visible. Access density is not calculated per 50-ft bin or across the entire displayed group; it is calculated at local reference signal + signal-relative direction + distance-band grain and then summarized. Counts are descriptive only.*
 
-![Context Heatmap: Distance by AADT](figures/15_context_heatmap_crashes_by_distance_and_aadt.svg)
+![Context Heatmap: Distance by AADT](figures/active_v2_v5/13_context_heatmap_crashes_by_distance_and_aadt_active_v2_v5.svg)
 
 *Exhibit EX18. Pre-regression descriptive assigned-crash count heatmap by distance band and AADT band. AADT labels are vehicles/day. Counts are descriptive only and make no causal, policy, comparative-performance, or downstream functional area distance interpretation.*
 
-![Context Rate: Window by Access](figures/16_context_rate_by_window_and_access.svg)
+![Context Rate: Window by Access](figures/active_v2_v5/16_context_rate_by_window_and_access_active_v2_v5.svg)
 
-*Exhibit EX19. Descriptive AADT-normalized prototype aggregate rate table by analysis window and access-density band. Aggregate cells only; denominator warning, sparse cell, and review notes are shown; provisional bidirectional AADT assumption; `DIRECTION_FACTOR` not applied; missing/review AADT excluded; unit-level rates remain QA-only. Access density is not calculated per 50-ft bin or across the entire displayed group; it is calculated at reference signal + signal-relative direction + analysis-window grain and then summarized.*
+*Exhibit EX19. Active v2/v5 descriptive AADT-normalized prototype aggregate rate table by analysis window and access-density band. Aggregate cells only; `DIRECTION_FACTOR` applied where valid; bidirectional fallback where null; missing/review AADT excluded; unit-level rates remain QA-only. Access density is summarized from accepted access context.*
 
-![Context Rate: Window by Speed](figures/17_context_rate_by_window_and_speed.svg)
+![Context Rate: Window by Speed](figures/active_v2_v5/17_context_rate_by_window_and_speed_active_v2_v5.svg)
 
-*Exhibit EX20. Descriptive AADT-normalized prototype aggregate rate table by analysis window and speed band. Aggregate cells only; denominator warning, sparse cell, and review notes are shown; provisional bidirectional AADT assumption; `DIRECTION_FACTOR` not applied; missing/review AADT excluded; unit-level rates remain QA-only. Missing/review speed context remains visible.*
+*Exhibit EX20. Active v2/v5 descriptive AADT-normalized prototype aggregate rate table by analysis window and speed band. Aggregate cells only; `DIRECTION_FACTOR` applied where valid; bidirectional fallback where null; missing/review AADT excluded; unit-level rates remain QA-only. Missing/review speed context remains visible.*
 
-![Context Rate: Window by AADT](figures/18_context_rate_by_window_and_aadt.svg)
+![Context Rate: Window by AADT](figures/active_v2_v5/18_context_rate_by_window_and_aadt_active_v2_v5.svg)
 
-*Exhibit EX21. Descriptive AADT-normalized prototype aggregate rate table by analysis window and AADT band. Aggregate cells only; AADT labels are vehicles/day; denominator warning, sparse cell, and review notes are shown; provisional bidirectional AADT assumption; `DIRECTION_FACTOR` not applied; missing/review AADT excluded; unit-level rates remain QA-only.*
+*Exhibit EX21. Active v2/v5 descriptive AADT-normalized prototype aggregate rate table by analysis window and AADT band. Aggregate cells only; AADT labels are vehicles/day; `DIRECTION_FACTOR` applied where valid; bidirectional fallback where null; missing/review AADT excluded; unit-level rates remain QA-only.*
 
 ## 8. Descriptive Results
 
@@ -208,5 +210,5 @@ Recommended next steps:
 
 ## 13. Appendix / Table and Figure Inventory
 
-The figure index is maintained in `roadway_graph_figure_index.md`. Report QA is maintained in `roadway_graph_report_qa.md`. Stakeholder-safe rate tables are stored under `work/output/roadway_graph/report/current/tables`. The manually refined copied SVG package is stored under `docs/reports/roadway_graph/figures`, with copied overview figure-ready support data under `docs/reports/roadway_graph/figures/figure_data`. Context relationship figure-ready CSV files remain stored under `work/output/roadway_graph/report/current/context_relationship_figure_data`.
+The figure index is maintained in `roadway_graph_figure_index.md`. Report QA is maintained in `roadway_graph_report_qa.md`. Active v2/v5 figure data and comparison tables are stored under `work/output/roadway_graph/report/current_active/`. Active SVGs are stored under `docs/reports/roadway_graph/figures/active_v2_v5/`. The older manually refined copied SVG package remains under `docs/reports/roadway_graph/descriptive_figures` as v1/v4 baseline/history.
 

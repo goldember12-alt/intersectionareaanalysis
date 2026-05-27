@@ -1,0 +1,5 @@
+priority,recommended_next_step,purpose,non_goal
+1,Hold internal technical review of active v2/v5 S3 diagnostics and NB stabilization.,decide whether any model status language belongs in stakeholder materials,do not turn coefficients into stakeholder findings
+2,Regenerate internal model figures from active v2/v5 outputs before using visuals in review.,avoid showing baseline v1/v4 figures as current active evidence,do not update stakeholder report conclusions with model findings
+3,Keep fixed-alpha NB as sensitivity evidence and do not promote estimated-alpha NB.,preserve model-family decision discipline,do not treat non-interpretable NB4 as usable
+4,Continue documenting AADT v2 source-semantics caveat and speed v5 QA conflicts.,keep active exposure and speed limitations visible,do not create causal or policy claims

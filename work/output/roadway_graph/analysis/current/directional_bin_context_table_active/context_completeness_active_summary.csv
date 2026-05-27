@@ -1,0 +1,5 @@
+distance_window,directional_bin_count,assigned_crash_count,bins_with_assigned_crash,bins_with_access_context,bins_with_stable_speed_context,bins_with_stable_aadt_context,bins_with_urban_rural_context,bins_with_complete_core_context,summary_grain,signal_relative_direction
+high_priority_0_1000ft,66074,9170,5835,66074,62215,62565,0,0,distance_window,
+sensitivity_1000_2500ft,44636,4046,2717,44636,43620,43645,0,0,distance_window,
+,55370,6673,4276,55370,53032,53100,0,0,signal_relative_direction,downstream_of_reference_signal
+,55340,6543,4276,55340,52803,53110,0,0,signal_relative_direction,upstream_of_reference_signal

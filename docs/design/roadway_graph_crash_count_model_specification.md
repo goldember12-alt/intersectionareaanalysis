@@ -65,16 +65,17 @@ Primary offset:
 
 `offset(log_estimated_exposure)`
 
-Current exposure definition:
+Existing v1 exposure definition:
 
 `estimated_exposure = length_weighted_stable_AADT x represented_length_miles x 1,096 days`
 
 Primary model rows should be denominator-ready rows only. Denominator-ready rows require positive represented length, positive stable AADT, and stable AADT coverage share at or above the current 0.80 threshold.
 
-Exposure caveats:
+Exposure caveats for existing model-prep/model outputs:
 
-- AADT is bidirectional/provisional.
-- `DIRECTION_FACTOR` is not applied.
+- Existing outputs use the older v1 bidirectional/provisional AADT exposure.
+- `DIRECTION_FACTOR` is not applied in existing outputs.
+- The active denominator policy is now v2 direction-factor with null-factor bidirectional fallback; the model offset needs a v2 refresh before active denominator interpretation.
 - AADT year flags are preserved.
 - Mixed AADT year and outside-period AADT year flags should be retained for sensitivity and interpretation review.
 - The offset supports count-model exposure adjustment; it does not make the output policy-ready.

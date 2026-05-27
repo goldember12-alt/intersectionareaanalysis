@@ -1,0 +1,362 @@
+{
+  "bounded_question": "read-only source-vs-normalized attribute preservation audit for core normalized parquets",
+  "completed_at_utc": "2026-05-26T16:25:48.997084+00:00",
+  "crash_direction_fields_used": false,
+  "created_at_utc": "2026-05-26T16:22:12.145870+00:00",
+  "datasets": [
+    {
+      "dataset": "roads",
+      "normalized_file": "artifacts\\normalized\\roads.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "Travelway",
+          "source_path": "Intersection Crash Analysis Layers\\Travelway.gdb"
+        }
+      ]
+    },
+    {
+      "dataset": "access",
+      "normalized_file": "artifacts\\normalized\\access.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "layer_lrspoint",
+          "source_path": "Intersection Crash Analysis Layers\\accesspoints.gdb"
+        }
+      ]
+    },
+    {
+      "dataset": "speed",
+      "normalized_file": "artifacts\\normalized\\speed.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "SDE_VDOT_SPEED_LIMIT_MSTR_RTE",
+          "source_path": "Intersection Crash Analysis Layers\\postedspeedlimits.gdb"
+        }
+      ]
+    },
+    {
+      "dataset": "aadt",
+      "normalized_file": "artifacts\\normalized\\aadt.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "New_AADT",
+          "source_path": "Intersection Crash Analysis Layers\\New_AADT.gdb"
+        }
+      ]
+    },
+    {
+      "dataset": "crashes",
+      "normalized_file": "artifacts\\normalized\\crashes.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "CrashData_Basic",
+          "source_path": "Intersection Crash Analysis Layers\\crashdata.gdb"
+        }
+      ]
+    },
+    {
+      "dataset": "signals",
+      "normalized_file": "artifacts\\normalized\\signals.parquet",
+      "source_read_error": "",
+      "sources": [
+        {
+          "source_layer": "HMMS_TrafficSignals_Flat",
+          "source_path": "Intersection Crash Analysis Layers\\HMMS_Traffic_Signals.gdb"
+        },
+        {
+          "source_layer": "Hampton_Signals",
+          "source_path": "Intersection Crash Analysis Layers\\Hampton_Analysis.gdb"
+        },
+        {
+          "source_layer": "Norfolk_Signals",
+          "source_path": "Intersection Crash Analysis Layers\\Traffic_Signals_-_City_of_Norfolk.gdb"
+        }
+      ]
+    }
+  ],
+  "graph_context_rate_model_outputs_modified": false,
+  "normalized_parquets_overwritten": false,
+  "normalized_root": "artifacts\\normalized",
+  "outputs": {
+    "aadt": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\aadt_source_attribute_preservation_audit.csv",
+    "access": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\access_source_attribute_preservation_audit.csv",
+    "crashes": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\crash_source_attribute_preservation_audit.csv",
+    "findings": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_attribute_audit_findings.md",
+    "flags": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_field_loss_flags.csv",
+    "manifest": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_attribute_audit_manifest.json",
+    "nonnull": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_non_null_comparison.csv",
+    "qa": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_attribute_audit_qa.csv",
+    "recommendations": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_restaging_recommendations.csv",
+    "roads": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\roads_source_attribute_preservation_audit.csv",
+    "schema": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_schema_comparison.csv",
+    "signals": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\signal_source_attribute_preservation_audit.csv",
+    "source_layer_inventory": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_layer_inventory.csv",
+    "speed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\speed_source_attribute_preservation_audit.csv",
+    "summary": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_attribute_audit_summary.csv"
+  },
+  "qa": [
+    {
+      "check_name": "normalized_parquets_overwritten",
+      "expected": "unchanged",
+      "observed": "unchanged",
+      "passed": true
+    },
+    {
+      "check_name": "graph_context_rate_model_outputs_modified",
+      "expected": "no",
+      "observed": "module writes only normalized_source_attribute_audit review outputs",
+      "passed": true
+    },
+    {
+      "check_name": "crash_direction_fields_used",
+      "expected": "no",
+      "observed": "crash direction-like fields excluded from value profiling",
+      "passed": true
+    },
+    {
+      "check_name": "source_vs_parquet_comparisons_documented",
+      "expected": "yes",
+      "observed": "schema and non-null comparison CSVs written",
+      "passed": true
+    },
+    {
+      "check_name": "restaging_recommendations_executed",
+      "expected": "no",
+      "observed": "recommendations only; no restaging run",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_summary",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_attribute_audit_summary.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_schema",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_schema_comparison.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_nonnull",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_non_null_comparison.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_flags",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_field_loss_flags.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_access",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\access_source_attribute_preservation_audit.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_speed",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\speed_source_attribute_preservation_audit.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_aadt",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\aadt_source_attribute_preservation_audit.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_roads",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\roads_source_attribute_preservation_audit.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_crashes",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\crash_source_attribute_preservation_audit.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_recommendations",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\normalized_source_attribute_audit\\normalized_source_restaging_recommendations.csv",
+      "passed": true
+    }
+  ],
+  "read_only": true,
+  "recommendations": [
+    {
+      "after_restaging_regenerate": "roadway_graph scaffold and all downstream graph/context products if roads are ever restaged",
+      "dataset": "roads",
+      "expected_impact": "Travelway configuration, route, measure, median, lane, and identity fields appear preserved; improvements are more likely semantic decoding than restaging.",
+      "priority": "review",
+      "recommendation_basis": "no high-severity preservation loss flags",
+      "restage_recommendation": "not_required_for_attribute_preservation",
+      "source_fields_to_preserve": "RTE_NM|RTE_COMMON|FROM_MEASURE|TO_MEASURE|RTE_FROM_M|RTE_TO_MSR|RIM_FACILI|RIM_ACCESS|LANE_THRU_|LANE_THRU1|LANE_REVER|RIM_MEDIAN|MEDIAN_WID|MEDIAN_COV|MEDIAN_IND|MEDIAN_OPP|RTE_CATEGO|RTE_TYPE_N|RTE_RAMP_C|LOC_COMP_D|LOC_COMP_1|RTE_ID|EVENT_SOUR|EVENT_LOCA|EVENT_COMP|RTE_MEASUR"
+    },
+    {
+      "after_restaging_regenerate": "none until a populated access type source is found",
+      "dataset": "access",
+      "expected_impact": "Same source layer has no populated access type/context fields; restaging from it alone is unlikely to enable typed access summaries.",
+      "priority": "low",
+      "recommendation_basis": "source-vs-parquet non-null comparison",
+      "restage_recommendation": "do_not_restage_from_same_layer_for_type_values",
+      "source_fields_to_preserve": "ACCESS_DIRECTION|ACCESS_CONTROL|NUMBER_OF_APPROACHES|INDUSTRIAL|RESIDENTIAL|COMMERCIAL_RETAIL|GOV_SCHOOL_INSTITUTIONAL|TURN_LANES_PRIMARY_ROUTE|CROSS_STREET"
+    },
+    {
+      "after_restaging_regenerate": "stage_posted_speed_source; speed_context_join_v4_identity_enriched; directional_bin_context_table; summaries if speed is restaged",
+      "dataset": "speed",
+      "expected_impact": "Posted-speed route, directionality, event, and measure fields appear preserved; missing/review speed bins likely need matching logic review, not source restaging.",
+      "priority": "low",
+      "recommendation_basis": "no high-severity preservation loss flags",
+      "restage_recommendation": "not_required_for_attribute_preservation",
+      "source_fields_to_preserve": "ROUTE_COMMON_NAME|LOC_COMP_DIRECTIONALITY_NAME|CAR_SPEED_LIMIT|TRUCK_SPEED_LIMIT|EVENT_SOURCE_ID|EVENT_LOCATION_ID|EVENT_COMPONENT_ID|ROUTE_FROM_MEASURE|ROUTE_TO_MEASURE|RTE_TYPE_CD|RTE_TYPE_NM"
+    },
+    {
+      "after_restaging_regenerate": "stage_aadt_source; aadt_context_join_v3_identity_route_measure; directional_bin_context_table; AADT audits/rate prototypes if AADT is restaged",
+      "dataset": "aadt",
+      "expected_impact": "AADT, year, direction factor, directionality, route, link, edge, and measure fields appear preserved; denominator policy remains a later analytical decision.",
+      "priority": "low",
+      "recommendation_basis": "no high-severity preservation loss flags",
+      "restage_recommendation": "not_required_for_attribute_preservation",
+      "source_fields_to_preserve": "AADT|AADT_YR|DIRECTION_FACTOR|DIRECTIONALITY|RTE_NM|MASTER_RTE_NM|LINKID|EDGE_RTE_KEY|FROM_MEASURE|TO_MEASURE|TRANSPORT_EDGE_FROM_MSR|TRANSPORT_EDGE_TO_MSR"
+    },
+    {
+      "after_restaging_regenerate": "crash assignment/readiness/context products only if crash geometry or identifiers are restaged",
+      "dataset": "crashes",
+      "expected_impact": "Basic crash context fields appear preserved; crash direction-like fields were not profiled or used.",
+      "priority": "low",
+      "recommendation_basis": "no high-severity preservation loss flags; crash direction fields excluded",
+      "restage_recommendation": "not_required_for_attribute_preservation",
+      "source_fields_to_preserve": "DOCUMENT_NBR|CRASH_YEAR|CRASH_DT|CRASH_SEVERITY|VEH_COUNT|COLLISION_TYPE|ROADWAY_DESCRIPTION|INTERSECTION_TYPE|TRAFFIC_CONTROL_TYPE|AREA_TYPE|RTE_NM|RNS_MP|NODE|OFFSET"
+    },
+    {
+      "after_restaging_regenerate": "signal association, eligibility, scaffold, catchments, assignments, and all context products if signals are restaged",
+      "dataset": "signals",
+      "expected_impact": "Normalized signals are a union of available signal sources; row-count and source-specific completeness should be reviewed before any signal restaging.",
+      "priority": "review",
+      "recommendation_basis": "multi-source schema comparison",
+      "restage_recommendation": "not_required_for_attribute_preservation",
+      "source_fields_to_preserve": "GLOBALID|ASSET_ID|REG_SIGNAL_ID|ASSET_NUM|STATUS|MAJ_NAME|MAJ_NUM|MINOR_NAME|MINOR_NUM|SIGNAL_NO|INTNUM|INTNO"
+    }
+  ],
+  "source_root": "Intersection Crash Analysis Layers",
+  "summary": [
+    {
+      "dataset": "roads",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\roads.parquet",
+      "parquet_field_count": 78,
+      "parquet_fields_not_in_source": 2,
+      "parquet_row_count": 140654,
+      "restaging_priority": "not_indicated_by_attribute_preservation",
+      "shared_fields_profiled": 76,
+      "source_field_count": 76,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "Travelway",
+      "source_paths": "Intersection Crash Analysis Layers\\Travelway.gdb",
+      "source_read_status": "read",
+      "source_row_count": 141152
+    },
+    {
+      "dataset": "access",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\access.parquet",
+      "parquet_field_count": 27,
+      "parquet_fields_not_in_source": 2,
+      "parquet_row_count": 70595,
+      "restaging_priority": "low_source_empty",
+      "shared_fields_profiled": 25,
+      "source_field_count": 25,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "layer_lrspoint",
+      "source_paths": "Intersection Crash Analysis Layers\\accesspoints.gdb",
+      "source_read_status": "read",
+      "source_row_count": 70595
+    },
+    {
+      "dataset": "speed",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\speed.parquet",
+      "parquet_field_count": 33,
+      "parquet_fields_not_in_source": 4,
+      "parquet_row_count": 38723,
+      "restaging_priority": "not_indicated_by_attribute_preservation",
+      "shared_fields_profiled": 29,
+      "source_field_count": 29,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "SDE_VDOT_SPEED_LIMIT_MSTR_RTE",
+      "source_paths": "Intersection Crash Analysis Layers\\postedspeedlimits.gdb",
+      "source_read_status": "read",
+      "source_row_count": 38723
+    },
+    {
+      "dataset": "aadt",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\aadt.parquet",
+      "parquet_field_count": 24,
+      "parquet_fields_not_in_source": 4,
+      "parquet_row_count": 677597,
+      "restaging_priority": "not_indicated_by_attribute_preservation",
+      "shared_fields_profiled": 20,
+      "source_field_count": 20,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "New_AADT",
+      "source_paths": "Intersection Crash Analysis Layers\\New_AADT.gdb",
+      "source_read_status": "read",
+      "source_row_count": 677597
+    },
+    {
+      "dataset": "crashes",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\crashes.parquet",
+      "parquet_field_count": 69,
+      "parquet_fields_not_in_source": 2,
+      "parquet_row_count": 379272,
+      "restaging_priority": "not_indicated_by_attribute_preservation",
+      "shared_fields_profiled": 67,
+      "source_field_count": 67,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "CrashData_Basic",
+      "source_paths": "Intersection Crash Analysis Layers\\crashdata.gdb",
+      "source_read_status": "read",
+      "source_row_count": 1076099
+    },
+    {
+      "dataset": "signals",
+      "field_loss_flag_count": 0,
+      "high_severity_field_loss_flag_count": 0,
+      "normalized_exists": true,
+      "normalized_path": "artifacts\\normalized\\signals.parquet",
+      "parquet_field_count": 75,
+      "parquet_fields_not_in_source": 2,
+      "parquet_row_count": 3933,
+      "restaging_priority": "not_indicated_by_attribute_preservation",
+      "shared_fields_profiled": 73,
+      "source_field_count": 73,
+      "source_fields_missing_from_parquet": 0,
+      "source_layers_found": "HMMS_TrafficSignals_Flat|Hampton_Signals|Norfolk_Signals",
+      "source_paths": "Intersection Crash Analysis Layers\\HMMS_Traffic_Signals.gdb|Intersection Crash Analysis Layers\\Hampton_Analysis.gdb|Intersection Crash Analysis Layers\\Traffic_Signals_-_City_of_Norfolk.gdb",
+      "source_read_status": "read|read|read",
+      "source_row_count": 3933
+    }
+  ]
+}

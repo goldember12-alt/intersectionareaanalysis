@@ -1,0 +1,7 @@
+coverage_group,proposed_access_type_category,access_point_count,total_access_points_in_group,share_of_group
+matched_to_stable_universe,any_usable_type,0,3040,0.0
+matched_to_stable_universe,unknown,3040,3040,1.0
+ambiguous_across_bins,any_usable_type,0,251,0.0
+ambiguous_across_bins,unknown,251,251,1.0
+unmatched_or_outside_stable_universe,any_usable_type,0,67555,0.0
+unmatched_or_outside_stable_universe,unknown,67555,67555,1.0

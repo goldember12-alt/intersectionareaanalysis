@@ -39,6 +39,15 @@ Additional current descriptive output folders:
 - `work/output/roadway_graph/analysis/current/descriptive_crash_rate_prototype/`
 - `work/output/roadway_graph/analysis/current/descriptive_crash_rate_prototype_qa/`
 - `work/output/roadway_graph/analysis/current/descriptive_crash_rate_suppression_review/`
+- `work/output/roadway_graph/analysis/current/descriptive_crash_rate_direction_factor_sensitivity/`
+- `work/output/roadway_graph/analysis/current/active_rate_denominator_policy/`
+- `work/output/roadway_graph/review/current/active_speed_context_policy/`
+- `work/output/roadway_graph/analysis/current/directional_bin_context_table_active/`
+- `work/output/roadway_graph/analysis/current/directional_context_descriptive_summaries_active/`
+- `work/output/roadway_graph/analysis/current/descriptive_crash_rate_prototype_active/`
+- `work/output/roadway_graph/analysis/current/descriptive_crash_rate_suppression_review_active/`
+- `work/output/roadway_graph/analysis/current/crash_count_modeling_readiness_dataset_active/`
+- `work/output/roadway_graph/analysis/current/active_refresh_impact_summary/`
 
 Use matching history/run metadata lanes if implemented later.
 
@@ -77,7 +86,7 @@ Command:
 .\.venv\Scripts\python.exe -m src.active.roadway_graph.signal_context_review_queue
 ```
 
-Output folder:
+Figure-ready source table output folder:
 
 `work/output/roadway_graph/analysis/current/signal_context_review_queue/`
 
@@ -219,6 +228,101 @@ Created outputs:
 
 The module audits candidate analysis units at `reference_signal_id + signal_relative_direction + analysis_window` and `reference_signal_id + signal_relative_direction + fixed distance_band`. It creates denominator-readiness flags, feature-matrix scaffolds, descriptive count cross-tabs, sparse-cell queues, and duplicate source-bin audits. It does not compute crash rates, fit regressions, create predictive models, make causal claims, rank safety performance, or recommend downstream functional area distances.
 
+## Active Denominator Policy Update
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.active_rate_denominator_policy_update
+```
+
+Output folder:
+
+`work/output/roadway_graph/analysis/current/active_rate_denominator_policy/`
+
+Created outputs:
+
+- `active_rate_denominator_policy_summary.csv`
+- `active_rate_denominator_policy_rules.csv`
+- `active_rate_denominator_policy_comparison_v1_v2.csv`
+- `active_rate_denominator_policy_findings.md`
+- `active_rate_denominator_policy_manifest.json`
+
+This module promotes `v2_direction_factor_with_bidirectional_fallback` as the active descriptive exposure denominator policy going forward. It does not rerun rates, overwrite v1 outputs, fit models, create figures, or change downstream combined context tables. Valid `DIRECTION_FACTOR` is applied only in the approved denominator context, null factors fall back to v1 bidirectional AADT treatment, invalid factors are flagged, and the source-documentation caveat remains open.
+
+Downstream outputs requiring refresh before they are treated as current under v2:
+
+- descriptive crash-rate prototype v2 active denominator outputs
+- rate suppression review v2 active denominator outputs
+- context relationship rate figures using v2
+- modeling readiness exposure/offset update
+- simplified internal model v2 only if speed/AADT context changes are accepted
+
+## Active Speed Context Policy Update
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.active_speed_context_policy_update
+```
+
+Output folder:
+
+`work/output/roadway_graph/review/current/active_speed_context_policy/`
+
+Created outputs:
+
+- `active_speed_context_policy_summary.csv`
+- `active_speed_context_policy_rules.csv`
+- `active_speed_context_v4_v5_comparison.csv`
+- `active_speed_context_conflict_summary.csv`
+- `active_speed_context_downstream_refresh_requirements.csv`
+- `active_speed_context_policy_findings.md`
+- `active_speed_context_policy_manifest.json`
+
+This module promotes `speed_v5_new_source_supplement` as the active speed context going forward. It does not overwrite speed v4 outputs, overwrite `artifacts/normalized/speed.parquet`, rerun the combined context table, rerun rates, or fit models. `Speed_Limit_RNS` route+measure evidence is preferred for future refreshes, v4/v5 conflicts are preserved as QA evidence rather than blockers, and remaining v5 review/missing statuses remain visible. No speed values are imputed.
+
+Downstream outputs requiring refresh before they are treated as current under v5:
+
+- combined directional-bin context table
+- descriptive context summaries
+- review queues and profile outputs using speed context
+- stakeholder table packages and report figures/tables using speed context
+- rate outputs after active denominator v2 and active speed v5 are integrated
+- modeling readiness datasets and internal models before interpreting speed terms under v5
+
+## Active V2/V5 Downstream Refresh
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.directional_bin_context_table_active_refresh
+```
+
+Primary output folders:
+
+- `work/output/roadway_graph/analysis/current/directional_bin_context_table_active/`
+- `work/output/roadway_graph/analysis/current/directional_context_descriptive_summaries_active/`
+- `work/output/roadway_graph/analysis/current/descriptive_crash_rate_prototype_active/`
+- `work/output/roadway_graph/analysis/current/descriptive_crash_rate_suppression_review_active/`
+- `work/output/roadway_graph/analysis/current/crash_count_modeling_readiness_dataset_active/`
+- `work/output/roadway_graph/analysis/current/active_refresh_impact_summary/`
+
+This module refreshes the accepted downstream analytical surface using speed v5 and AADT denominator v2. It reuses the existing scaffold, catchments, crash assignment/readiness, access context, AADT v3 context join, and crash-level `AREA_TYPE` context. It does not overwrite v1/v4 outputs, rerun source staging, modify graph/context joins, use crash direction fields, fit models, or make policy/risk/safety-performance claims.
+
+Active refresh counts:
+
+- stable speed bins: 84,857 baseline v4 -> 105,835 active v5
+- represented assigned crashes: 13,216 -> 13,216
+- rate-ready window units: 2,967 -> 2,967
+- v1 exposure: 12,162,169,675.11
+- active v2 exposure: 7,108,955,359.70
+- v1 aggregate rate per million: 1.020706
+- active v2 aggregate rate per million: 1.746248
+- window-grain modeling-ready units: 2,124 baseline -> 2,786 active
+
+Figures and report tables that use speed coverage, speed bands, rates, or model matrices must be regenerated from the active folders before they are treated as current.
+
 Current readiness results:
 
 - Window-grain denominator-ready units under the conservative AADT coverage rule: 2,967 of 3,222.
@@ -346,7 +450,7 @@ Current prototype result:
 - Downstream summary: 6,288 crashes, 6,102,114,567.00 VMT-like exposure, 1.030462 crashes per million VMT-like exposure.
 - Upstream summary: 6,126 crashes, 6,060,055,108.11 VMT-like exposure, 1.010882 crashes per million VMT-like exposure.
 
-The prototype is descriptive and provisional. It uses length-weighted stable AADT, represented length in miles, and the approved 1,096-day 2022-2024 study period. AADT is treated as bidirectional exposure for each signal-relative view. `DIRECTION_FACTOR` is not applied. Missing/review AADT units are excluded from primary rate rows and preserved in `descriptive_rate_prototype_non_ready_units.csv`.
+This v1 prototype is descriptive and provisional. It uses length-weighted stable AADT, represented length in miles, and the approved 1,096-day 2022-2024 study period. AADT is treated as bidirectional exposure for each signal-relative view and `DIRECTION_FACTOR` is not applied in this legacy/baseline output. Missing/review AADT units are excluded from primary rate rows and preserved in `descriptive_rate_prototype_non_ready_units.csv`. After the v2 active policy promotion, this output needs a v2 refresh before it is treated as the current active denominator product.
 
 This module does not compute raw 50-ft bin rates, fixed distance-band rates, models, regressions, causal results, safety-performance rankings, danger/risk rankings, policy guidance, or downstream functional-area distance recommendations.
 
@@ -485,9 +589,9 @@ Current readiness result:
 - Distance-band matrix units: 7,797; denominator-ready units: 7,174.
 - Window denominator-ready assigned crashes: 12,414 of 13,216.
 - Distance-band denominator-ready assigned crashes: 12,413 of 13,216.
-- `estimated_exposure = length_weighted_stable_AADT x represented_length_miles x 1,096 days`.
-- `DIRECTION_FACTOR` is not applied.
-- AADT remains bidirectional/provisional and is flagged on all model-prep rows.
+- Existing v1 `estimated_exposure = length_weighted_stable_AADT x represented_length_miles x 1,096 days`.
+- Existing model-prep outputs do not apply `DIRECTION_FACTOR`; they need a v2 exposure/offset refresh before they are treated as current under the active denominator policy.
+- AADT v1 bidirectional/provisional flags remain on existing model-prep rows as legacy/baseline evidence.
 - AADT year mismatches are flagged, not automatically suppressed.
 - Access density is recalculated at the local signal-direction-window or signal-direction-distance-band grain from summed catchment access count divided by summed represented length, not from raw 50-ft bin density.
 
@@ -498,7 +602,7 @@ Exploratory association findings:
 - The 1,000-2,500 ft access pattern appears monotonic after the zero-access group.
 - Speed and AADT bands are usable candidate fields with caution; speed has missing/review units, and AADT remains provisional as both exposure input and possible covariate.
 
-QA confirmed no crash direction fields were read or used, no rows beyond 2,500 ft entered, no `DIRECTION_FACTOR` was applied, no model/regression was fit, no causal/policy/safety-performance/danger/risk language was introduced, local access density was used, exposure is denominator-gated, and high/exploding preview rates are flagged rather than hidden.
+QA confirmed no crash direction fields were read or used, no rows beyond 2,500 ft entered, no `DIRECTION_FACTOR` was applied in the existing v1 readiness package, no model/regression was fit, no causal/policy/safety-performance/danger/risk language was introduced, local access density was used, exposure is denominator-gated, and high/exploding preview rates are flagged rather than hidden. A v2 readiness refresh is now required for active denominator use.
 
 ## Implemented Crash Count Model Specification Memo
 
@@ -690,6 +794,74 @@ Current simplified-model result:
 
 The simplified model is for internal technical review only. Stakeholder interpretation remains blocked until denominator assumptions, AADT directionality, model diagnostics, and reporting language are reviewed.
 
+## Active V2/V5 Crash Count Simplified Internal Model Rerun
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.crash_count_simplified_internal_model_active
+```
+
+Output folder:
+
+`work/output/roadway_graph/analysis/current/crash_count_simplified_internal_model_active/`
+
+This rerun uses the active v2/v5 window-grain modeling-readiness matrix and active speed v5 bands derived from the active combined context table. It does not fit distance-band models, create predictions, create rankings, modify source/context/assignment data, or introduce causal, policy, risk, safety-performance, or downstream-distance guidance language.
+
+Current active result:
+
+- Modeled rows: 2,967 denominator-ready signal-direction-window rows.
+- Modeled assigned crashes: 12,414.
+- Access interaction remains useful; scaled-Poisson delta AIC for `S2_access_interaction` versus `S1_window_direction` is -26.269.
+- Simplified speed remains useful; scaled-Poisson delta AIC for `S3_access_interaction_speed_simplified` versus `S2_access_interaction` is -16.439.
+- S3 scaled-Poisson Pearson overdispersion ratio is 6.894, so overdispersion remains.
+- Scaled and cluster-robust Poisson remain the primary internal-review family.
+- Fixed-alpha NB remains sensitivity evidence only; active estimated-alpha NB stabilization was rerun separately and did not replace the Poisson-family primary decision.
+
+The prior `crash_count_simplified_internal_model/` package is retained as baseline/history.
+
+## Active V2/V5 Negative-Binomial Stabilization Diagnostic
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.crash_count_negative_binomial_stabilization_active
+```
+
+Output folder:
+
+`work/output/roadway_graph/analysis/current/crash_count_negative_binomial_stabilization_active/`
+
+This diagnostic uses only denominator-ready active signal-direction-window rows, `assigned_crash_count` as the outcome, the active `log_estimated_exposure` offset, active speed v5 simplified categories, and the same simplified model sequence. It does not apply any additional `DIRECTION_FACTOR`, fit distance-band models, create predictions, create rankings, alter source/context/assignment data, or introduce causal, policy, risk, safety-performance, or downstream-distance guidance language.
+
+Created outputs:
+
+- `active_nb_stabilization_input_summary.csv`
+- `active_estimated_alpha_nb_sequence_summary.csv`
+- `active_estimated_alpha_nb_coefficients.csv`
+- `active_estimated_alpha_nb_irrs.csv`
+- `active_estimated_alpha_nb_warning_log.csv`
+- `active_fixed_alpha_nb_sequence_summary.csv`
+- `active_fixed_alpha_nb_irrs.csv`
+- `active_poisson_vs_nb_comparison.csv`
+- `active_nb_access_interaction_stability.csv`
+- `active_nb_speed_term_stability.csv`
+- `active_vs_baseline_nb_comparison.csv`
+- `active_nb_model_readiness_decision.csv`
+- `active_negative_binomial_stabilization_qa.csv`
+- `crash_count_negative_binomial_stabilization_active_findings.md`
+- `crash_count_negative_binomial_stabilization_active_manifest.json`
+
+Current active result:
+
+- Estimated-alpha NB is interpretable for `NB0_exposure_only_active` and `NB3_access_interaction_no_speed_active`.
+- `NB1_window_direction_active`, `NB2_add_access_no_interaction_active`, and `NB4_access_interaction_speed_simplified_active` remain unstable or have incomplete covariance; NB4 does not converge.
+- Fixed-alpha NB fits succeed across alpha 0.25, 0.5, 1.0, and 2.0.
+- Fixed-alpha NB supports the access-window interaction and simplified speed as sensitivity evidence.
+- Active v2/v5 improves estimated-alpha NB stability versus baseline, but not enough to replace scaled and cluster-robust Poisson.
+- Readiness decision: `active_robust_poisson_primary_nb_sensitivity`.
+- Stakeholder interpretation remains blocked.
+
 ## Implemented Internal Crash Count Model Review Memo
 
 Memo:
@@ -713,7 +885,7 @@ Created outputs:
 - `internal_model_next_steps.csv`
 - `internal_model_review_manifest.json`
 
-The memo translates the existing category-simplified model outputs into an internal technical review record. It does not fit new models, use crash direction fields, apply `DIRECTION_FACTOR`, fit distance-band models, alter source/context/assignment data, create stakeholder-facing conclusions, create rankings, make causal claims, or recommend downstream functional area distances.
+The memo translates the existing category-simplified model outputs into an internal technical review record. It does not fit new models, use crash direction fields, apply `DIRECTION_FACTOR` in the existing v1 exposure offset, fit distance-band models, alter source/context/assignment data, create stakeholder-facing conclusions, create rankings, make causal claims, or recommend downstream functional area distances.
 
 Current review result:
 
@@ -721,8 +893,155 @@ Current review result:
 - Inference focus: scaled Poisson and cluster-robust Poisson.
 - Fixed-alpha negative-binomial fits remain sensitivity evidence only.
 - Overdispersion remains present and requires explicit review.
-- AADT remains bidirectional/provisional, with `DIRECTION_FACTOR` unapplied.
+- Existing internal model outputs use the older v1 bidirectional/provisional exposure, with `DIRECTION_FACTOR` unapplied; they need a v2 offset refresh before active denominator interpretation.
 - Stakeholder interpretation remains blocked.
+
+## Implemented Baseline Internal Crash Count Model Figures
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.crash_count_internal_model_figures
+```
+
+Output folder:
+
+`work/output/roadway_graph/analysis/current/crash_count_internal_model_figures/`
+
+Cleaned presentation SVGs and docs:
+
+`docs/reports/roadway_graph/modeling_figures/`
+
+Created source-table outputs:
+
+- `internal_model_irr_plot_data.csv`
+- `internal_model_access_interaction_plot_data.csv`
+- `internal_model_speed_effect_plot_data.csv`
+- `internal_model_diagnostic_plot_data.csv`
+- `internal_model_inference_comparison_plot_data.csv`
+- `internal_model_figure_qa.csv`
+- `internal_model_figure_manifest.json`
+
+Baseline review SVGs were later cleaned into `docs/reports/roadway_graph/modeling_figures/`:
+
+- `internal_model_irr_forest_plot.svg`
+- `internal_model_access_interaction_forest_plot.svg`
+- `internal_model_speed_effect_forest_plot.svg`
+- `internal_model_diagnostic_summary.svg`
+- `internal_model_inference_comparison.svg`
+
+The figure package is internal technical review only. It visualizes baseline selected-model coefficient, IRR, and diagnostic outputs without fitting new models or changing model specification, rate methodology, source data, context data, assignment data, or stakeholder-facing report conclusions. These figures predate the active v2/v5 model refresh and should be treated as baseline/historical until regenerated from active outputs. It does not use crash direction fields, does not create policy predictions, and does not support causal claims, rankings, safety-performance language, risk/danger language, or downstream functional area distance recommendations.
+
+## Implemented Baseline Negative-Binomial Stabilization Diagnostic
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.crash_count_negative_binomial_stabilization
+```
+
+Output folder:
+
+`work/output/roadway_graph/analysis/current/crash_count_negative_binomial_stabilization/`
+
+Created outputs:
+
+- `nb_stabilization_input_summary.csv`
+- `estimated_alpha_nb_sequence_summary.csv`
+- `estimated_alpha_nb_coefficients.csv`
+- `estimated_alpha_nb_irrs.csv`
+- `estimated_alpha_nb_warning_log.csv`
+- `fixed_alpha_nb_sequence_summary.csv`
+- `fixed_alpha_nb_irrs.csv`
+- `poisson_vs_nb_comparison.csv`
+- `nb_access_interaction_stability.csv`
+- `nb_speed_term_stability.csv`
+- `nb_model_readiness_decision.csv`
+- `crash_count_negative_binomial_stabilization_findings.md`
+- `negative_binomial_stabilization_qa.csv`
+- `crash_count_negative_binomial_stabilization_manifest.json`
+
+The diagnostic is read-only and stays at the denominator-ready signal-direction-window grain. It uses `assigned_crash_count` as outcome, `log_estimated_exposure` as offset, and the same simplified S3 categories. Estimated-alpha negative-binomial models are attempted from exposure-only through access-interaction-plus-speed complexity, while fixed-alpha NB sensitivities are run at alpha 0.25, 0.5, 1.0, and 2.0.
+
+Current diagnostic result:
+
+- Estimated-alpha NB is not interpretable even at `NB0_exposure_only` because covariance/Hessian behavior is unstable.
+- `NB4_access_interaction_speed_simplified` does not converge and returns an unusable alpha estimate.
+- Fixed-alpha NB fits succeed across the requested grid and model sequence.
+- Fixed-alpha NB supports the access-window interaction and simplified speed as sensitivity evidence.
+- Readiness decision: `robust_poisson_primary_nb_sensitivity`.
+- Preferred internal model family remains scaled and cluster-robust Poisson, with fixed-alpha NB retained as sensitivity evidence only.
+- Stakeholder interpretation remains blocked.
+
+## Active Internal Modeling Conclusion And Presentation Readiness
+
+Memo:
+
+`docs/reports/roadway_graph/internal_modeling_conclusion_and_presentation_readiness.md`
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.internal_modeling_conclusion_readiness_active
+```
+
+Active supporting output folder:
+
+`work/output/roadway_graph/analysis/current/internal_modeling_conclusion_readiness_active/`
+
+Created active outputs:
+
+- `active_internal_modeling_conclusion_summary.csv`
+- `active_model_family_readiness_table.csv`
+- `active_presentable_internal_artifacts_table.csv`
+- `active_blocked_stakeholder_claims_table.csv`
+- `active_recommended_next_steps_modeling.csv`
+- `active_internal_modeling_conclusion_manifest.json`
+
+The active conclusion memo is a synthesis and presentation-readiness document only. It does not fit new models, compute rates, use crash direction fields, apply any additional `DIRECTION_FACTOR`, include rows beyond 2,500 ft, create predictions, create rankings, make causal/safety-performance/risk/policy claims, update stakeholder report conclusions, or recommend downstream functional area distances.
+
+Current active conclusion:
+
+- Active v2/v5 replaces the prior v1/v4 baseline for current internal modeling review.
+- Preferred active internal model: `S3_access_interaction_speed_simplified`.
+- Preferred internal family: scaled and cluster-robust Poisson primary.
+- Fixed-alpha negative-binomial remains sensitivity evidence only.
+- Estimated-alpha negative-binomial improved versus baseline but is not stable for `NB4_access_interaction_speed_simplified_active`, so it does not replace Poisson-family inference.
+- Active access-window interaction and simplified speed remain useful, but both are weaker than in the baseline v1/v4 model.
+- Active internal artifacts are review-ready for technical discussion only.
+- Stakeholder model findings remain blocked.
+
+The prior `internal_modeling_conclusion_readiness/` package is retained as baseline/history.
+
+## Implemented Model Presentation Figure Subset
+
+Command:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.active.roadway_graph.crash_count_model_presentation_figures
+```
+
+Output folder:
+
+`work/output/roadway_graph/report/current/model_presentation_figures/`
+
+Docs and review SVG copies:
+
+`docs/reports/roadway_graph/modeling_figures/`
+
+Main presentation subset:
+
+- `model_presentation_model_summary.svg`
+- `model_presentation_access_interaction.svg`
+- `model_presentation_speed_context.svg`
+
+Appendix/internal figures:
+
+- `model_appendix_full_irr_forest_plot.svg`
+- `model_appendix_inference_comparison.svg`
+- `model_appendix_diagnostic_summary.svg`
+
+The package refines figure labels, spacing, and titles for internal team discussion only. It does not fit new models, change methodology, compute rates, update stakeholder report conclusions, create predictions, create rankings, make causal/safety-performance/risk/policy claims, or recommend downstream functional area distances.
 
 ## Earlier Planned Output Tables
 
@@ -956,6 +1275,9 @@ Before sharing, verify:
 7. Decide whether to refine denominator rules, AADT-year handling, or directional exposure before any fixed-band rate prototype.
 8. Define modeling-readiness requirements before any regression or policy claim.
 9. Review the internal crash-count model memo before any coefficient visualization, distance-band sensitivity, or report-facing model language.
+10. Review the internal model figure package manually before any later model-language or visualization approval.
+11. Treat fixed-alpha negative-binomial results as sensitivity evidence unless a future bounded diagnostic stabilizes estimated-alpha NB with usable covariance.
+12. Use the internal modeling conclusion memo to decide whether a stakeholder report should include only a high-level modeling-status paragraph.
 
 ## Non-Goals
 

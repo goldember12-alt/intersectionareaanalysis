@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="36" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#222">Accepted Universe Summary</text>
+<text x="30" y="60" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#222">Active v2/v5 context counts</text>
+<text x="30" y="80" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#222">Active v2/v5. Speed context: v5 Speed_Limit_RNS supplement. Exposure: AADT v2 direction-factor with bidirectional fallback.</text>
+<line x1="95" y1="105" x2="95" y2="425" stroke="#666"/>
+<line x1="95" y1="425" x2="885" y2="425" stroke="#666"/>
+<rect x="95" y="129" width="111" height="296" fill="#3f6f8f"/>
+<text x="150.5" y="121" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">110,710</text>
+<text x="150.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">directional_bins</text>
+<rect x="230" y="390" width="111" height="35" fill="#3f6f8f"/>
+<text x="285.5" y="382" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">13,216</text>
+<text x="285.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">assigned_crashes_represented</text>
+<rect x="365" y="143" width="111" height="282" fill="#3f6f8f"/>
+<text x="420.5" y="135" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">105,835</text>
+<text x="420.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">stable_speed_bins_active_v5</text>
+<rect x="500" y="142" width="111" height="283" fill="#3f6f8f"/>
+<text x="555.5" y="134" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">106,210</text>
+<text x="555.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">stable_aadt_bins</text>
+<rect x="635" y="418" width="111" height="7" fill="#3f6f8f"/>
+<text x="690.5" y="410" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">2,967</text>
+<text x="690.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">rate_ready_window_units</text>
+<rect x="770" y="418" width="111" height="7" fill="#3f6f8f"/>
+<text x="825.5" y="410" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#222">2,786</text>
+<text x="825.5" y="449" font-family="Arial, sans-serif" font-size="10" font-weight="normal" text-anchor="middle" fill="#222">window_modeling_ready_units</text>
+</svg>

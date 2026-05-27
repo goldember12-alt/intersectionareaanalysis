@@ -1,0 +1,321 @@
+{
+  "bounded_question": "read-only inventory of access source type fields and feasibility of typed directional-bin access summaries",
+  "candidate_fields": [
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "ACCESS_DIRECTION",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "ACCESS_CONTROL",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "NUMBER_OF_APPROACHES",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "INDUSTRIAL",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "RESIDENTIAL",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "COMMERCIAL_RETAIL",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "GOV_SCHOOL_INSTITUTIONAL",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "TURN_LANES_PRIMARY_ROUTE",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    },
+    {
+      "candidate_reason": "explicit_user_requested_field",
+      "feasibility_note": "field is present but has no populated values",
+      "field_name": "CROSS_STREET",
+      "field_present": true,
+      "full_vs_riro_support": "not_supported",
+      "missing_count": 70595,
+      "missing_pct": 1.0,
+      "non_null_count": 0,
+      "proposed_normalized_categories": "not_inferable",
+      "row_count": 70595,
+      "top_values": "",
+      "unique_non_null_count": 0,
+      "value_shape": "empty"
+    }
+  ],
+  "candidate_mapping_written": false,
+  "completed_at_utc": "2026-05-26T15:59:44.158299+00:00",
+  "coverage": [
+    {
+      "access_point_count": 0,
+      "coverage_group": "matched_to_stable_universe",
+      "proposed_access_type_category": "any_usable_type",
+      "share_of_group": 0.0,
+      "total_access_points_in_group": 3040
+    },
+    {
+      "access_point_count": 3040,
+      "coverage_group": "matched_to_stable_universe",
+      "proposed_access_type_category": "unknown",
+      "share_of_group": 1.0,
+      "total_access_points_in_group": 3040
+    },
+    {
+      "access_point_count": 0,
+      "coverage_group": "ambiguous_across_bins",
+      "proposed_access_type_category": "any_usable_type",
+      "share_of_group": 0.0,
+      "total_access_points_in_group": 251
+    },
+    {
+      "access_point_count": 251,
+      "coverage_group": "ambiguous_across_bins",
+      "proposed_access_type_category": "unknown",
+      "share_of_group": 1.0,
+      "total_access_points_in_group": 251
+    },
+    {
+      "access_point_count": 0,
+      "coverage_group": "unmatched_or_outside_stable_universe",
+      "proposed_access_type_category": "any_usable_type",
+      "share_of_group": 0.0,
+      "total_access_points_in_group": 67555
+    },
+    {
+      "access_point_count": 67555,
+      "coverage_group": "unmatched_or_outside_stable_universe",
+      "proposed_access_type_category": "unknown",
+      "share_of_group": 1.0,
+      "total_access_points_in_group": 67555
+    }
+  ],
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-26T15:59:30.493991+00:00",
+  "feasibility": [
+    {
+      "answer": "no",
+      "feasibility_note": "No candidate source field contains populated full/RIRO/right-in/right-out/restriction values.",
+      "inference_basis": "not_supported",
+      "normalized_categories_supported": "not_inferable|unknown",
+      "question": "is_full_vs_riro_directly_available",
+      "supporting_fields": ""
+    },
+    {
+      "answer": "no",
+      "feasibility_note": "The populated fields are locator or metadata fields, not independent movement-permission evidence; empty access-control, direction, turn-lane, approach-count, and land-use fields prevent defensible combination inference.",
+      "inference_basis": "not_supported",
+      "normalized_categories_supported": "unknown|not_inferable",
+      "question": "can_full_vs_riro_be_inferred_from_combinations",
+      "supporting_fields": ""
+    },
+    {
+      "answer": "no",
+      "feasibility_note": "Counts-only access context should remain unchanged until a populated access type or movement-restriction source is available.",
+      "inference_basis": "not_supported",
+      "normalized_categories_supported": "unknown|not_inferable",
+      "question": "can_directional_bin_access_context_be_upgraded_to_typed_summaries_now",
+      "supporting_fields": ""
+    }
+  ],
+  "final_context_tables_overwritten": false,
+  "full_vs_riro_combination_inference_available": "no",
+  "full_vs_riro_direct_available": "no",
+  "inputs": {
+    "access_context_join_manifest": "work\\output\\roadway_graph\\review\\current\\access_context_join\\access_context_join_manifest.json",
+    "access_context_join_qa": "work\\output\\roadway_graph\\review\\current\\access_context_join\\access_context_join_qa.csv",
+    "access_points_ambiguous": "work\\output\\roadway_graph\\review\\current\\access_context_join\\access_points_ambiguous_bin_matches.csv",
+    "access_points_joined": "work\\output\\roadway_graph\\review\\current\\access_context_join\\access_points_joined_to_stable_universe.csv",
+    "access_points_unmatched": "work\\output\\roadway_graph\\review\\current\\access_context_join\\access_points_unmatched_or_outside_stable_universe.csv",
+    "access_source": "artifacts\\normalized\\access.parquet",
+    "directional_bin_context_header_only": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context.csv",
+    "directional_crash_context_header_only": "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_crash_context.csv"
+  },
+  "outputs": {
+    "candidate_fields": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_candidate_fields.csv",
+    "coverage": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\matched_access_type_coverage.csv",
+    "feasibility": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_inference_feasibility.csv",
+    "findings": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_inventory_findings.md",
+    "join_preview": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_join_preview.csv",
+    "manifest": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_inventory_manifest.json",
+    "missingness": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_missingness_summary.csv",
+    "qa": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_inventory_qa.csv",
+    "source_schema": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_source_schema.csv",
+    "value_counts": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_value_counts.csv"
+  },
+  "qa": [
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": "none",
+      "observed": "none",
+      "passed": true
+    },
+    {
+      "check_name": "source_joins_modified",
+      "expected": "no",
+      "observed": "read_only_existing_access_join_outputs",
+      "passed": true
+    },
+    {
+      "check_name": "final_context_tables_overwritten",
+      "expected": "no",
+      "observed": "no_writes_to_analysis_current_directional_bin_context_table",
+      "passed": true
+    },
+    {
+      "check_name": "full_vs_riro_inference_labeled",
+      "expected": "direct|inferred|not_supported",
+      "observed": "direct=not_supported;combination=not_supported",
+      "passed": true
+    },
+    {
+      "check_name": "unknown_and_not_inferable_preserved",
+      "expected": "preserved",
+      "observed": "unknown|not_inferable",
+      "passed": true
+    },
+    {
+      "check_name": "candidate_access_type_mapping_written",
+      "expected": "only_if_feasible",
+      "observed": "False",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_source_schema",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_source_schema.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_candidate_fields",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_candidate_fields.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_value_counts",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_value_counts.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_missingness",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_missingness_summary.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_feasibility",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_inference_feasibility.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_coverage",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\matched_access_type_coverage.csv",
+      "passed": true
+    },
+    {
+      "check_name": "output_written_join_preview",
+      "expected": "exists",
+      "observed": "work\\output\\roadway_graph\\review\\current\\access_type_inventory\\access_type_join_preview.csv",
+      "passed": true
+    }
+  ],
+  "read_only": true,
+  "source_joins_modified": false
+}

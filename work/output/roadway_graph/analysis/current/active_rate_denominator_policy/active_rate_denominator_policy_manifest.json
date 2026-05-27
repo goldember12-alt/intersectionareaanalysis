@@ -1,0 +1,187 @@
+{
+  "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+  "bounded_question": "promote AADT direction-factor v2 to active descriptive exposure denominator policy",
+  "completed_at_utc": "2026-05-26T18:11:01.005624+00:00",
+  "crash_direction_fields_read_or_used": false,
+  "created_at_utc": "2026-05-26T18:11:00.958310+00:00",
+  "inputs": {
+    "application_coverage": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_application_coverage.csv",
+    "sensitivity_comparison": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_comparison_to_v1.csv",
+    "sensitivity_findings": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_findings.md",
+    "window_summary": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_summary_by_window.csv"
+  },
+  "outputs": {
+    "comparison": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_comparison_v1_v2.csv",
+    "findings": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_findings.md",
+    "manifest": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_manifest.json",
+    "qa": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_qa.csv",
+    "rules": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_rules.csv",
+    "summary": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy\\active_rate_denominator_policy_summary.csv"
+  },
+  "qa": [
+    {
+      "check_name": "v1_outputs_overwritten",
+      "expected": "unchanged",
+      "observed": "unchanged",
+      "passed": true
+    },
+    {
+      "check_name": "rates_or_models_silently_changed",
+      "expected": "no",
+      "observed": "no_rate_or_model_outputs_written",
+      "passed": true
+    },
+    {
+      "check_name": "v2_policy_clear_active",
+      "expected": "yes",
+      "observed": "active_policy_output_and_docs",
+      "passed": true
+    },
+    {
+      "check_name": "null_factor_fallback_documented",
+      "expected": "yes",
+      "observed": "rule_written",
+      "passed": true
+    },
+    {
+      "check_name": "source_documentation_caveat_preserved",
+      "expected": "yes",
+      "observed": "rule_written",
+      "passed": true
+    },
+    {
+      "check_name": "crash_direction_fields_read_or_used",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    }
+  ],
+  "rates_or_models_recomputed": false,
+  "rules": [
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "active_for_future_refresh",
+      "rule": "Treat v2 as the active descriptive exposure denominator policy going forward.",
+      "rule_id": "policy_status"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "approved",
+      "rule": "Where DIRECTION_FACTOR is valid, apply it to stable AADT exposure in the approved window-grain descriptive denominator context.",
+      "rule_id": "valid_direction_factor"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "approved",
+      "rule": "Where DIRECTION_FACTOR is null, fall back to v1 bidirectional AADT treatment.",
+      "rule_id": "null_direction_factor"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "approved_flag_required",
+      "rule": "Where DIRECTION_FACTOR is invalid, flag the row for review and retain transparent fallback handling rather than silently applying the factor.",
+      "rule_id": "invalid_direction_factor"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "required_boundary",
+      "rule": "Do not apply DIRECTION_FACTOR outside the approved descriptive exposure denominator context.",
+      "rule_id": "scope_limit"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "required_boundary",
+      "rule": "Retain v1 outputs as baseline and legacy comparison artifacts; do not overwrite or delete them.",
+      "rule_id": "v1_retention"
+    },
+    {
+      "active_policy": "v2_direction_factor_with_bidirectional_fallback",
+      "implementation_status": "open_caveat",
+      "rule": "Preserve caveat that source documentation is still needed to fully confirm field semantics.",
+      "rule_id": "source_documentation"
+    }
+  ],
+  "summary": [
+    {
+      "count": "",
+      "metric": "active_denominator_policy",
+      "value": "v2_direction_factor_with_bidirectional_fallback"
+    },
+    {
+      "count": "",
+      "metric": "baseline_denominator_policy",
+      "value": "v1_bidirectional_aadt"
+    },
+    {
+      "count": 2967,
+      "metric": "units_evaluated",
+      "value": ""
+    },
+    {
+      "count": 2751,
+      "metric": "units_with_factor_applied",
+      "value": ""
+    },
+    {
+      "count": 594,
+      "metric": "units_using_null_factor_bidirectional_fallback",
+      "value": ""
+    },
+    {
+      "count": 0,
+      "metric": "units_with_invalid_factor_review",
+      "value": ""
+    },
+    {
+      "count": 12414,
+      "metric": "assigned_crash_count",
+      "value": ""
+    },
+    {
+      "count": "",
+      "metric": "v1_estimated_exposure",
+      "value": 12162169675.11
+    },
+    {
+      "count": "",
+      "metric": "v2_adjusted_exposure",
+      "value": 7108955359.7
+    },
+    {
+      "count": "",
+      "metric": "exposure_ratio_v2_to_v1",
+      "value": 0.584514
+    },
+    {
+      "count": "",
+      "metric": "v1_aggregate_descriptive_rate_per_million",
+      "value": 1.020706
+    },
+    {
+      "count": "",
+      "metric": "v2_aggregate_descriptive_rate_per_million",
+      "value": 1.746248
+    },
+    {
+      "count": "",
+      "metric": "rate_ratio_v2_to_v1",
+      "value": 1.710824
+    },
+    {
+      "count": "",
+      "metric": "source_documentation_caveat",
+      "value": "source documentation still needed to fully confirm DIRECTION_FACTOR semantics"
+    },
+    {
+      "count": "",
+      "metric": "crash_direction_fields_read_or_used",
+      "value": false
+    },
+    {
+      "count": "",
+      "metric": "rates_or_models_recomputed",
+      "value": false
+    }
+  ],
+  "v1_retained_as_baseline": true
+}

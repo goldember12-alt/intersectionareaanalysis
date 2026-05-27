@@ -1,0 +1,139 @@
+{
+  "approved_rate_grain": "reference_signal_id + signal_relative_direction + analysis_window",
+  "bounded_question": "direction-factor exposure sensitivity for approved window-grain descriptive crash-rate prototype",
+  "created_utc": "2026-05-26T17:13:58.741367+00:00",
+  "guardrails": {
+    "aadt_join_modified": false,
+    "accepted_denominator_policy_changed": false,
+    "causal_policy_safety_performance_risk_claims": false,
+    "crash_direction_fields_used": false,
+    "fixed_band_rates_computed": false,
+    "models_or_regressions_fit": false,
+    "raw_bin_rates_computed": false,
+    "signal_rankings_created": false,
+    "v1_outputs_overwritten": false
+  },
+  "inputs": [
+    "work\\output\\roadway_graph\\analysis\\current\\directional_bin_context_table\\directional_bin_context.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype\\descriptive_rate_prototype_signal_direction_window.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype\\descriptive_rate_prototype_non_ready_units.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_suppression_review\\rate_unit_suppression_flags.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\rate_assumption_approval_v1\\rate_prototype_authorization_decision.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\rate_assumption_approval_v1\\denominator_rule_spec_v1.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\aadt_direction_factor_audit\\aadt_direction_factor_denominator_sensitivity.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\aadt_direction_factor_audit\\aadt_direction_factor_audit_findings.md",
+    "work\\output\\roadway_graph\\review\\current\\aadt_context_join_v3_identity_route_measure\\directional_bin_aadt_context_v3.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\exposure_modeling_readiness_audit\\modeling_feature_matrix_signal_direction_window.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\exposure_modeling_readiness_audit\\analysis_unit_readiness_signal_direction_window.csv"
+  ],
+  "outputs": [
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_application_coverage.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_missing_fallback_summary.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_comparison_to_v1.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_findings.md",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_manifest.json",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_non_ready_units.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_qa.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_summary_by_direction.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_summary_by_window.csv",
+    "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_direction_factor_sensitivity\\direction_factor_sensitivity_unit_rates.csv"
+  ],
+  "qa": [
+    {
+      "check_name": "no_crash_direction_fields_read_or_used",
+      "expected": "required",
+      "observed": "guarded reads reject crash-direction tokens",
+      "passed": true
+    },
+    {
+      "check_name": "direction_factor_not_applied_to_v1_outputs",
+      "expected": "same fingerprint before and after",
+      "observed": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype\\descriptive_rate_prototype_signal_direction_window.csv",
+      "passed": true
+    },
+    {
+      "check_name": "v2_outputs_clearly_labeled_sensitivity",
+      "expected": "required",
+      "observed": "sensitivity_output_flag present",
+      "passed": true
+    },
+    {
+      "check_name": "null_direction_factor_rows_use_bidirectional_fallback_and_are_flagged",
+      "expected": "all null-factor units flagged",
+      "observed": 594,
+      "passed": true
+    },
+    {
+      "check_name": "no_models_or_regressions_fit",
+      "expected": "required",
+      "observed": "descriptive arithmetic only",
+      "passed": true
+    },
+    {
+      "check_name": "no_rankings_policy_risk_language",
+      "expected": "required",
+      "observed": "outputs are grouped summaries and unordered unit comparisons only",
+      "passed": true
+    },
+    {
+      "check_name": "all_v2_rates_at_approved_window_grain_only",
+      "expected": "reference_signal_id_signal_relative_direction_analysis_window",
+      "observed": "reference_signal_id_signal_relative_direction_analysis_window",
+      "passed": true
+    },
+    {
+      "check_name": "no_raw_bin_rates_computed",
+      "expected": "required",
+      "observed": "bin context used only to aggregate adjusted AADT to window units",
+      "passed": true
+    },
+    {
+      "check_name": "no_fixed_band_rates_computed",
+      "expected": "required",
+      "observed": "no fixed distance-band rate output created",
+      "passed": true
+    },
+    {
+      "check_name": "no_signal_rankings_created",
+      "expected": "required",
+      "observed": "no sorted ranking output created",
+      "passed": true
+    }
+  ],
+  "qa_passed": true,
+  "rate_file_fingerprint_after": {
+    "exists": true,
+    "modified_utc": "2026-05-19T17:38:04.511125+00:00",
+    "path": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype\\descriptive_rate_prototype_signal_direction_window.csv",
+    "sha256": "bc8b17c2c0eb2fb606b4ef21e97fc2e1038ef472bae233e67f64f5112325c4d0",
+    "size_bytes": 2591265
+  },
+  "rate_file_fingerprint_before": {
+    "exists": true,
+    "modified_utc": "2026-05-19T17:38:04.511125+00:00",
+    "path": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype\\descriptive_rate_prototype_signal_direction_window.csv",
+    "sha256": "bc8b17c2c0eb2fb606b4ef21e97fc2e1038ef472bae233e67f64f5112325c4d0",
+    "size_bytes": 2591265
+  },
+  "status": "sensitivity_analysis_only_not_v1_replacement",
+  "study_period": {
+    "days": 1096,
+    "label": "2022_2024",
+    "years": 3.000684
+  },
+  "summary": {
+    "exposure_ratio_v2_to_v1": 0.5845137462812408,
+    "internal_review_plausibility": "plausible_enough_for_internal_review_with_source_documentation_needed",
+    "rate_ratio_v2_to_v1": 1.7108237511301347,
+    "source_documentation_still_needed": true,
+    "units_evaluated": 2967,
+    "units_with_factor_applied": 2751,
+    "units_with_invalid_factor": 0,
+    "units_with_null_factor_bidirectional_fallback": 594,
+    "v1_estimated_exposure": 12162169675.106346,
+    "v1_rate_per_million": 1.0207060361449407,
+    "v2_direction_factor_adjusted_exposure": 7108955359.704511,
+    "v2_rate_per_million": 1.7462481295586583
+  },
+  "v2_rule": "valid non-null DIRECTION_FACTOR applied to stable AADT bins; null/invalid factors retain v1 AADT treatment with flags"
+}

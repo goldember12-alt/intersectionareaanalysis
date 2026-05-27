@@ -1,16 +1,16 @@
 # Internal Model Technical Review Memo
 
-**Status: INTERNAL TECHNICAL REVIEW ONLY.** This memo translates the category-simplified crash-count model outputs into a cautious technical review record. It does not fit new models, create predictions for policy use, make causal claims, rank signals, describe safety performance, use risk or danger language, or recommend downstream functional area distances.
+**Status: INTERNAL TECHNICAL REVIEW ONLY.** This memo translates the active v2/v5 category-simplified crash-count model outputs into a cautious technical review record. It does not fit new models, compute new rates, create predictions for policy use, make causal claims, rank signals, describe safety performance, use risk or danger language, update stakeholder report conclusions, or recommend downstream functional area distances.
 
 ## Bounded Question
 
-Can the existing category-simplified signal-direction-window crash-count model package support internal technical review of exploratory associations between assigned crash counts, distance window, local access density, speed context, and signal-relative direction after accounting for estimated exposure?
+Can the active v2/v5 category-simplified signal-direction-window crash-count model package support internal technical review of exploratory associations between assigned crash counts, distance window, local access density, speed context, and signal-relative direction after accounting for estimated exposure?
 
 ## Executive Summary
 
-`S3_access_interaction_speed_simplified` is ready for **internal technical review only**. The recommended internal review framing is scaled Poisson and cluster-robust Poisson inference, with fixed-alpha negative-binomial results retained as sensitivity evidence only.
+`S3_access_interaction_speed_simplified` remains the selected active internal model and is ready for **internal technical review only**. The recommended internal review framing remains scaled Poisson and cluster-robust Poisson inference, with fixed-alpha negative-binomial results retained as sensitivity evidence only.
 
-The simplified package modeled 2,967 denominator-ready signal-direction-window rows and 12,414 assigned crashes. It preserved 255 excluded rows outside the modeled denominator-ready universe. Speed categories were simplified by merging 50-59 mph and 60+ mph into `50+ mph`; missing/review speed remained an explicit category. After simplification, remaining sparse categories were 0.
+The active simplified package modeled 2,967 denominator-ready signal-direction-window rows and 12,414 assigned crashes. It used active speed v5 context and the active AADT v2 denominator exposure offset. Speed categories were simplified by merging 50-59 mph and 60+ mph into `50+ mph`; missing/review speed remained an explicit category. After simplification, remaining sparse categories were 0.
 
 Stakeholder interpretation remains blocked. The model is not ready for policy findings, signal ranking, safety-performance language, risk/danger language, causal interpretation, predictions for policy use, or downstream functional area distance recommendations.
 
@@ -28,13 +28,13 @@ The offset is:
 
 `log_estimated_exposure`
 
-The current exposure concept is:
+The active exposure concept is:
 
-`estimated_exposure = length_weighted_stable_AADT x represented_length_miles x 1,096 days`
+`active estimated exposure = active v2 denominator policy x represented length x 2022-2024 study period`
 
-Only denominator-ready signal-direction-window rows were modeled. Denominator-ready rows require positive represented length, positive stable AADT, and stable AADT coverage share at or above the current 0.80 threshold. Rows beyond 2,500 ft were not included, crash direction fields were not used, and `DIRECTION_FACTOR` was not applied.
+Only denominator-ready signal-direction-window rows were modeled. Denominator-ready rows require positive represented length, positive stable AADT, and stable AADT coverage share at or above the current 0.80 threshold. Rows beyond 2,500 ft were not included and crash direction fields were not used.
 
-Exposure remains estimated and provisional. AADT is still bidirectional/provisional, and the source directionality audit found mixed or unclear directionality values rather than explicit opposing travel-direction labels.
+Exposure remains estimated. The active v2 denominator policy applies valid `DIRECTION_FACTOR`, uses bidirectional fallback where `DIRECTION_FACTOR` is null, and flags invalid factors. No additional `DIRECTION_FACTOR` is applied in the model package or this memo. Source-documentation confirmation remains a caveat.
 
 ## Model Sequence
 
@@ -46,21 +46,21 @@ The simplified package followed the internal S0-S4 sequence:
 - `S3_access_interaction_speed_simplified`: adds simplified speed context.
 - `S4_speed_sensitivity_no_missing`: stable-speed-only sensitivity row set.
 
-`S3_access_interaction_speed_simplified` is preferred for internal review because the access interaction remained useful after simplification and adding simplified speed improved fit while avoiding the prior sparse 60+ mph category. The scaled-Poisson AIC comparison for `S2_access_interaction` versus `S1_window_direction` was -36.752. The scaled-Poisson AIC comparison for `S3_access_interaction_speed_simplified` versus `S2_access_interaction` was -59.901.
+`S3_access_interaction_speed_simplified` is preferred for internal review because the access interaction remained useful after simplification and adding simplified speed improved fit while avoiding the prior sparse 60+ mph category. Under active v2/v5, the scaled-Poisson AIC comparison for `S2_access_interaction` versus `S1_window_direction` was -26.269. The scaled-Poisson AIC comparison for `S3_access_interaction_speed_simplified` versus `S2_access_interaction` was -16.439. Both additions remain useful, though less strongly than in the prior v1/v4 baseline model.
 
 ## Diagnostics Summary
 
-Overdispersion remains present. For the selected S3 model, the Pearson overdispersion ratio is 7.680, so conventional Poisson standard errors should not be used alone.
+Overdispersion remains present. For the active selected S3 model, the scaled-Poisson Pearson overdispersion ratio is 6.894, so conventional Poisson standard errors should not be used alone.
 
 Scaled Poisson inference is available and is the main internal sequence-comparison basis. Cluster-robust Poisson inference by `reference_signal_id` is also available for review and should be used alongside scaled inference when discussing coefficient stability.
 
-Fixed-alpha negative-binomial sensitivity fits at alpha 0.25, 0.5, 1.0, and 2.0 converged for S3, but they remain sensitivity evidence only. They do not replace a stable estimated-alpha negative-binomial model and do not make the model stakeholder-ready.
+Fixed-alpha negative-binomial sensitivity fits at alpha 0.25, 0.5, 1.0, and 2.0 converged for the active sequence and support the access-window interaction and simplified speed as sensitivity evidence only. Active estimated-alpha NB improved versus baseline for `NB0` and `NB3`, but `NB4_access_interaction_speed_simplified_active` did not converge and had incomplete covariance. Estimated-alpha NB therefore does not replace the active scaled and cluster-robust Poisson framework.
 
 The simplified package reports convergence for the selected model families used in the internal review package. The sparse-category cleanup passed after merging 50-59 mph and 60+ mph into `50+ mph`, while preserving missing/review speed as an explicit category.
 
 Supporting diagnostics are in:
 
-`work/output/roadway_graph/analysis/current/crash_count_internal_model_review/internal_model_diagnostic_summary.csv`
+`work/output/roadway_graph/analysis/current/crash_count_simplified_internal_model_active/active_simplified_model_diagnostics.csv`
 
 ## Access Interaction Interpretation
 
@@ -70,7 +70,7 @@ This aligns with the descriptive pattern that the 0-1,000 ft window is less mono
 
 Selected IRRs and confidence intervals are preserved for review in:
 
-`work/output/roadway_graph/analysis/current/crash_count_internal_model_review/internal_model_access_interaction_interpretation_table.csv`
+`work/output/roadway_graph/analysis/current/crash_count_simplified_internal_model_active/active_simplified_access_interaction_summary.csv`
 
 Those IRRs are conditional model terms. They are not causal effects, they are not signal rankings, and they do not support policy or distance guidance.
 
@@ -80,15 +80,15 @@ Adding simplified speed improved scaled-Poisson fit for S3 relative to S2. Speed
 
 The `50+ mph` merge was used to avoid sparse-category instability by combining the prior 50-59 mph and 60+ mph categories. This improves technical stability for internal review, but it also means the selected model does not distinguish 50-59 mph from 60+ mph.
 
-Selected speed IRRs and confidence intervals are preserved for review in:
+Selected speed summaries are preserved for review in:
 
-`work/output/roadway_graph/analysis/current/crash_count_internal_model_review/internal_model_speed_sensitivity_interpretation_table.csv`
+`work/output/roadway_graph/analysis/current/crash_count_simplified_internal_model_active/active_simplified_speed_sensitivity_summary.csv`
 
 ## AADT And Exposure Caveats
 
-AADT remains bidirectional/provisional. `DIRECTION_FACTOR` was not applied.
+AADT v2 direction-factor denominator policy is active for this model input. `DIRECTION_FACTOR` is not applied again in the model.
 
-The AADT direction-factor audit found that source `DIRECTIONALITY` values are `Combined`, `Single`, and missing rather than explicit opposing travel-direction labels. It also found that applying `DIRECTION_FACTOR` as a diagnostic denominator alternative would generally reduce estimated exposure, but that diagnostic result is not validated as the correct directional exposure method.
+The active policy applies valid `DIRECTION_FACTOR`, uses the bidirectional fallback where the factor is null, and flags invalid factors. Source documentation is still needed to fully confirm field semantics, so the exposure should remain labeled estimated exposure.
 
 AADT year flags remain limitations. Mixed AADT year and outside-period AADT year conditions should remain visible in internal review rather than being silently suppressed or treated as solved.
 
@@ -111,32 +111,25 @@ Allowed language is limited to internal technical review, exploratory associatio
 
 ## Supporting Review Outputs
 
-Supporting outputs live under:
+Active supporting model outputs live under:
 
-`work/output/roadway_graph/analysis/current/crash_count_internal_model_review/`
+`work/output/roadway_graph/analysis/current/crash_count_simplified_internal_model_active/`
 
-Created review outputs:
+Active conclusion support outputs live under:
 
-- `internal_model_review_summary.csv`
-- `internal_model_selected_coefficients.csv`
-- `internal_model_selected_irrs.csv`
-- `internal_model_diagnostic_summary.csv`
-- `internal_model_access_interaction_interpretation_table.csv`
-- `internal_model_speed_sensitivity_interpretation_table.csv`
-- `internal_model_limitations_table.csv`
-- `internal_model_language_guardrails.csv`
-- `internal_model_next_steps.csv`
-- `internal_model_review_manifest.json`
+`work/output/roadway_graph/analysis/current/internal_modeling_conclusion_readiness_active/`
+
+The prior `crash_count_internal_model_review/` package is retained as baseline/history unless a later task regenerates that review table package from active outputs.
 
 ## QA Checks
 
-This review package did not fit new models. It reformatted and summarized already-available outputs from the simplified model package and related diagnostics.
+This memo update did not fit new models. It summarizes already-available outputs from the active simplified model package and active NB stabilization diagnostic.
 
 QA status:
 
 - No new models were fit.
 - No crash direction fields were used.
-- `DIRECTION_FACTOR` was not applied.
+- No additional `DIRECTION_FACTOR` was applied beyond the active v2 exposure already present in model inputs.
 - No distance-band models were fit.
 - Source, context, and assignment data were not altered.
 - Stakeholder interpretation remains blocked.
@@ -144,8 +137,8 @@ QA status:
 
 ## Recommended Next Steps
 
-1. Complete technical review of this memo, the selected coefficient table, and the diagnostic summary.
-2. Optionally create coefficient visualizations for internal review only, using the same guardrail language.
-3. Consider distance-band sensitivity only after this memo is reviewed and an explicit bounded task authorizes that sparser grain.
-4. Continue AADT directionality and `DIRECTION_FACTOR` validation before any stakeholder-facing model interpretation.
+1. Complete technical review of this active memo, the active selected coefficient table, the active diagnostics, and the active NB stabilization result.
+2. Regenerate internal model figures from active v2/v5 outputs before using visuals in review.
+3. Keep fixed-alpha NB as sensitivity evidence and do not promote estimated-alpha NB while active NB4 remains non-interpretable.
+4. Continue AADT v2 source-semantics validation before any stakeholder-facing model interpretation.
 5. Draft any stakeholder report language only after method and language approval.

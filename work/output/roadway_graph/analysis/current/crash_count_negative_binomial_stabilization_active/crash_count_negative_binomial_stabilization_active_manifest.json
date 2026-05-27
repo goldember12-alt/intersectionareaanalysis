@@ -1,0 +1,97 @@
+{
+  "bounded_question": "active v2/v5 negative-binomial stabilization diagnostic for simplified internal model",
+  "completed_at_utc": "2026-05-26T19:11:34.748775+00:00",
+  "created_at_utc": "2026-05-26T19:11:32.942340+00:00",
+  "fixed_alpha_grid": [
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "guardrails": {
+    "additional_direction_factor_applied": false,
+    "causal_policy_risk_safety_language_introduced": false,
+    "crash_direction_fields_used": false,
+    "distance_band_models_fit": false,
+    "predictions_created": false,
+    "rankings_created": false,
+    "source_context_assignment_data_modified": false
+  },
+  "inputs": {
+    "active_aadt_policy": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy",
+    "active_modeling_readiness": "work\\output\\roadway_graph\\analysis\\current\\crash_count_modeling_readiness_dataset_active",
+    "active_rate": "work\\output\\roadway_graph\\analysis\\current\\descriptive_crash_rate_prototype_active",
+    "active_simplified_model_input": "work\\output\\roadway_graph\\analysis\\current\\crash_count_simplified_internal_model_active\\active_simplified_model_input_rows.csv",
+    "active_speed_policy": "work\\output\\roadway_graph\\review\\current\\active_speed_context_policy",
+    "baseline_nb_for_comparison_only": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization",
+    "model_specification": "docs\\design\\roadway_graph_crash_count_model_specification.md"
+  },
+  "models_attempted": [
+    "NB0_exposure_only_active",
+    "NB1_window_direction_active",
+    "NB2_add_access_no_interaction_active",
+    "NB3_access_interaction_no_speed_active",
+    "NB4_access_interaction_speed_simplified_active"
+  ],
+  "outputs": {
+    "active_estimated_alpha_nb_coefficients.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_estimated_alpha_nb_coefficients.csv",
+    "active_estimated_alpha_nb_irrs.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_estimated_alpha_nb_irrs.csv",
+    "active_estimated_alpha_nb_sequence_summary.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_estimated_alpha_nb_sequence_summary.csv",
+    "active_estimated_alpha_nb_warning_log.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_estimated_alpha_nb_warning_log.csv",
+    "active_fixed_alpha_nb_irrs.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_fixed_alpha_nb_irrs.csv",
+    "active_fixed_alpha_nb_sequence_summary.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_fixed_alpha_nb_sequence_summary.csv",
+    "active_nb_access_interaction_stability.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_nb_access_interaction_stability.csv",
+    "active_nb_model_readiness_decision.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_nb_model_readiness_decision.csv",
+    "active_nb_speed_term_stability.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_nb_speed_term_stability.csv",
+    "active_nb_stabilization_input_summary.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_nb_stabilization_input_summary.csv",
+    "active_negative_binomial_stabilization_qa.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_negative_binomial_stabilization_qa.csv",
+    "active_poisson_vs_nb_comparison.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_poisson_vs_nb_comparison.csv",
+    "active_vs_baseline_nb_comparison.csv": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\active_vs_baseline_nb_comparison.csv",
+    "findings": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active\\crash_count_negative_binomial_stabilization_active_findings.md"
+  },
+  "qa": [
+    {
+      "check_name": "no_crash_direction_fields_used",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "additional_direction_factor_applied",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "only_denominator_ready_active_window_rows_modeled",
+      "expected": "all denominator-ready",
+      "observed": 2967,
+      "passed": true
+    },
+    {
+      "check_name": "no_distance_band_models_fit",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "source_context_assignment_data_modified",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "causal_policy_risk_safety_language_introduced",
+      "expected": false,
+      "observed": false,
+      "passed": true
+    },
+    {
+      "check_name": "unstable_nb_outputs_not_marked_interpretable",
+      "expected": "blocked",
+      "observed": "unstable rows blocked",
+      "passed": true
+    }
+  ],
+  "status": "internal_technical_modeling_only"
+}

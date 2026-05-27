@@ -1,6 +1,6 @@
 # Roadway Graph Rate Denominator Policy
 
-**Status: DENOMINATOR POLICY AND RATE-PROTOTYPE SPECIFICATION ONLY.** This memo defines the first denominator policy for a later descriptive rate prototype. It does not compute crash rates, AADT-normalized comparisons, regressions, predictive models, causal claims, safety-performance rankings, policy guidance, or downstream functional-area distance recommendations.
+**Status: CURRENT ACTIVE DENOMINATOR POLICY.** AADT direction-factor v2 is now the active descriptive exposure denominator policy for future rate refreshes. The original bidirectional-AADT v1 policy is retained as a baseline and legacy comparison. This memo does not itself rerun rates, fit models, create causal claims, rank safety performance, make policy recommendations, or recommend downstream functional-area distances.
 
 ## Bounded Question
 
@@ -83,19 +83,23 @@ Crash study-period audit:
 
 Status: crash dates are available, but the study period is not yet authorized for rate calculation. Before rates are computed, a later review must confirm source filters, complete-year handling, denominator period alignment, and AADT year treatment.
 
-## Directional AADT Assumption
+## Directional AADT Policy
 
-Candidate directional AADT policies:
+Active policy:
 
-- Use AADT as bidirectional exposure for each signal-relative directional view.
-- Use `DIRECTION_FACTOR` only after validation.
-- Split AADT by direction only where the source explicitly supports directional AADT.
+`v2_direction_factor_with_bidirectional_fallback`
 
-Recommended prototype v1 policy:
+Rules:
 
-Use AADT as bidirectional exposure for each signal-relative directional view, label the assumption provisional, and report that the denominator is not directionally adjusted.
+- Where `DIRECTION_FACTOR` is valid, apply it in the approved descriptive exposure denominator context.
+- Where `DIRECTION_FACTOR` is null, fall back to the v1 bidirectional AADT treatment.
+- Where `DIRECTION_FACTOR` is invalid, flag the row for review and preserve transparent fallback handling.
+- Do not apply `DIRECTION_FACTOR` outside the approved denominator context.
+- Preserve v1 bidirectional-AADT outputs as baseline and legacy comparison artifacts.
 
-Do not apply `DIRECTION_FACTOR` in prototype v1. The direction factor and AADT source directionality need a separate validation step before directional splitting is allowed.
+Rationale:
+
+V2 is inclusive of v1. It uses available direction-factor information where present and preserves the v1 bidirectional treatment where the factor is absent. Invalid factors remain visible as review flags. Source documentation is still needed to fully confirm field semantics, but v2 is the best active policy for future descriptive denominator refreshes because it uses available source evidence without dropping null-factor units.
 
 ### AADT Direction-Factor Audit Result
 
@@ -115,7 +119,36 @@ Current audit result:
 
 Policy implication:
 
-Keep the prototype v1 bidirectional AADT assumption for current figures and descriptive rate outputs. A future prototype v2 may evaluate `DIRECTION_FACTOR` or source directional AADT rows, but only after source-definition review and paired route/measure validation.
+Promote v2 to the active denominator policy for future descriptive rate refreshes. Do not overwrite v1 outputs. Treat v1 as the baseline comparison. Existing v1-derived outputs remain historical/legacy until refreshed under v2.
+
+### AADT Direction-Factor V2 Promotion
+
+The read-only sensitivity module `src/active/roadway_graph/descriptive_crash_rate_direction_factor_sensitivity.py` evaluated v2 against v1 at the approved window grain.
+
+Active policy output:
+
+`work/output/roadway_graph/analysis/current/active_rate_denominator_policy/`
+
+Promotion result:
+
+- Units evaluated: 2,967.
+- Units with valid factor applied: 2,751.
+- Units using null-factor bidirectional fallback: 594.
+- Units with invalid factor: 0.
+- V1 exposure: 12,162,169,675.11.
+- V2 adjusted exposure: 7,108,955,359.70.
+- Exposure ratio v2/v1: 0.584514.
+- V1 aggregate descriptive rate per million: 1.020706.
+- V2 aggregate descriptive rate per million: 1.746248.
+- Rate ratio v2/v1: 1.710824.
+
+Downstream outputs that need a v2 refresh before they are treated as current:
+
+- descriptive crash-rate prototype v2 active denominator outputs
+- rate suppression review v2 active denominator outputs
+- context relationship rate figures using v2
+- modeling readiness exposure/offset update
+- simplified internal model v2 only if speed/AADT context changes are accepted
 
 ## Missing Or Review AADT
 

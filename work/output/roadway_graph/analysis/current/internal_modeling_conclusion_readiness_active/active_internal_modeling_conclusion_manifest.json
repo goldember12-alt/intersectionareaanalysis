@@ -1,0 +1,36 @@
+{
+  "active_conclusion": {
+    "estimated_alpha_nb_full_model_interpretable": false,
+    "preferred_family": "scaled and cluster-robust Poisson primary; fixed-alpha NB sensitivity",
+    "selected_model": "S3_access_interaction_speed_simplified",
+    "stakeholder_interpretation": "blocked"
+  },
+  "bounded_question": "active v2/v5 internal modeling conclusion and presentation-readiness support tables",
+  "created_at_utc": "2026-05-26T19:30:06.507499+00:00",
+  "guardrails": {
+    "additional_direction_factor_applied": false,
+    "causal_policy_risk_safety_language_introduced": false,
+    "crash_direction_fields_used": false,
+    "new_models_fit": false,
+    "new_rates_computed": false,
+    "predictions_created": false,
+    "rankings_created": false,
+    "stakeholder_report_model_findings_updated": false
+  },
+  "inputs": {
+    "active_nb_stabilization": "work\\output\\roadway_graph\\analysis\\current\\crash_count_negative_binomial_stabilization_active",
+    "active_rate_denominator_policy": "work\\output\\roadway_graph\\analysis\\current\\active_rate_denominator_policy",
+    "active_refresh_impact_summary": "work\\output\\roadway_graph\\analysis\\current\\active_refresh_impact_summary",
+    "active_simplified_internal_model": "work\\output\\roadway_graph\\analysis\\current\\crash_count_simplified_internal_model_active",
+    "active_speed_context_policy": "work\\output\\roadway_graph\\review\\current\\active_speed_context_policy",
+    "baseline_conclusion_for_comparison_only": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness"
+  },
+  "outputs": {
+    "active_blocked_stakeholder_claims_table.csv": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness_active\\active_blocked_stakeholder_claims_table.csv",
+    "active_internal_modeling_conclusion_summary.csv": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness_active\\active_internal_modeling_conclusion_summary.csv",
+    "active_model_family_readiness_table.csv": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness_active\\active_model_family_readiness_table.csv",
+    "active_presentable_internal_artifacts_table.csv": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness_active\\active_presentable_internal_artifacts_table.csv",
+    "active_recommended_next_steps_modeling.csv": "work\\output\\roadway_graph\\analysis\\current\\internal_modeling_conclusion_readiness_active\\active_recommended_next_steps_modeling.csv"
+  },
+  "package": "internal_modeling_conclusion_readiness_active"
+}

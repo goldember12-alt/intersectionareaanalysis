@@ -1,0 +1,3 @@
+source_name,recommended_use,recommended_next_module_name,replacement_vs_supplement,recommendation,evidence
+VDOT_Routes,route_identity_supplement_only,vdot_routes_identity_bridge.py,identity_bridge,"Useful for route identity review/bridge diagnostics, not for speed values.",missing/review route key match share=0.641115; speed fields absent
+Speed_Limit_RNS,speed_source_supplement,speed_context_join_v5_new_source_supplement.py,supplement_not_replacement,Promising as a supplement for current missing/review speed bins; do not replace v4 until directionality/measure semantics are validated.,candidate speed fields=CAR_SPEED_LIMIT|FINAL_SPEED_LIMIT_SOURCE|TRUCK_SPEED_LIMIT|SPEEDZONE_TYPE_DSC; possible missing/review bin recovery=24865

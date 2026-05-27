@@ -1,0 +1,8 @@
+check_name,passed,observed,expected
+no_crash_direction_fields_used,True,False,False
+additional_direction_factor_applied,True,False,False
+only_denominator_ready_active_window_rows_modeled,True,2967,all denominator-ready
+no_distance_band_models_fit,True,False,False
+source_context_assignment_data_modified,True,False,False
+causal_policy_risk_safety_language_introduced,True,False,False
+unstable_nb_outputs_not_marked_interpretable,True,unstable rows blocked,blocked

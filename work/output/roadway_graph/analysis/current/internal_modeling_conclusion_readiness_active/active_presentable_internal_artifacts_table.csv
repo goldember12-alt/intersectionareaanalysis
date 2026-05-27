@@ -1,0 +1,6 @@
+artifact,path,status,use,restriction
+Active simplified internal model package,work\output\roadway_graph\analysis\current\crash_count_simplified_internal_model_active,ready_internal_review,"active v2/v5 S3 model diagnostics, coefficients, IRRs, and comparisons",internal technical review only
+Active NB stabilization diagnostic,work\output\roadway_graph\analysis\current\crash_count_negative_binomial_stabilization_active,ready_internal_review,NB readiness and sensitivity evidence,estimated-alpha NB full model not interpretable
+Active refresh impact summary,work\output\roadway_graph\analysis\current\active_refresh_impact_summary,ready_internal_review,"baseline-to-active context, exposure, and model-matrix changes",not a model result
+Active internal modeling conclusion memo,docs/reports/roadway_graph/internal_modeling_conclusion_and_presentation_readiness.md,ready_internal_review_after_doc_update,synthesis for internal discussion,not stakeholder report language
+Existing model presentation figures,docs/reports/roadway_graph/modeling_figures/,baseline_historical_until_regenerated,visual style/reference only unless regenerated from active outputs,do not present as active v2/v5 figures without refresh

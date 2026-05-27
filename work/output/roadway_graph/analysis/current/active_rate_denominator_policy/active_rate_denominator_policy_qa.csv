@@ -1,0 +1,7 @@
+check_name,passed,observed,expected
+v1_outputs_overwritten,True,unchanged,unchanged
+rates_or_models_silently_changed,True,no_rate_or_model_outputs_written,no
+v2_policy_clear_active,True,active_policy_output_and_docs,yes
+null_factor_fallback_documented,True,rule_written,yes
+source_documentation_caveat_preserved,True,rule_written,yes
+crash_direction_fields_read_or_used,True,False,False

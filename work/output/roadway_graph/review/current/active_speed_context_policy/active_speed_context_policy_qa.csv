@@ -1,0 +1,8 @@
+check_name,passed,observed,expected
+speed_v4_outputs_overwritten,True,unchanged,unchanged
+normalized_speed_parquet_overwritten,True,unchanged,unchanged
+graph_context_rate_model_outputs_silently_changed,True,policy_record_only,no
+crash_direction_fields_read_or_used,True,False,False
+v5_clearly_labeled_active_going_forward,True,speed_v5_new_source_supplement,active
+v4_retained_as_baseline_legacy,True,baseline_retention_rule,present
+downstream_refresh_requirements_explicit,True,8,>0

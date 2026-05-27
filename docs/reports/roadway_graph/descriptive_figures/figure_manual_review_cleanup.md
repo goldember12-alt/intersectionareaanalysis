@@ -1,4 +1,4 @@
-﻿# Figure Manual Review Cleanup
+# Figure Manual Review Cleanup
 
 **Status:** copied roadway-graph report figure cleanup only. Work/output report figures were preserved.
 
@@ -61,5 +61,5 @@ Removed stakeholder references to the archived upstream/downstream standalone, w
 ## Remaining Manual Review Concerns
 
 - The access context stacked figure uses summed `access_count_within_catchment` from accepted bins, matching the descriptive context field; it should remain descriptive and not be interpreted as a policy distance or access effect.
-- The copied context relationship figures are now consolidated under `docs/reports/roadway_graph/figures/` with the other report SVGs.
+- The copied context relationship figures are now consolidated under `docs/reports/roadway_graph/descriptive_figures/` with the other report SVGs.
 

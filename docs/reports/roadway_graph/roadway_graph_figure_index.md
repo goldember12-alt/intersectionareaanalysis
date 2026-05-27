@@ -1,6 +1,41 @@
 ﻿# Roadway-Graph Figure Index
 
-**Status: CURRENT DRAFT FIGURE INDEX.** Figures use accepted descriptive outputs and aggregate rate summaries only. Unit-level rates remain QA-only and are not included in stakeholder-facing exhibits. The former context relationship rate display summary is demoted to technical QA and omitted from this stakeholder-facing index.
+**Status: CURRENT ACTIVE V2/V5 FIGURE INDEX.** Active figures use speed v5 (`Speed_Limit_RNS` supplement), AADT v2 direction-factor denominator with bidirectional fallback for descriptive prototype rates, and accepted crash/access/scaffold outputs. Unit-level rates remain QA-only and are not included in stakeholder-facing exhibits. The former v1/v4 figure package is retained as baseline/history below.
+
+## Active V2/V5 Figure Package
+
+Active SVGs live under:
+
+`docs/reports/roadway_graph/figures/active_v2_v5/`
+
+Figure-ready source tables and comparison tables live under:
+
+`work/output/roadway_graph/report/current_active/`
+
+| figure_id | title | active_svg_path | figure_data_path | limitation_caution |
+| --- | --- | --- | --- | --- |
+| 01 | Accepted Universe Summary | `docs/reports/roadway_graph/figures/active_v2_v5/01_accepted_universe_summary_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/universe.csv` | Descriptive counts only. |
+| 02 | Assigned Crashes by Distance and Direction | `docs/reports/roadway_graph/figures/active_v2_v5/02_assigned_crashes_by_distance_and_direction_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/crash_distance_dir.csv` | Crash direction fields are not used. |
+| 03 | Access Context by Distance and Direction | `docs/reports/roadway_graph/figures/active_v2_v5/03_access_context_by_distance_and_direction_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/access.csv` | Access context reused without join changes. |
+| 04 | Speed Context Coverage by Distance | `docs/reports/roadway_graph/figures/active_v2_v5/04_speed_context_coverage_by_distance_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/speed_dist.csv` | Speed v5 missing/review status remains visible. |
+| 05 | Speed Context Coverage by Distance and Direction | `docs/reports/roadway_graph/figures/active_v2_v5/05_speed_context_coverage_by_distance_and_direction_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/speed_dir.csv` | Speed v5 missing/review status remains visible. |
+| 06 | AADT Context Coverage by Distance | `docs/reports/roadway_graph/figures/active_v2_v5/06_aadt_context_coverage_by_distance_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/aadt_dist.csv` | AADT context coverage is not itself a rate. |
+| 07 | AADT Context Coverage by Distance and Direction | `docs/reports/roadway_graph/figures/active_v2_v5/07_aadt_context_coverage_by_distance_and_direction_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/aadt_dir.csv` | AADT context coverage is not itself a rate. |
+| 08 | Crash AREA_TYPE Composition | `docs/reports/roadway_graph/figures/active_v2_v5/08_crash_area_type_composition_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/area.csv` | Crash-level context only; not roadway-level urban/rural truth. |
+| 09 | Roadway Representation Mix by Distance | `docs/reports/roadway_graph/figures/active_v2_v5/09_roadway_representation_mix_by_distance_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/representation.csv` | Accepted scaffold reused. |
+| 10 | Aggregate Rate by Window | `docs/reports/roadway_graph/figures/active_v2_v5/10_aggregate_rate_by_window_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/rate_window.csv` | Descriptive prototype rate using estimated exposure; not risk, safety, policy, or distance guidance. |
+| 11 | Aggregate Rate by Direction | `docs/reports/roadway_graph/figures/active_v2_v5/11_aggregate_rate_by_direction_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/rate_direction.csv` | Descriptive prototype rate using estimated exposure; not risk, safety, policy, or distance guidance. |
+| 12 | Crashes by Distance and Speed | `docs/reports/roadway_graph/figures/active_v2_v5/12_context_heatmap_crashes_by_distance_and_speed_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/distance_speed.csv` | Count cross-tab only. |
+| 13 | Crashes by Distance and AADT | `docs/reports/roadway_graph/figures/active_v2_v5/13_context_heatmap_crashes_by_distance_and_aadt_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/distance_aadt.csv` | Count cross-tab only. |
+| 14 | Crashes by Distance and Access | `docs/reports/roadway_graph/figures/active_v2_v5/14_context_heatmap_crashes_by_distance_and_access_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/distance_access.csv` | Count cross-tab only. |
+| 15 | Crashes by Speed and Access | `docs/reports/roadway_graph/figures/active_v2_v5/15_context_heatmap_crashes_by_speed_and_access_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/speed_access.csv` | Count cross-tab only. |
+| 16 | Rate by Window and Access | `docs/reports/roadway_graph/figures/active_v2_v5/16_context_rate_by_window_and_access_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/rate_window_access.csv` | Descriptive prototype rate using estimated exposure; not risk, safety, policy, or distance guidance. |
+| 17 | Rate by Window and Speed | `docs/reports/roadway_graph/figures/active_v2_v5/17_context_rate_by_window_and_speed_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/rate_window_speed.csv` | Descriptive prototype rate using estimated exposure; not risk, safety, policy, or distance guidance. |
+| 18 | Rate by Window and AADT | `docs/reports/roadway_graph/figures/active_v2_v5/18_context_rate_by_window_and_aadt_active_v2_v5.svg` | `work/output/roadway_graph/report/current_active/figure_data/rate_window_aadt.csv` | Descriptive prototype rate using estimated exposure; not risk, safety, policy, or distance guidance. |
+
+## Baseline V1/V4 Figure Package
+
+The table below is retained as baseline/history. It references the prior v1/v4 figure package and should not be treated as the active report figure set.
 
 | exhibit_id | title                                       | file_path                                                                                      | svg_path                                                                                       | figure_data_path                                                          | source_table_path                                                                                                                                 | report_section                                       | intended_use                                               | limitation_caution                                   | generated_successfully |
 | ---------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------- | ---------------------- |

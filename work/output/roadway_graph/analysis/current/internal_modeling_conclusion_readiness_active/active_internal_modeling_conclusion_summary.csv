@@ -1,0 +1,13 @@
+topic,active_value,baseline_or_comparison,conclusion
+active_model_scope,active_v2_v5_internal_modeling,prior v1/v4 model packages retained as baseline/history,active v2/v5 replaces baseline for current internal modeling review
+modeled_rows,2967,,denominator-ready active signal-direction-window rows modeled
+modeled_assigned_crashes,12414,,assigned crashes represented in active modeled rows
+selected_model,S3_access_interaction_speed_simplified,same selected internal model name as baseline,selected active internal model remains unchanged
+preferred_model_family,scaled and cluster-robust Poisson primary; fixed-alpha NB sensitivity,same family decision as baseline,estimated-alpha NB still does not replace Poisson-family inference
+access_window_interaction,-26.26894125230956,-36.751973421784896,access-window interaction remains useful under active v2/v5 but weaker than baseline by scaled-Poisson delta AIC
+simplified_speed,-16.438615127505727,-59.900747457199486,simplified speed remains useful under active v2/v5 but weaker than baseline by scaled-Poisson delta AIC
+estimated_alpha_nb,2 of 5 estimated-alpha NB models interpretable,0 of 5 matched baseline estimated-alpha NB models interpretable,"active v2/v5 improved stability, but NB4 remains non-interpretable"
+fixed_alpha_nb,True,fixed-alpha NB also sensitivity-only in baseline,supports access-window and simplified speed as sensitivity evidence only
+speed_coverage,105835,84857,active speed v5 increases stable speed coverage for context/model readiness
+window_modeling_ready_units,2786,2124,active v2/v5 increases window-grain modeling-ready units
+stakeholder_status,blocked,blocked,"no causal, risk, safety-performance, policy, ranking, prediction, or downstream-distance claims are supported"
