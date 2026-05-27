@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="518" viewBox="0 0 1200 518">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="34.0" y="36.0" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="start" fill="#263238">Modeled Association by Posted Speed Context</text>
+<text x="34.0" y="64.0" font-family="Arial, sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#455A64">Simplified speed bands; estimated exposure offset included. Reference group: 30–39 mph.</text>
+<text x="390.0" y="108.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#455A64">Incidence rate ratio relative to reference group</text>
+<line x1="390.0" y1="140.0" x2="1040.0" y2="140.0" stroke="#78909C" stroke-width="1.0"/>
+<line x1="435.3" y1="134.0" x2="435.3" y2="446.0" stroke="#ECEFF1" stroke-width="1.0" stroke-dasharray="4 4"/>
+<text x="435.3" y="126.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#607D8B">0.5</text>
+<line x1="608.0" y1="134.0" x2="608.0" y2="446.0" stroke="#ECEFF1" stroke-width="1.0" stroke-dasharray="4 4"/>
+<text x="608.0" y="126.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#607D8B">0.75</text>
+<line x1="730.5" y1="134.0" x2="730.5" y2="446.0" stroke="#ECEFF1" stroke-width="1.0"/>
+<text x="730.5" y="126.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#607D8B">No modeled difference</text>
+<line x1="903.2" y1="134.0" x2="903.2" y2="446.0" stroke="#ECEFF1" stroke-width="1.0" stroke-dasharray="4 4"/>
+<text x="903.2" y="126.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#607D8B">1.5</text>
+<line x1="1025.8" y1="134.0" x2="1025.8" y2="446.0" stroke="#ECEFF1" stroke-width="1.0" stroke-dasharray="4 4"/>
+<text x="1025.8" y="126.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" fill="#607D8B">2</text>
+<line x1="730.5" y1="132.0" x2="730.5" y2="446.0" stroke="#37474F" stroke-width="1.4"/>
+<text x="58.0" y="165.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#263238">&lt;30 mph</text>
+<line x1="759.2" y1="160.0" x2="969.5" y2="160.0" stroke="#2F6F9F" stroke-width="2.2"/>
+<circle cx="864.4" cy="160.0" r="5.2" fill="#2F6F9F"/>
+<text x="1058.0" y="164.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#455A64">1.37 (1.07, 1.75)</text>
+<text x="58.0" y="207.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#263238">40–49 mph</text>
+<line x1="695.0" y1="202.0" x2="809.3" y2="202.0" stroke="#2F6F9F" stroke-width="2.2"/>
+<circle cx="752.2" cy="202.0" r="5.2" fill="#2F6F9F"/>
+<text x="1058.0" y="206.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#455A64">1.05 (0.92, 1.20)</text>
+<text x="58.0" y="249.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#263238">50+ mph</text>
+<line x1="512.5" y1="244.0" x2="710.4" y2="244.0" stroke="#2F6F9F" stroke-width="2.2"/>
+<circle cx="611.5" cy="244.0" r="5.2" fill="#2F6F9F"/>
+<text x="1058.0" y="248.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#455A64">0.76 (0.60, 0.95)</text>
+<text x="58.0" y="291.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#263238">Missing/review speed context</text>
+<line x1="720.7" y1="286.0" x2="836.1" y2="286.0" stroke="#2F6F9F" stroke-width="2.2"/>
+<circle cx="778.4" cy="286.0" r="5.2" fill="#2F6F9F"/>
+<text x="1058.0" y="290.0" font-family="Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start" fill="#455A64">1.12 (0.98, 1.28)</text>
+<text x="34.0" y="476.0" font-family="Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" fill="#455A64">Speed is treated as roadway context, not a causal speed effect.</text>
+</svg>
