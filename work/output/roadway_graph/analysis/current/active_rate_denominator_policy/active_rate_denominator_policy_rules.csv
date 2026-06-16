@@ -1,8 +1,0 @@
-rule_id,active_policy,rule,implementation_status
-policy_status,v2_direction_factor_with_bidirectional_fallback,Treat v2 as the active descriptive exposure denominator policy going forward.,active_for_future_refresh
-valid_direction_factor,v2_direction_factor_with_bidirectional_fallback,"Where DIRECTION_FACTOR is valid, apply it to stable AADT exposure in the approved window-grain descriptive denominator context.",approved
-null_direction_factor,v2_direction_factor_with_bidirectional_fallback,"Where DIRECTION_FACTOR is null, fall back to v1 bidirectional AADT treatment.",approved
-invalid_direction_factor,v2_direction_factor_with_bidirectional_fallback,"Where DIRECTION_FACTOR is invalid, flag the row for review and retain transparent fallback handling rather than silently applying the factor.",approved_flag_required
-scope_limit,v2_direction_factor_with_bidirectional_fallback,Do not apply DIRECTION_FACTOR outside the approved descriptive exposure denominator context.,required_boundary
-v1_retention,v2_direction_factor_with_bidirectional_fallback,Retain v1 outputs as baseline and legacy comparison artifacts; do not overwrite or delete them.,required_boundary
-source_documentation,v2_direction_factor_with_bidirectional_fallback,Preserve caveat that source documentation is still needed to fully confirm field semantics.,open_caveat

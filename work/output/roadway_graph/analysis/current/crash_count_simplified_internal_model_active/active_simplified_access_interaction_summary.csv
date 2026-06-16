@@ -1,6 +1,0 @@
-comparison_scope,interaction_model,comparison_model,delta_aic,interaction_improves_aic
-scaled_poisson,S2_access_interaction,S1_window_direction,-26.26894125230956,True
-fixed_alpha_nb_0.25,S2_access_interaction,S1_window_direction,-73.70163734378912,True
-fixed_alpha_nb_0.5,S2_access_interaction,S1_window_direction,-44.721956948815205,True
-fixed_alpha_nb_1.0,S2_access_interaction,S1_window_direction,-23.293517330714167,True
-fixed_alpha_nb_2.0,S2_access_interaction,S1_window_direction,-8.196653019300356,True

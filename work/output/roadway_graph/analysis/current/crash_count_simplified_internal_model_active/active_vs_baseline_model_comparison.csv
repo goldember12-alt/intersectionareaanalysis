@@ -1,9 +1,0 @@
-comparison_type,model_name,metric,baseline_value,active_value,active_minus_baseline
-fit_summary,S2_access_interaction,aic,2619.4788271690422,2870.1303129669186,250.65148579787638
-fit_summary,S3_access_interaction_speed_simplified,aic,2559.5780797118427,2853.691697839413,294.11361812757013
-family_comparison,S1_window_direction,delta_aic_vs_previous,-82.38595091789284,-75.03245342233913,7.353497495553711
-family_comparison,S2_access_interaction,delta_aic_vs_previous,-36.751973421784896,-26.26894125230956,10.483032169475337
-family_comparison,S3_access_interaction_speed_simplified,delta_aic_vs_previous,-59.900747457199486,-16.438615127505727,43.46213232969376
-irr,S3_access_interaction_speed_simplified,"C(local_access_density_label, Treatment(reference='0'))[T.6+]",0.7217653824410066,0.7798971939419452,0.0581318115009386
-irr,S3_access_interaction_speed_simplified,"C(speed_band_simplified, Treatment(reference='30-39 mph'))[T.50+ mph]",0.7561348643858635,0.8177269995691437,0.06159213518328022
-irr,S3_access_interaction_speed_simplified,"C(speed_band_simplified, Treatment(reference='30-39 mph'))[T.missing/review speed]",1.119002397078728,1.183620072330363,0.06461767525163498

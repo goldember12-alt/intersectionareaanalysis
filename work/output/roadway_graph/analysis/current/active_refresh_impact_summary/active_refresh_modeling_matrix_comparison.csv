@@ -1,5 +1,0 @@
-grain,metric,baseline_v1_v4,active_v2_v5,change
-signal_direction_window,unit_count,3222,3222,0
-signal_direction_window,denominator_ready_units,2967,2967,0
-signal_direction_window,modeling_ready_units,2124,2786,662
-signal_direction_distance_band,modeling_ready_units,,6698,

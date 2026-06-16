@@ -1,7 +1,0 @@
-blocked_claim_type,status,reason
-causal interpretation,blocked,exploratory association model only
-"risk, danger, or safety-performance language",blocked,model is internal technical review only
-policy guidance,blocked,no policy or treatment recommendations are supported
-downstream functional-area distance recommendation,blocked,window model is not a distance-selection model
-signal rankings or predictions,blocked,no predictions or rankings were created
-stakeholder model coefficient findings,blocked,method/language approval and further diagnostic review are still needed

@@ -1,9 +1,0 @@
-check_name,passed,observed,expected
-crash_direction_fields_read_or_used,True,False,False
-active_speed_v5_counts_reflected,True,105835,105835
-active_aadt_v2_rates_reflected,True,7108955359.704512,7108955359.704501
-models_fit,True,False,False
-old_v1_v4_figures_not_silently_overwritten,True,baseline_svg_file_lists_unchanged,unchanged
-causal_policy_risk_safety_language_absent,True,guardrail_labels_used,no_claims
-all_refreshed_figures_exist,True,36,36
-figure_captions_label_active_v2_v5,True,Active v2/v5,Active v2/v5

@@ -1,4 +1,0 @@
-model_family,covariance_method,model_name,comparison_model,delta_aic_vs_previous,delta_bic_vs_previous,likelihood_ratio_stat,likelihood_ratio_df,likelihood_ratio_p_value,fit_improves_aic
-poisson_glm,poisson_scaled_pearson,S1_window_direction,S0_exposure_only,-75.03245342233913,-63.04184018175738,79.03245342233913,2.0,6.8916116057890594e-18,True
-poisson_glm,poisson_scaled_pearson,S2_access_interaction,S1_window_direction,-26.26894125230956,21.693511710016992,42.26894125230956,8.0,1.2055993064309854e-06,True
-poisson_glm,poisson_scaled_pearson,S3_access_interaction_speed_simplified,S2_access_interaction,-16.438615127505727,7.542611353657776,24.438615127505727,4.0,6.522751892787119e-05,True

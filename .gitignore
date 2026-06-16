@@ -1,31 +1,21 @@
-# ---------------------------
 # Git / local repo internals
-# ---------------------------
 .git/
 /.git_writable_test/
 /.git-local/
 /.git_working/
 
-# ---------------------------
 # Python
-# ---------------------------
 __pycache__/
 *.pyc
 *.py[cod]
 *$py.class
 
-# Compiled extensions
-*.pyd
-*.so
-*.dylib
-*.dll
-
-# Packaging / build
-build/
-dist/
-.eggs/
-*.egg-info/
-pip-wheel-metadata/
+# Root packaging/build outputs. Keep this root-anchored so src/roadway_graph/build is visible.
+/build/
+/dist/
+/.eggs/
+/*.egg-info/
+/pip-wheel-metadata/
 
 # Test / coverage / tooling caches
 .pytest_cache/
@@ -37,95 +27,44 @@ pip-wheel-metadata/
 .coverage.*
 htmlcov/
 
-# Jupyter
-.ipynb_checkpoints/
-
-# ---------------------------
 # Virtual environments
-# ---------------------------
 /.venv/
 .venv/
 venv/
 env/
 ENV/
 
-# ---------------------------
 # IDE / editor files
-# ---------------------------
 .idea/
 .vscode/
 *.iml
 
-# ---------------------------
 # OS cruft
-# ---------------------------
 Thumbs.db
 Desktop.ini
 .DS_Store
 
-# ---------------------------
-# Logs
-# ---------------------------
+# Logs and temp
 *.log
-
-# ---------------------------
-# ArcGIS / geodatabase temp + locks
-# ---------------------------
-*.lock
-*.sr.lock
-*.ex.lock
 *.tmp
 *.temp
-
-# ArcGIS scratch / temp folders if created later
 scratch/
 temp/
 tmp/
 pip_cache/
 .npm-cache/
 
-# ---------------------------
-# Local outputs / generated figures
-# Keep these ignored only if they are reproducible outputs.
-# Remove these lines if you want these folders versioned.
-# ---------------------------
-secondstepfigures/
-outputs/
-exports/
+# Protected heavy/generated work and artifact products
 /work/
-work/
-
-# ---------------------------
-# Repository-local raw, generated, and retired material
-# ---------------------------
-/Intersection Crash Analysis Layers/
 /artifacts/
+
+# Archived local legacy material
+/legacy_*/
 /legacy/*
 !/legacy/README.md
-!/legacy/docs/
-/legacy/docs/*
-!/legacy/docs/README.md
-!/legacy/docs/recovery_audits/
-!/legacy/docs/recovery_audits/**
 
-# ---------------------------
-# Runtime spill under tracked artifact roots
-# ---------------------------
-artifacts/Users/
-artifacts/pycompile/
-artifacts/pycompile_verify/
-
-# ---------------------------
-# Secrets / machine-specific config
-# ---------------------------
-.env
-.env.*
-*.local
-
-# ---------------------------
-# Optional: large data artifacts
-# Keep heavy geospatial/data products out of the active repo.
-# ---------------------------
+# Source geodatabases/layers and compressed deliveries
+/Intersection Crash Analysis Layers/
 *.gdb/
 *.gpkg
 *.gpkg-journal
@@ -154,9 +93,4 @@ artifacts/pycompile_verify/
 *.aprx
 *.lyrx
 
-# Reviewed small configuration/evidence tables may be versioned explicitly.
-!docs/workflow/context_enrichment_access_same_corridor_seed_families.csv
-
-# Large generated roadway graph QA outputs
-work/output/roadway_graph/review/current/reference_signal_directional_bin_catchments/catchment_local_vector_qa.csv
-work/output/roadway_graph/review/current/reference_signal_directional_bin_catchments/undivided_polygon_construction_qa.csv
+# Explicit small documentation exceptions may be added below if needed.

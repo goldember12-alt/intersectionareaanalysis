@@ -1,9 +1,0 @@
-metric,value,notes
-source_input_file,work\output\roadway_graph\analysis\current\crash_count_simplified_internal_model_active\active_simplified_model_input_rows.csv,active simplified model input
-modeled_rows,2967,denominator-ready active signal-direction-window rows
-modeled_assigned_crashes,12414,assigned crashes represented
-zero_count_rows,831,zero-count modeled rows
-speed_missing_or_review_rows,181,explicit speed category
-active_speed_policy,speed_v5_new_source_supplement,input policy
-active_aadt_denominator_policy,v2_direction_factor_with_bidirectional_fallback,input policy
-additional_direction_factor_applied,False,active exposure already contains v2 denominator policy

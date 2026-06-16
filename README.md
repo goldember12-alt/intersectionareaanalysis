@@ -1,91 +1,61 @@
 # IntersectionCrashAnalysis
 
-This repository is in an active redesign state, but the current bounded workflow is runnable again.
+`IntersectionCrashAnalysis` supports context-aware crash analysis for Virginia signalized intersections, with the long-term goal of downstream functional-area guidance.
 
-Start with:
+The repository is now organized around a canonical roadway graph cache and products derived from it. Ordinary analysis should start from the current cache and should not stitch together old branch outputs.
 
-- [docs/README.md](docs/README.md)
-- [docs/methodology/current_methodology_index.md](docs/methodology/current_methodology_index.md)
-- [docs/methodology/roadway_graph_methodology.md](docs/methodology/roadway_graph_methodology.md)
-- [docs/workflow/current_workflow_index.md](docs/workflow/current_workflow_index.md)
-- [docs/workflow/roadway_graph_workflow.md](docs/workflow/roadway_graph_workflow.md)
-- [docs/methodology/overview_methodology.md](docs/methodology/overview_methodology.md)
-- [docs/methodology/proposal_alignment_growth_plan.md](docs/methodology/proposal_alignment_growth_plan.md)
-- [AGENTS.md](AGENTS.md)
-- [docs/workflow/active_workflow.md](docs/workflow/active_workflow.md)
+## Current State
 
-## Canonical Working Copy
+- The canonical core cache is built at `work/roadway_graph/analysis/final_dataset_cache/`.
+- Lightweight summary and QA products are built at `work/roadway_graph/analysis/final_summaries/`.
+- The first development MVP analytical product is built at `work/roadway_graph/analysis/mvp_dataset/`.
+- Source-layer preservation has been repaired under `artifacts/normalized/source_layers/`, with documented residuals for measured-geometry handling.
+- The active Python package is `src/roadway_graph/`.
 
-The canonical working copy for this repository should live outside OneDrive, under a normal local development path such as:
+## Folder Map
 
-- `C:\Users\Jameson.Clements\source\IntersectionCrashAnalysis`
+- `artifacts/`: protected staging, normalized, and source-preserving artifacts.
+- `src/roadway_graph/`: active package, including builders, audits, patches, QA helpers, and utilities.
+- `work/roadway_graph/analysis/final_dataset_cache/`: canonical core cache.
+- `work/roadway_graph/analysis/final_summaries/`: compact reporting and QA summaries.
+- `work/roadway_graph/analysis/mvp_dataset/`: development MVP lookup/rate product.
+- `work/roadway_graph/_index/`: current product indexes.
+- `work/roadway_graph/review/`: audit, cleanup, repair, and diagnostic logs.
+- `legacy_06152026/`: archived legacy repo material, not active workflow input.
 
-Treat any OneDrive-hosted copy as transitional only. The workflow writes frequently under `work/` and depends on stable replacement of grouped `current/` outputs, so sync-driven file locking is a real operational risk.
+## Do Not Use As Current Inputs
 
-If you are converting a prior OneDrive working tree into the local canonical copy, copy the ignored local working-state directories deliberately when needed:
+- old `final_leg_corrected_analysis_dataset`
+- old `mvp_directional_rate_distribution_dataset`
+- old `src/active/roadway_graph`
+- old root scripts/tests
+- old `work/output` paths
 
-- `artifacts/`
-- `work/`
-- `legacy/`
-- `Intersection Crash Analysis Layers/`
+## Method Notes
 
-Do not rely on moving a repo-local `.venv/` between locations. Use the bootstrap flow to discover or recreate the active interpreter instead.
+- Crash direction fields are not used to derive upstream/downstream.
+- Directionality is derived and documented in the cache.
+- Access assignment is combined-source, spatial-only, and exclusive within signal/approach/direction distance bands.
+- Crash assignment is spatial-primary, band-exclusive, equal fractional, and total-preserving.
+- Exposure is a daily VMT proxy unless later MVP logic defines final crash-period exposure.
 
-## Current Active Workflow Surface
+## Lightweight Validation
 
-The current active analytical method is graph-first:
+Use the repository virtual environment:
 
-full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
+```powershell
+.\.venv\Scripts\python.exe -m py_compile src\roadway_graph\audit\repo_docs_config_metadata_cleanup.py
+.\.venv\Scripts\python.exe -c "import src.roadway_graph; print('import ok')"
+```
 
-The current active workflow has two layers:
+Inspect cache metadata before using data:
 
-1. Standard package CLI slice under `-m src`
-   - `bootstrap`
-   - `stage-inputs`
-   - `normalize-stage`
-   - `build-study-slice`
-   - `enrich-study-signals-nearest-road`
-   - `check-parity`
-2. Current graph-first direct-entry analytical modules under `src/active/roadway_graph/`
-   - `python -m src.active.roadway_graph`
-   - `python -m src.active.roadway_graph.crash_assignment`
-   - `python -m src.active.roadway_graph.geometric_direction`
-   - `python -m src.active.roadway_graph.divided_carriageway_pairing`
-   - `python -m src.active.roadway_graph.divided_pairing_recovery`
-   - `python -m src.active.roadway_graph.roadway_role_classification`
+```powershell
+Get-ChildItem work\roadway_graph\analysis\final_dataset_cache
+Get-ChildItem work\roadway_graph\analysis\final_summaries
+Get-ChildItem work\roadway_graph\analysis\mvp_dataset
+```
 
-The older signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype docs are preserved as historical or supporting reference, not the current methodology.
+## Distribution Note
 
-## Output Areas
-
-The current active graph-first outputs are under:
-
-- `work/output/roadway_graph/`
-
-Historical or supporting output areas include:
-
-- `work/output/stage1b_study_slice/`
-- `work/parity/`
-- `work/output/directionality_experiment/`
-- `work/output/upstream_downstream_prototype/`
-- `work/output/upstream_downstream_prototype/high_confidence_descriptive_analysis/`
-
-Grouped `current/` output contracts still matter where present. Some older flat-layout residue may remain in parts of `work/`, so trust grouped `current/` lanes and local `README.md` files over older loose files when both are present.
-
-Manual QGIS PNG exports are not regenerated automatically by the Python steps.
-
-## Repo layout
-
-- `src/active/roadway_graph/` - current graph-first roadway_graph modules
-- `src/active/` - standard active runtime plus historical/supporting direct-entry modules
-- `src/transitional/` - transitional diagnostics still referenced by the narrowed workflow
-- `config/` - active runtime config
-- `scripts/` - bootstrap and environment entrypoints
-- `artifacts/` - active local staged and normalized intermediates
-- `work/` - ignored runtime outputs and review products
-- `docs/` - active methodology, workflow, planning, and design docs
-- `legacy/` - consolidated historical preservation root for retired code, archived docs, recovery audits, old outputs, and reference material
-
-
-
-
+The repo is close to zip/distribution readiness after remaining source-package cleanup and validation. Heavy external source layers should remain outside the active repo after artifact preservation is accepted.

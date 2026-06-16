@@ -1,6 +1,6 @@
 # Proposal Alignment and Growth Plan: Downstream Functional Area Guidance
 
-**Status: CURRENT SUPPORT.** This remains the proposal-alignment growth plan. Read it as the controlled expansion path after the current roadway_graph scaffold is validated.
+**Status: CURRENT SUPPORT.** This remains the proposal-alignment growth plan. Read it as the controlled expansion path after the current stable-lineage roadway_graph scaffold is used to produce descriptive and later comparison-ready downstream functional area evidence.
 
 ## Purpose
 
@@ -11,15 +11,15 @@ It should be kept under `docs/methodology/` because it is not merely a workflow 
 - clearer Virginia guidance for calculating downstream functional area dimensions at signalized intersections
 - evidence for Appendix F of VDOT's Road Design Manual
 - exploratory crash/access analysis that can inform, but not solely determine, downstream functional area guidance
-- controlled growth from the full-roadway graph foundation and preserved divided-road vertical slice into comparison-ready analytical outputs
+- controlled growth from the stable-lineage signal-relative scaffold into comparison-ready analytical outputs
 
-This document is a companion to `docs/methodology/overview_methodology.md`. The overview remains the core active methodology for how this repo should work today. The current graph-foundation pivot is a full-roadway signal-adjacent graph that retains both divided and undivided Travelway roads, documented further in `docs/methodology/roadway_graph_methodology.md`. The older divided-road directed segment workflow remains useful as a preserved vertical-slice prototype. This proposal-alignment document explains why that active methodology matters to the larger research project and how it can grow without losing methodological discipline.
+This document is a companion to `docs/methodology/overview_methodology.md`. The overview remains the core active methodology for how this repo should work today. The current roadway_graph method is a recovery-first, stable-lineage signal-relative scaffold that preserves physical legs, carriageway subbranches, Travelway source lineage, context readiness, source/data limitation flags, and access-source caveats. The older divided-road directed segment workflow remains useful as a preserved historical prototype. This proposal-alignment document explains why the current active methodology matters to the larger research project and how it can grow without losing methodological discipline.
 
 ## Relationship to the Core Methodology
 
 The core methodology now asks a bounded implementation question:
 
-- how can the repo build a full-roadway signal-adjacent graph and distance bins that retain both divided and undivided roads so later crash, access, AADT, speed, and median evidence can be attached to a stable roadway scaffold without prematurely claiming true vehicle travel direction?
+- how can the repo maintain a stable-lineage signal-relative roadway scaffold that preserves defensible signals, physical legs, subbranches, bins, route/measure context, access evidence, and source/data limitations so later crash/catchment analysis can be attached without forcing uncertain labels?
 
 The proposal asks a broader research question:
 
@@ -27,7 +27,7 @@ The proposal asks a broader research question:
 
 Those questions are aligned but not identical.
 
-The current repository should not try to become the full proposal in one step. It should first produce a trustworthy roadway graph foundation, while preserving the divided-road vertical slice as a comparison and validation prototype. Once the graph foundation is reviewed, it can become the analytical backend for the proposal's exploratory crash analysis and later guidance development.
+The current repository should not try to become the full proposal in one step. It has now moved beyond the early graph-foundation prototype into a mature review-only scaffold: 2,739 represented signals, 262,329 bins, complete speed+AADT readiness, stable Travelway lineage on nearly every bin, and explicit source/data limitation accounting. That scaffold can become the analytical backend for proposal-facing access and crash/catchment summaries once the remaining access doctrine and crash/catchment design choices are documented.
 
 ## Core Ideas from the Final Proposal
 
@@ -97,15 +97,34 @@ The current repo is aligned with the proposal in these ways:
 - it treats access points downstream of signals as analytically important
 - it is building reproducible validation outputs rather than relying on one-off manual summaries
 - it keeps unresolved and ambiguous cases visible instead of forcing labels
+- it now preserves stable Travelway lineage at the bin surface
+- it has reduced scaffold recovery into explicit complete/open/holdout branches
+- it carries source/data limitation findings as methodological output rather than hiding them as failures
 
-The active workflow already contains useful building blocks:
+The active workflow now contains a mature review-only scaffold:
 
-- divided-road study slice
-- signal-to-nearest-road enrichment
-- empirical flow-orientation experiment
-- upstream/downstream crash-classification prototype
-- high-confidence downstream descriptive analysis
-- context enrichment for AADT, access points, and rural/urban crash context
+- base staged signals: 3,933
+- represented review-only signals: 2,739
+- represented share: about 69.6%
+- speed+AADT-ready signals: 2,739
+- scaffold bins: 262,329
+- high-confidence stable Travelway lineage after regeneration: 262,327 bins
+- unmatched stable-lineage bins: 0
+
+The final calibrated physical-leg distribution is:
+
+- one-leg: 234
+- two-leg: 195
+- three-leg: 798
+- four-leg: 1,511
+- five-plus: 1
+- two-leg-or-less combined: 429
+
+Remaining source/data limitation classes are:
+
+- source_limited_holdout: 281
+- grade_separated_or_mainline_contamination: 49
+- still_insufficient_geometry_evidence: 54
 
 ## Current Repository Non-Alignment
 
@@ -113,12 +132,12 @@ The current repo is not yet the full proposal.
 
 Important gaps:
 
-- the prior analytical vertical slice was intentionally focused on divided roads; the active graph foundation now retains divided and undivided roads but is still a prototype requiring QA
-- it does not yet implement explicit downstream distance bands from the proposal
+- it does not yet implement proposal-specific downstream distance bands such as limiting/desirable values or speed-based bands as final reporting units
 - it does not yet produce regression-ready or model-ready analysis tables as a stable output contract
 - it does not yet provide a spreadsheet-style calculation tool
 - it does not yet have a trusted roadway-level rural/suburban/urban source
-- it does not yet classify access type, commercial access intensity, or trip-generation context deeply enough for the proposal's full modeling variable list
+- typed access v2 remains an enrichment layer and untyped access remains a broad count/density layer; access source coverage is major-route biased and not yet a complete access inventory
+- broad Travelway-normalized access is diagnostic only because it has long-route overcapture risk
 - it does not yet turn exploratory findings into policy guidance or Appendix F language
 
 These gaps are expected. They should not be solved by reactivating old broad machinery unless that machinery proves simpler and more truthful than the bounded active workflow.
@@ -127,8 +146,8 @@ These gaps are expected. They should not be solved by reactivating old broad mac
 
 The repository can become the analytical backend for the proposal if it grows in controlled phases:
 
-1. Keep the full-roadway graph foundation as the active roadway scaffold while preserving the divided-road workflow as a validation prototype.
-2. Use the reviewed graph foundation to produce downstream-zone crash/access/AADT/speed/median summaries by signal.
+1. Keep the stable-lineage signal-relative scaffold as the active roadway foundation while preserving historical divided-road and Step 5 prototypes as reference only.
+2. Use the reviewed scaffold to produce downstream-zone access/AADT/speed/median and later crash summaries by signal, leg, subbranch, and distance band.
 3. Add explicit downstream distance bands matching proposal concepts, such as physical area to limiting value, limiting value to desirable value, fixed buffers, and speed-based bands.
 4. Add comparison-ready outputs for regression or descriptive analysis.
 5. Expand analysis cautiously beyond reviewed graph contexts only after graph QA and divided/undivided handling are validated.
@@ -139,33 +158,41 @@ These steps are the preferred growth sequence for proposal alignment.
 
 ## Phase Guidance for Repo Implementation
 
-### Phase 1: Build and Review the Full-Roadway Graph Foundation
+### Phase 1: Build and Review the Stable-Lineage Scaffold
 
-The active roadway scaffold should retain both divided and undivided roads. The older divided-road vertical slice should remain preserved for comparison, but it should not be the only graph foundation.
+The active roadway scaffold is now a stable-lineage signal-relative scaffold. The older divided-road and early graph-foundation vertical slices should remain preserved for comparison, but they are not the current foundation.
 
 Required behavior:
 
-- keep graph adjacency separate from true vehicle travel direction
-- preserve divided/undivided source-roadway status as descriptive context
-- keep strict and empirical directionality evidence separate from low-trust support fields
+- define physical legs as signalized-intersection approaches, not graph edges, route names, source rows, or carriageways
+- preserve divided carriageways, ramps, route/facility changes, and source-line splits as subbranches or QA attributes unless evidence supports a distinct physical approach
+- persist stable Travelway lineage fields at scaffold/bin generation time
+- keep graph/source/route/facility evidence separate from true vehicle travel direction
 - report unresolved rates and conflict rates
+- carry source/data limitation flags forward
 - keep current/history output lanes stable
 
-### Phase 2: Produce Signal-Level Downstream Context Summaries
+### Phase 2: Produce Stable-Lineage Signal-Level Downstream Context Summaries
 
 The next proposal-facing output should summarize conditions by signal and downstream zone.
 
 Likely fields:
 
 - signal identifiers and route context
+- stable signal/bin/Travelway lineage fields
+- physical leg and carriageway subbranch identifiers
 - assigned speed and speed source
 - median/facility context
 - AADT and AADT match status
-- downstream access count and density
-- upstream access count and density for comparison
+- untyped access count and density
+- typed v2 access category enrichment
+- spatial 100 ft access evidence
+- conservative Travelway-windowed sensitivity evidence
+- source-preserving weighted and unweighted access products kept separate
 - high-confidence downstream crash count
 - high-confidence upstream crash count
 - unresolved crash count
+- source/data limitation flags
 - rural/urban or future geographic-context fields with provenance
 - flow-orientation provenance and classification confidence
 
@@ -199,6 +226,7 @@ Candidate output units:
 
 - one row per signal and band
 - one row per signal, approach, and band
+- one row per signal, physical leg/subbranch, and band
 - one row per access point with signal-relative and band-relative assignment
 - one row per crash with signal-relative and band-relative assignment
 
@@ -216,6 +244,7 @@ Candidate independent variables:
 - median presence
 - access count and density
 - distance to first downstream access
+- typed access category where source quality supports it
 - upstream/downstream band family
 - rural/suburban/urban class once a trusted source exists
 - roadway functional class if a trusted source exists
@@ -223,19 +252,20 @@ Candidate independent variables:
 
 Crash-rate or regression claims should wait until denominator coverage, sample size, and unresolved-case behavior are reviewed.
 
-### Phase 5: Expand Beyond Divided Roads
+### Phase 5: Expand Beyond Current Represented and Source-Supported Contexts
 
-Expansion beyond divided roads should occur only after the divided-road workflow has earned confidence.
+The current scaffold already includes divided and undivided represented signals where the source evidence supports them. Expansion should now mean moving beyond the current represented/source-supported context, not simply moving beyond divided roads.
 
 Before expansion, document:
 
-- what divided-road assumptions no longer apply
+- what current represented-universe assumptions no longer apply
 - what new orientation evidence is required
 - whether undivided roads require a different classification model
 - whether intersection geometry introduces new movement classes
 - how unresolved cases will be handled
+- how stable lineage will be persisted for new source records
 
-Expansion should not reuse divided-road labels blindly.
+Expansion should not reuse current scaffold, access, or source-limitation labels blindly.
 
 ### Phase 6: Add Better Geographic and Policy Context
 

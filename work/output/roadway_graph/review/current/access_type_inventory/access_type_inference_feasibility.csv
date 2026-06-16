@@ -1,4 +1,0 @@
-question,answer,inference_basis,supporting_fields,normalized_categories_supported,feasibility_note
-is_full_vs_riro_directly_available,no,not_supported,,not_inferable|unknown,No candidate source field contains populated full/RIRO/right-in/right-out/restriction values.
-can_full_vs_riro_be_inferred_from_combinations,no,not_supported,,unknown|not_inferable,"The populated fields are locator or metadata fields, not independent movement-permission evidence; empty access-control, direction, turn-lane, approach-count, and land-use fields prevent defensible combination inference."
-can_directional_bin_access_context_be_upgraded_to_typed_summaries_now,no,not_supported,,unknown|not_inferable,Counts-only access context should remain unchanged until a populated access type or movement-restriction source is available.

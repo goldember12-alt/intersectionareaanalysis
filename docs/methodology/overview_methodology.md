@@ -1,16 +1,16 @@
-# Core Methodology: Graph-First Downstream Functional Area Analysis
+# Core Methodology: Stable-Lineage Scaffold for Downstream Functional Area Analysis
 
-**Status: CURRENT ACTIVE OVERVIEW.** The detailed current method is documented in `roadway_graph_methodology.md`. This file gives the stable repository-level methodology and explains how older signal-centered work relates to the current graph-first path.
+**Status: CURRENT ACTIVE OVERVIEW.** The detailed current method is documented in `roadway_graph_methodology.md`. This file gives the repository-level methodology and explains how the current recovery-first, stable-lineage roadway scaffold supports later access and crash/catchment analysis.
 
 ## Purpose
 
-This project evaluates downstream functional area conditions at signalized intersections in Virginia using roadway, signal, crash, access, speed, volume, median, geographic, and related contextual data.
+This project evaluates downstream functional area conditions at signalized intersections in Virginia using roadway, signal, access, crash, speed, volume, median, geographic, and related contextual data.
 
 The goal is not to preserve a legacy implementation path. The goal is to produce a trustworthy, explainable, maintainable analytical workflow that can support Virginia-specific downstream functional area understanding and eventual guidance.
 
-The current active methodology is roadway_graph / Step 5 graph-first:
+The current active methodology is:
 
-full Travelway graph -> signal graph association -> signal eligibility gating -> TRUE reference signals -> signal-to-anchor segments -> roadway role classification -> crash-ready segment/bin subset -> divided carriageway pairing where geometry supports it -> undivided roads treated as shared centerline by default -> crashes added only after the roadway scaffold is clean -> upstream/downstream interpreted using roadway geometry, not crash direction -> unresolved/review-only cases preserved.
+base staged signals -> represented signal universe -> calibrated expected physical-leg model -> recovery-first scaffold completion -> divided/carriageway subbranch normalization -> source/data limitation ledger -> stable Travelway lineage persistence at bin generation -> review-only speed/AADT/access context -> crash/catchment design only after scaffold and lineage QA.
 
 ## Core Principle
 
@@ -20,80 +20,149 @@ Complexity is not a virtue by itself. If a proposed method requires repeated bri
 
 The workflow should favor methods that are understandable, testable, bounded in scope, empirically grounded where appropriate, easy to validate, and proportionate to the question being asked.
 
-## Current Graph-First Scaffold
+## Recovery-First Philosophy
 
-The active workflow starts with roadway geometry rather than crashes. It builds a full Travelway graph, associates signals to graph components, applies signal eligibility gates, and then creates signal-to-anchor roadway segments and 50-foot bins.
+The project now treats scaffold recovery as an explicit methodology step rather than a side diagnostic. The goal is to preserve and recover every defensible signal, physical leg, bin, and context record before access or crash assignment.
 
-This scaffold is signal-centered in analytical purpose, but graph-first in construction. Signals remain the reference object for downstream analysis. Roadway geometry supplies the scaffold that defines which signal-to-anchor segments and bins are eligible for later crash/access/context assignment.
+Recovery does not mean forcing uncertain labels. It means:
 
-The graph-first scaffold intentionally retains both divided and undivided roads. The current method must not silently narrow the graph to divided roads only.
+- recover missing physical legs where source Travelway, graph, and intersection-zone evidence support them;
+- normalize divided carriageways, ramps, source-line splits, route/facility changes, and candidate-branch artifacts as subbranches or QA attributes under physical legs;
+- keep partial but defensible records visible;
+- carry unresolved records as review-only flags;
+- distill remaining losses into clear source/data limitations, grade/mainline holdouts, still-insufficient evidence, or manual-review classes.
+
+Source limitation findings are part of the project value. They explain where available source systems do not support a defensible signal-relative scaffold, access inventory, or later crash/catchment claim.
+
+## Final Represented Universe
+
+The current review-only represented universe contains:
+
+- base staged signals: 3,933
+- represented signals: 2,739
+- represented share: about 69.6%
+- speed+AADT-ready signals: 2,739
+- final scaffold bins: 262,329
+
+This universe is review-only. It is mature enough to support access doctrine and crash/catchment design, but it should not be described as a promoted active production output until the handoff is explicitly made.
+
+## Final Physical-Leg Model
+
+The calibrated final physical-leg distribution is:
+
+- one-leg: 234
+- two-leg: 195
+- three-leg: 798
+- four-leg: 1,511
+- five-plus: 1
+- two-leg-or-less combined: 429
+
+Four-leg intersections dominate, three-leg intersections are the next major class, five-plus cases have been reduced to near zero, and two-leg-or-less cases are carried with source/geometry explanation flags.
+
+A physical leg is a signalized-intersection approach. It is not a graph edge, source row, route name, carriageway, or candidate association. Divided carriageways, ramps, route/facility changes, and source-line splits should generally be represented as subbranches or attributes under a physical leg unless evidence supports a distinct physical approach.
+
+Intersection-zone and geometry-bearing logic are central. They define approach sectors, missing-leg candidates, divided/subbranch normalization, and review queues without relying on crash evidence.
+
+## Stable Travelway Lineage
+
+Stable Travelway lineage is a core pipeline requirement. It must be persisted during scaffold/bin generation, not only reconstructed later.
+
+The stable-lineage scaffold regeneration produced:
+
+- regenerated signals: 2,739
+- regenerated bins: 262,329
+- high-confidence stable Travelway lineage: 262,327
+- low-confidence lineage: 2
+- unmatched bins: 0
+- prior unmatched bins recovered: 111,200 / 111,200
+
+Every future scaffold, access, crash, and source-limitation output that depends on Travelway geometry should carry:
+
+- `stable_travelway_id`
+- `stable_signal_id`
+- `source_signal_id`
+- `stable_bin_id`
+- `source_layer`
+- `source_route_id`
+- `source_route_name`
+- `source_route_common`
+- `source_measure_start`
+- `source_measure_end`
+- `source_feature_local_fid`
+- `geometry_hash`
+- `lineage_match_method`
+- `lineage_confidence`
+
+GeoPackage `fid` is package-local and must not be used as the sole source-lineage key.
+
+## Source/Data Limitation Ledger
+
+The scaffold recovery branches are currently summarized as:
+
+- Branch A, direct missing-leg recovery: complete after final context refresh.
+- Branch B, divided/carriageway normalization: complete enough to proceed.
+- Branch C, source limitation/holdout: reduced to manual, external-data, and source limitations.
+
+Remaining source/data limitation ledger:
+
+- source_limited_holdout: 281
+- grade_separated_or_mainline_contamination: 49
+- still_insufficient_geometry_evidence: 54
+
+These are not hidden losses. They should remain visible in downstream access and crash/catchment outputs as QA flags.
+
+## Access Doctrine
+
+Access is not currently the highest-priority recovery issue. Manual review and source accounting indicate substantial source coverage limitations, especially major-route bias.
+
+Current access source counts:
+
+- untyped source points: 70,595
+- typed v2 source points: 28,762
+
+Nearly all access source points appear to be on major route classes. Low access capture should therefore not be interpreted automatically as scaffold failure.
+
+Current access doctrine:
+
+- Untyped access remains the broad count/density layer.
+- Typed v2 access remains an enrichment layer.
+- Spatial 100 ft catchment is the conservative primary review product.
+- Conservative Travelway-windowed access is a source-identity sensitivity/enrichment product.
+- Broad Travelway-normalized access is source-coverage diagnostic evidence only because it has long-route overcapture risk.
+- Access points may legitimately multi-assign to more than one signal-relative context.
+- Unweighted/double-counted and source-preserving weighted products must remain separate.
+- Raw typed access codes must be preserved next to corrected categories.
+
+Typed v2 code mapping currently treats `R` and `RC` as `right_in_right_out`; `I`, `M`, `S`, `AS`, and `AU` remain `other_review`.
+
+## Map-Review Lessons
+
+Manual map review sharpened several methodological requirements:
+
+- `signal_000045` demonstrated the need for stable source Travelway lineage. The reviewed source Travelway leg FID 52369 remains candidate/ambiguous, while FID 46419 is the best match for 50 bins. Stable IDs, not package-local FIDs alone, must support these claims.
+- `signal_002692` is primarily a complex multi-signal ownership/source-signal limitation. Opposite carriageway legs should not be forced onto the wrong signal when missing source signals likely own that carriageway.
+- The Wellington Road / University Boulevard HMMS signal exists in normalized/staged records but not in the final represented universe. This is a signal-source lineage and complex exclusion issue, not a Travelway FID issue.
 
 ## Why Crashes Are Delayed
 
 Crash data is delayed because crashes should not define the roadway scaffold. The scaffold must first answer no-crash questions:
 
-- Which signals have enough roadway evidence to be reference signals?
-- Which signal-to-anchor segments are usable?
-- Which bins belong to each usable segment?
-- Which rows are divided carriageways, undivided centerlines, ramps, frontage roads, auxiliary lanes, one-way candidates, or unknown review cases?
+- Which represented signals have enough source/graph geometry evidence?
+- Which physical legs and subbranches are defensible?
+- Which bins have stable Travelway lineage, route/measure context, speed, AADT, and exposure readiness?
+- Which records remain source-limited, grade/mainline, still-insufficient, or manual-review holdouts?
 
-Only after those roadway questions are answered should crashes be spatially assigned to segment/bin records. Even then, crash assignment is not the same as final upstream/downstream interpretation. The current crash assignment prototype assigns crashes conservatively to the nearest crash-ready segment/bin and leaves event direction and upstream/downstream status unresolved.
-
-## TRUE Signal Eligibility
-
-TRUE signal eligibility exists to protect the reference-signal side of the analysis. A TRUE signal is one whose nearby roadway evidence is complete enough to serve as an analysis anchor under the current graph rules.
-
-FALSE and CONDITIONAL signals are still useful evidence, but they should not silently enter the analysis as reference signals. They may appear in review outputs, supporting context, or future explicitly documented promotion logic.
-
-## Opposite Anchors
-
-The opposite anchor does not have to be a TRUE signal. Step 5 is A-centered: the reference signal must be TRUE, but the other end of a segment may be a valid signal, roadway intersection, or endpoint boundary.
-
-This distinction matters because a non-TRUE opposite signal can still be a valid boundary even when it is not eligible to act as the reference signal for its own analysis row. The method should preserve that boundary evidence without treating the opposite anchor as an approved reference signal.
-
-## Roadway Role Before Pairing Recovery
-
-Roadway role classification comes before divided-pairing recovery because not every unpaired divided-looking row should be recovered the same way.
-
-The current role layer separates mainline divided carriageways from undivided centerlines, ramps/connectors, frontage/service roads, turn lanes/auxiliary features, one-way pair candidates, and unknown review cases. Pairing recovery should focus first on `mainline_divided_carriageway` records and should handle one-way pair candidates only through a separate reviewed one-way method.
-
-This avoids broad graph repair that treats every unresolved row as the same problem.
-
-## Divided Roads
-
-For divided roads, upstream/downstream interpretation should use roadway geometry and accepted carriageway pairing, not crash direction.
-
-The geometric direction model and divided carriageway pairing diagnostic are no-crash methods. They use graph geometry, segment geometry, and pairing evidence to identify accepted high/medium-confidence divided carriageway pairs and unresolved cases. Crash direction remains historical/supporting evidence only unless a later bounded task explicitly re-evaluates it.
-
-## Undivided Roads
-
-Undivided roads are shared centerline records by default. They should not be forced into physical directional carriageways.
-
-Later crash interpretation on undivided roads may need side-of-centerline, approach/leaving, or bidirectional logic, but the current scaffold should preserve undivided centerlines as shared/bidirectional geometry until that method is explicitly designed and validated.
-
-## Unresolved And Review-Only Cases
-
-Unresolved and review-only cases are part of the method, not failures to hide. The workflow should preserve:
-
-- FALSE and CONDITIONAL signal eligibility rows
-- excluded or review-only segment rows
-- unresolved divided-pairing rows
-- unknown roadway-role rows
-- crash assignment rows whose event direction or upstream/downstream status is not yet interpretable
-
-Coverage should not be improved by forcing weak labels. The repository should make unresolved rates and review queues visible so later work can target the highest-value recovery problem.
+Only after those questions are answered should crashes be spatially or route/measure assigned to signal-relative records. Crash findings can inform downstream guidance, but they should not be treated as the sole basis for downstream functional area distance.
 
 ## Historical Signal-Centered Work
 
-Older signal-centered Package 001/002/003, directed_segments, directionality_experiment, and upstream_downstream_prototype documentation is preserved as historical or supporting reference.
+Older signal-centered Package 001/002/003, directed_segments, directionality_experiment, upstream_downstream_prototype, and early TRUE-reference graph-foundation documentation are preserved as historical or supporting reference.
 
-That work remains useful because it records earlier divided-road vertical-slice assumptions, crash-evidence directionality experiments, downstream descriptive package designs, and context-enrichment ideas. It is not the current methodology.
-
-Current graph-first work may reuse concepts from those packages only after the graph scaffold, crash-ready subset, roadway role classification, divided-pairing recovery, and crash assignment QA make the reuse appropriate.
+That work remains useful because it records earlier assumptions, crash-evidence directionality experiments, descriptive package designs, and context-enrichment ideas. It is not the current methodology.
 
 ## Proposal Alignment
 
-The companion document `proposal_alignment_growth_plan.md` describes how this analytical backend should grow toward the larger VTRC proposal. The current method supports that growth by establishing a defensible roadway scaffold first.
+The companion document `proposal_alignment_growth_plan.md` describes how this analytical backend should grow toward the larger VTRC proposal. The current method supports that growth by establishing a stable-lineage signal-relative scaffold first.
 
 Proposal-facing outputs should remain descriptive or exploratory until the workflow defines the downstream band family, analysis unit, denominator availability, unresolved-case handling, evidence provenance, and validation checks.
 
@@ -101,7 +170,15 @@ Crash findings can inform downstream guidance, but they should not be treated as
 
 ## Current Next Step
 
-The divided-pairing recovery prototype now exists as review-only evidence. The next technical step is QGIS review of its low-confidence candidates and still-unresolved rows. A narrower recovery rule should be promoted only if mapped review supports it, and broad graph repair or modeling claims should still wait.
+The current next step is to finalize the access doctrine/readout and prepare figure/paper materials around:
+
+- final represented signal universe and physical-leg distribution;
+- stable Travelway lineage discipline;
+- source/data limitation ledger;
+- access source coverage limitations and major-route bias;
+- conservative spatial access and Travelway-windowed sensitivity evidence.
+
+After that, crash/catchment assignment should be designed using the stable-lineage scaffold and carried QA flags.
 
 ## Documentation Map
 
@@ -113,5 +190,7 @@ Use these documents first:
 - `../workflow/current_workflow_index.md`
 - `../workflow/roadway_graph_workflow.md`
 - `../workflow/active_workflow.md`
+- `../workflow/access_code_mapping_notes.md`
+- `../workflow/roadway_graph_lineage_requirements.md`
 
 Raw generated outputs belong under `work/output/`. Curated readouts belong under `docs/results/` or, for now, under `docs/workflow/` when they are still operational roadway_graph readouts. Polished/shareable reports belong under `docs/reports/`.

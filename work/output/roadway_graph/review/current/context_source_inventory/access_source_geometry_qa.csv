@@ -1,2 +1,0 @@
-dataset,geometry_column,row_count,geometry_null_count,geometry_empty_count,geometry_valid_count,geometry_invalid_count,crs,geometry_type,geometry_type_count
-access,geometry,70595,0,0,70595,0,EPSG:3968,Point,70595

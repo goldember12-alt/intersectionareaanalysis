@@ -1,8 +1,0 @@
-metric,value,notes
-total_rate_ready_units,2967,All v1 denominator-ready window-grain units evaluated for v2 sensitivity.
-units_with_valid_factor_applied,2751,At least one stable AADT bin had valid 0 < DIRECTION_FACTOR <= 1.
-units_with_null_factor_bidirectional_fallback,594,At least one stable AADT bin had null DIRECTION_FACTOR and retained v1 AADT treatment for that bin.
-units_with_invalid_factor_review,0,At least one stable AADT bin had DIRECTION_FACTOR <= 0 or > 1 and retained v1 AADT treatment for that bin.
-valid_factor_bins,91796,Stable denominator bins with valid factor.
-null_factor_fallback_bins,11045,Stable denominator bins with null factor fallback.
-invalid_factor_review_bins,0,Stable denominator bins with invalid factor review flag.

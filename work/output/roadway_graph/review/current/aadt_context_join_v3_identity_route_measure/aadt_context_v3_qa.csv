@@ -1,9 +1,0 @@
-check_name,passed,observed,expected
-crash_direction_fields_read_or_used,True,False,False
-aadt_not_used_for_upstream_downstream,True,False,False
-scaffold_catchment_assignment_access_speed_logic_changed,True,False,False
-main_context_limited_to_0_2500ft,True,0,0
-enriched_directional_bins_one_row_per_bin,True,0,0
-base_context_one_row_per_base_bin,True,0,0
-aadt_crs_matches_working_epsg_3968,True,EPSG:3968,EPSG:3968
-paired_pseudo_direction_consistency,True,0,0

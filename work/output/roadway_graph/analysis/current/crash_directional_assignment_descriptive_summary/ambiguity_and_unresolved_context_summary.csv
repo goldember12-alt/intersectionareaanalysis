@@ -1,5 +1,0 @@
-summary_type,context,count,note
-overall,ambiguous_assignments,1055,Excluded from unique-assignment descriptive summaries.
-overall,unresolved_assignments,360583,Excluded from unique-assignment descriptive summaries.
-ambiguous_detail,ambiguous_multiple_usable_directional_catchments,1055,Ambiguous records are preserved separately and excluded from unique summaries.
-unresolved_detail,no_usable_directional_catchment_contains_point,360583,Unresolved records are preserved separately and excluded from unique summaries.

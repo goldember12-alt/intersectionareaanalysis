@@ -1,6 +1,0 @@
-dataset,field_name,field_kind,row_count,null_count,duplicate_non_null_count,unique_non_null_count
-access,id,likely_id,70595,0,0,70595
-access,_editId,likely_id,70595,0,0,70595
-access,_layerId,likely_id,70595,0,70594,1
-access,_featureId,likely_id,70595,0,0,70595
-access,geometry,geometry,70595,0,64,70531

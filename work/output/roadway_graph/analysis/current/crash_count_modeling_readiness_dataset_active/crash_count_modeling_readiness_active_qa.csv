@@ -1,4 +1,0 @@
-check_name,passed,observed,expected
-active_speed_v5_in_model_matrix,True,speed_v5_new_source_supplement,speed_v5_new_source_supplement
-active_aadt_v2_in_model_matrix,True,v2_direction_factor_with_bidirectional_fallback,v2_direction_factor_with_bidirectional_fallback
-models_fit,True,False,False
